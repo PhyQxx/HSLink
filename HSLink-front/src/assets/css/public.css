@@ -1,0 +1,30 @@
+html {
+  overflow-y: overlay;
+}
+.default-color{
+  color: #666!important;
+}
+.pointer{
+  cursor: pointer!important;
+}
+.blue{
+  color: #419EFF!important;
+}
+.special-font-blue:hover{
+  color: #419EFF!important;
+}
+.white{
+  color: #fff!important;
+}
+.text-underline:hover{
+  text-decoration: underline;
+}
+.theme-font-blue{
+  color: #1B94D4;
+}
+.body-background{
+  background: #EEFCFE;
+}
+body{
+  padding-right:0 !important
+}

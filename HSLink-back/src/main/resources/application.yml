@@ -1,0 +1,21 @@
+##端口号
+server:
+  port: 8048
+## mybatis配置
+mybatis:
+  mapper-locations: classpath*:com/qinxx/hslink/dao/mapping/*.xml
+  typeAliasesPackage: com.qinxx.hslink.model
+##日志等级
+logging:
+  level:
+    com.qinxx.hslink.dao : debug
+##数据源
+spring:
+  datasource:
+#    url: jdbc:mysql://123.57.22.91:3306/hslink?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/hslink?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    db-name: hslink
+    filters: log4j,wall,mergeStat
+    driverClassName: com.mysql.cj.jdbc.Driver

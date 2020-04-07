@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qinxx.hslink.dao.HSLinkMapper">
+
+    <!--登录验证-->
+    <select id="login" resultType="map" parameterType="map">
+        select * from hs_user where (real_name = #{username}  and pass_word = #{password} and user_type = #{role})
+        or (mobile = #{username} and pass_word = #{password}  and user_type = #{role})
+    </select>
+
+    <!--注册-->
+    <insert id="register" parameterType="map">
+       INSERT INTO hs_user ( user_id, pass_word,real_name, mobile, user_type, creat_time, frozen_state, error_times)
+        VALUES
+        (
+        uuid(),
+        #{password},
+        #{realname},
+        #{mobile},
+        #{type},
+        now(),
+        '00',
+        '0'
+        )
+    </insert>
+
+    <!--获取校园通知-->
+    <select id="getSchoolNotice" parameterType="map" resultType="map">
+        SELECT
+        s.id,
+        label,
+        title,
+        content,
+        real_name,
+        release_time
+        FROM
+        hs_notice s left join hs_user u on s.release_id = u.user_id
+        where type = '校园通知'
+	    <if test="id != null and id != ''">
+            and s.id = #{id}
+        </if>
+        <if test="type != null and type != ''">
+            and label = #{label}
+        </if>
+        ORDER BY release_time desc
+    </select>
+
+    <!--获取家长建议-->
+    <select id="getParentAdvice" parameterType="map" resultType="map">
+        SELECT
+        p.id,
+        label,
+        title,
+        content,
+        real_name,
+        release_time
+        FROM
+        hs_notice p left join hs_user u on p.release_id = u.user_id
+        where type = '家长建议'
+        <if test="id != null and id != ''">
+            and p.id = #{id}
+        </if>
+        <if test="type != null and type != ''">
+            and label = #{label}
+        </if>
+        ORDER BY release_time desc
+    </select>
+
+    <!--获取学生想法-->
+    <select id="getStudentThinking" parameterType="map" resultType="map">
+        SELECT
+        s.id,
+        label,
+        title,
+        content,
+        real_name,
+        release_time
+        FROM
+        hs_notice s left join hs_user u on s.release_id = u.user_id
+        where type = '学生想法'
+        <if test="id != null and id != ''">
+            and s.id = #{id}
+        </if>
+        <if test="type != null and type != ''">
+            and label = #{label}
+        </if>
+        ORDER BY release_time desc
+    </select>
+
+    <!--获取一条数据的具体内容-->
+    <select id="getOneContent" resultType="map" parameterType="map">
+        select
+        id,
+        release_id author_id,
+        real_name author_name,
+        create_time,
+        label,
+        title,
+        content,
+        integral,
+        '' header_photo
+        from hs_notice n left join hs_user u on n.release_id = u.user_id
+        where id = #{id}
+    </select>
+
+    <!--获取一条数据的留言-->
+    <select id="getOneLeaveMessage" parameterType="map" resultType="map">
+        select id,
+		messager_id,
+		content,
+		hs_leave_message.create_time,
+		real_name,
+		'' header_photot from hs_leave_message left join hs_user  on messager_id = user_id where notice_id = #{id} ORDER BY create_time desc
+    </select>
+
+    <!--新增留言-->
+    <insert id="addMessage" parameterType="map">
+       insert into hs_leave_message(id,notice_id,messager_id,content,create_time) VALUES (uuid(),#{noticeId},#{userId},#{content},#{createTime})
+    </insert>
+</mapper>
