@@ -204,9 +204,10 @@
 
 <style scoped>
   .el-main{
-    padding: 0.5rem 0.001rem;
+    padding: 1rem;
   }
   .search{
+    padding: 1rem;
   }
   .searchinp{
     float: left;

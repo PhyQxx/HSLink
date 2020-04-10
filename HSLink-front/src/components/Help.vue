@@ -54,7 +54,8 @@
     margin: 0 auto;
   }
   .el-main{
-    padding: 1rem 0;
+    padding: 1rem;
     display: flex;
   }
+
 </style>

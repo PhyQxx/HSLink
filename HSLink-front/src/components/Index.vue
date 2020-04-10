@@ -175,7 +175,7 @@
     margin-right: 1rem;
   }
   .el-main{
-    padding: 1rem;
+    padding: 0;
   }
   #tab{
     background-image: url("../assets/img/dh-002.gif");

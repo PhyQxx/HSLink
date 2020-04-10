@@ -155,7 +155,7 @@
     margin: 0 0 3rem 0;
   }
   .el-main{
-    padding: 0;
+    padding: 1rem;
     /*background: #fff;*/
   }
   .searchinp{

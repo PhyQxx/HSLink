@@ -260,7 +260,7 @@
     width: 6rem;
   }
   .el-main{
-    padding: 0;
+    padding: 1rem;
     background: #EEFCFE;
   }
   .el-aside{
@@ -305,6 +305,6 @@
     flex: 1;
   }
   .el-aside{
-    margin-left: 1rem;
+    margin-top: 1rem;
   }
 </style>

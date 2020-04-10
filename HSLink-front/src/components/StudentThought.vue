@@ -60,6 +60,9 @@
 </script>
 
 <style scoped>
+  .el-container{
+    padding: 1rem;
+  }
   .el-aside{
     margin: -1rem 0 0 1rem;
   }
