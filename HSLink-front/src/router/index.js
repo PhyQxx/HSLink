@@ -14,6 +14,7 @@ export default new Router({
         path:'/',
         name:'index',
         component:() => import('@/components/Index'),
+        redirect: '/homepage',
         children: [
           {
             path:'help',

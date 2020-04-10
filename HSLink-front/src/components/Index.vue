@@ -34,22 +34,6 @@
       </el-menu>
     </el-aside>
     <el-main>
-      <!--<div id="tab">
-        <span class="pointer white text-underline" @click="goHomepage">首页</span>
-        <el-divider direction="vertical"></el-divider>
-        <span class="pointer white text-underline" @click="goSchoolNotice">校园通知</span>
-        <el-divider direction="vertical"></el-divider>
-        <span class="pointer white text-underline" @click="goParentsOpinion">家长建议</span>
-        <el-divider direction="vertical"></el-divider>
-        <span class="pointer white text-underline" @click="goStudentThought">学生想法</span>
-        <el-divider direction="vertical"></el-divider>
-        <span class="pointer white text-underline" @click="goMyClass">我的班级</span>
-        <el-divider direction="vertical"></el-divider>
-        <span class="pointer white text-underline" @click="goMore">更多···</span>
-        <span class="pointer white text-underline user-info" v-if="!isLogin" @click="login">登录</span>
-        <span class="pointer white text-underline user-cancellation" v-if="isLogin" @click="cancellation">注销</span>
-        <span class="pointer white text-underline user-info" v-if="isLogin">欢迎：{{userInfo.real_name}}（{{userInfo.user_type}}）</span>
-      </div>-->
       <router-view></router-view>
     </el-main>
     </el-container>

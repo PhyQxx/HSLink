@@ -180,6 +180,7 @@
         console.log(this.form.username)
       },
       selectUsername(event) {
+        this.rememberPassword = true
         if (this.rememberList != null) {
           this.rememberList.forEach((item)=>{
             if (item.username == event) {
@@ -275,7 +276,7 @@
     font-size: 0.9rem;
     float: right;
     cursor: pointer;
-    margin-right: 1rem;
+    margin-right: 1rem!important;
   }
   #forget:hover{
     text-decoration: underline;
