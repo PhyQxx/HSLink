@@ -1,17 +1,17 @@
 <template>
   <el-container>
     <el-main>
+      <el-page-header @back="goBack" content="搜索"></el-page-header>
       <div class="search">
         <el-input class="searchinp" v-model="condition" placeholder="请输入内容" @keydown.enter.native="search"></el-input>
         <el-button type="primary" class="searchbtn" @click="search">搜索</el-button>
       </div>
       <div class="list">
-        <div class="title">家长建议</div>
-        <div class="one" v-for="item in adviceList" >
-          <div class="type">[{{item.label}}]</div>
-          <div class="text" @click="getContent(item.id)">{{item.title}}</div>
-          <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
-          <div class="release-time">{{item.release_time}}</div>
+        <div class="one" v-for="item in list" >
+            <div class="type">[{{item.label}}]</div>
+            <div class="text" @click="getContent(item.id)">{{item.title}}</div>
+            <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
+            <div class="release-time">{{item.release_time}}</div>
         </div>
         <p class="sum">共{{length}}条数据</p>
       </div>
@@ -24,25 +24,33 @@
 </template>
 
 <script>
-  import footers from '../components/components/Footer'
+  import footers from './components/Footer'
     export default {
-        name: "ParentsOpinion",
+        name: "Search",
       data() {
           return{
             condition: '',
-            adviceList: '',
+            list: '',
             length: '',
           }
       },
       mounted() {
-        this.$ajax.post("/hs/getListByAttribute",{text:"",type:"家长建议"},r=>{
-          this.adviceList = r
-          this.length = r.length
-        })
+          this.condition = sessionStorage.getItem("condition")
+          this.$ajax.post("/hs/getListByAttribute",{text:this.condition},r=>{
+            this.list = r
+            this.length = r.length
+          })
       },
       methods: {
+        goBack() {
+          this.$router.back(-1)
+        },
         search() {
-
+          sessionStorage.setItem("condition",this.condition)
+          this.$ajax.post("/hs/getListByAttribute",{text:this.condition},r=>{
+            this.list = r
+            this.length = r.length
+          })
         },
         getContent(id) {
           this.$router.push({name: 'content'});
@@ -51,25 +59,20 @@
         goPersonalInfo(userId) {
           this.$router.push({name: 'personalinfo'});
           sessionStorage.setItem("userId",userId);
-        },
+        }
       },
       components: {
-        footers
+          footers
       }
     }
 </script>
 
 <style scoped>
-  .el-aside{
-    margin: -1rem 0 0 1rem;
-  }
-  .list .title{
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  .el-page-header{
+    padding: 1rem;
   }
   .el-main{
-    padding: 0;
-    background: #EEFCFE;
+    background: #fff;
   }
   .sum{
     color: #999;
@@ -106,8 +109,6 @@
   }
   .one .type{
     flex: 1;
-    text-decoration: none!important;
-    cursor: default!important;
   }
   .one .text{
     flex: 4;
@@ -118,12 +119,19 @@
   .one .release-time{
     flex: 1;
   }
+  .el-aside{
+    margin: -1rem 0 0 1rem;
+  }
+  .el-main{
+    padding: 0;
+  }
   .search{
     margin: 0 0 3rem 0;
   }
   .searchinp{
     float: left;
     width: calc(100% - 6rem);
+
   }
   .searchbtn{
     float: left;

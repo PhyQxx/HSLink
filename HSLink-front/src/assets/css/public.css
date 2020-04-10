@@ -4,6 +4,9 @@ html {
 .default-color{
   color: #666!important;
 }
+.grey{
+  color: #999;
+}
 .pointer{
   cursor: pointer!important;
 }

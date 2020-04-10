@@ -214,9 +214,11 @@
                 let flag = false;
                 this.rememberList.forEach((item)=>{
                   if (item.username == one.username) {
+                    item = one;
                     flag = true;
                   }
                 })
+                sessionStorage.setItem("rememberList",JSON.stringify(this.rememberList));
                 if (flag == false) {
                   this.rememberList.push(one)
                   sessionStorage.setItem("rememberList",JSON.stringify(this.rememberList));

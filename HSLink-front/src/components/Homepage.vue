@@ -1,109 +1,110 @@
 <template>
   <el-container>
-    <div id="top">
-      <div class="school-dynamic">
-        <div id="title">
-          校<br>园<br>动<br>态
-        </div>
-        <el-carousel indicator-position="outside">
-          <el-carousel-item>
-            <img src="../assets/img/carousel/carousel1.jpg" height="100%" width="100%"/>
-          </el-carousel-item>
-          <el-carousel-item>
-            <img src="../assets/img/carousel/carousel2.jpg" height="100%" width="100%"/>
-          </el-carousel-item>
-          <el-carousel-item>
-            <img src="../assets/img/carousel/carousel3.jpg" height="100%" width="100%"/>
-          </el-carousel-item>
-          <el-carousel-item>
-            <img src="../assets/img/carousel/carousel4.jpg" height="100%" width="100%"/>
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+    <div class="search">
+      <el-input class="searchinp" v-model="condition" placeholder="请输入内容" @keydown.enter.native="search"></el-input>
+      <el-button type="primary" class="searchbtn" @click="search">搜索</el-button>
     </div>
-    <div id="bottom">
-      <div class="left">
-        <el-tabs v-model="activeName" @tab-click="">
-          <el-tab-pane label="校园通知" name="first">
-            <div class="newest-notice module">
-              <div class="title">
-                <i class="el-icon-chat-dot-square"></i> 最 新 通 知
-              </div>
-              <div class="content">
-                <div class="one theme-font-blue" v-for="item in newestNotice" :data-id="item.id" >
-                  <div class="type">
-                    [{{item.label}}]
-                  </div>
-                  <div class="text" @click="getContent(item.id)">{{item.title}}</div>
-                  <div class="release">{{item.real_name}}</div>
-                  <div class="release-time">{{item.release_time}}</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="家长意见" name="second">
-            <div class="good-advice module">
-              <div class="title">
-                <i class="el-icon-chat-line-square"></i> 优 秀 建 议
-              </div>
-              <div class="content">
-                <div class="one theme-font-blue" v-for="item in goodAdvice" :data-id="item.id">
-                  <div class="type">
-                    [{{item.label}}]
-                  </div>
-                  <div class="text">{{item.title}}</div>
-                  <div class="release">{{item.real_name}}</div>
-                  <div class="release-time">{{item.release_time}}</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="学生想法" name="third">
-            <div class="magical-thinking module">
-              <div class="title">
-                <i class="el-icon-chat-square"></i> 神 奇 想 法
-              </div>
-              <div class="content">
-                <div class="one theme-font-blue" v-for="item in magicalThinking" :data-id="item.id">
-                  <div class="type">
-                    [{{item.label}}]
-                  </div>
-                  <div class="text">{{item.title}}</div>
-                  <div class="release">{{item.real_name}}</div>
-                  <div class="release-time">{{item.release_time}}</div>
-                </div>
-              </div>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-      <div class="right">
-        <div class="prominent-teacher">
-          <div class="header">
-            <i class="el-icon-trophy"></i>
-            优 秀 教 师
+    <el-main>
+      <div id="top">
+        <div class="school-dynamic">
+          <div id="title">
+            校<br>园<br>动<br>态
           </div>
-          <div class="one" v-for="item in prominentTeacher">
-            <div class="name theme-font-blue">{{item.name}}老师</div>
-            <!--          <div class="subject theme-font-blue">数学</div>-->
-<!--            <div class="grade theme-font-blue">2016届</div>-->
-            <div class="class theme-font-blue">{{item.class}}</div>
-          </div>
-        </div>
-        <div class="merit-student">
-          <div class="header">
-            <i class="el-icon-trophy-1"></i>
-            三 好 学 生
-          </div>
-          <div class="one" v-for="item in meritStudent">
-            <div class="name theme-font-blue">{{item.name}}同学</div>
-<!--            <div class="grade theme-font-blue">2016届</div>-->
-            <div class="subject theme-font-blue">{{item.class}}</div>
-          </div>
+          <el-carousel indicator-position="outside">
+            <el-carousel-item>
+              <img src="../assets/img/carousel/carousel1.jpg" height="100%" width="100%"/>
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../assets/img/carousel/carousel2.jpg" height="100%" width="100%"/>
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../assets/img/carousel/carousel3.jpg" height="100%" width="100%"/>
+            </el-carousel-item>
+            <el-carousel-item>
+              <img src="../assets/img/carousel/carousel4.jpg" height="100%" width="100%"/>
+            </el-carousel-item>
+          </el-carousel>
         </div>
       </div>
-    </div>
-
+      <div id="bottom">
+        <div class="left">
+          <el-tabs v-model="activeName" @tab-click="">
+            <el-tab-pane label="校园通知" name="first">
+              <div class="newest-notice module">
+                <div class="title">
+                  <i class="el-icon-chat-dot-square"></i> 最 新 通 知
+                </div>
+                <div class="content">
+                  <div class="one theme-font-blue" v-for="item in newestNotice" :data-id="item.id" >
+                    <div class="type" @click="searchLabel(item.label)">
+                      [{{item.label}}]
+                    </div>
+                    <div class="text" @click="getContent(item.id)">{{item.title}}</div>
+                    <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
+                    <div class="release-time">{{item.release_time}}</div>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="家长意见" name="second">
+              <div class="good-advice module">
+                <div class="title">
+                  <i class="el-icon-chat-line-square"></i> 优 秀 建 议
+                </div>
+                <div class="content">
+                  <div class="one theme-font-blue" v-for="item in goodAdvice" :data-id="item.id">
+                    <div class="type" @click="searchLabel(item.label)">[{{item.label}}]</div>
+                    <div class="text" @click="getContent(item.id)">{{item.title}}</div>
+                    <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
+                    <div class="release-time">{{item.release_time}}</div>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="学生想法" name="third">
+              <div class="magical-thinking module">
+                <div class="title">
+                  <i class="el-icon-chat-square"></i> 神 奇 想 法
+                </div>
+                <div class="content">
+                  <div class="one theme-font-blue" v-for="item in magicalThinking" :data-id="item.id">
+                    <div class="type" @click="searchLabel(item.label)">[{{item.label}}]</div>
+                    <div class="text" @click="getContent(item.id)">{{item.title}}</div>
+                    <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
+                    <div class="release-time">{{item.release_time}}</div>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <div class="right">
+          <div class="prominent-teacher">
+            <div class="header">
+              <i class="el-icon-trophy"></i>
+              优 秀 教 师
+            </div>
+            <div class="one" v-for="item in prominentTeacher">
+              <div class="name theme-font-blue">{{item.name}}老师</div>
+              <!--          <div class="subject theme-font-blue">数学</div>-->
+              <!--            <div class="grade theme-font-blue">2016届</div>-->
+              <div class="class theme-font-blue">{{item.class}}</div>
+            </div>
+          </div>
+          <div class="merit-student">
+            <div class="header">
+              <i class="el-icon-trophy-1"></i>
+              三 好 学 生
+            </div>
+            <div class="one" v-for="item in meritStudent">
+              <div class="name theme-font-blue">{{item.name}}同学</div>
+              <!--            <div class="grade theme-font-blue">2016届</div>-->
+              <div class="subject theme-font-blue">{{item.class}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-main>
   </el-container>
 </template>
 
@@ -112,6 +113,7 @@
         name: "Hompage",
       data() {
         return{
+          condition: '',
           newestNotice: '',
           goodAdvice: '',
           magicalThinking: '',
@@ -180,19 +182,45 @@
         })
       },
       methods: {
+        searchLabel(label) {
+          sessionStorage.setItem("condition",label)
+          this.$router.push({name: "search"})
+        },
+        search() {
+          sessionStorage.setItem("condition",this.condition)
+          this.$router.push({name: "search"})
+        },
         getContent(id) {
           this.$router.push({name: 'content'});
           sessionStorage.setItem("noticeId",id);
+        },
+        goPersonalInfo(userId) {
+          this.$router.push({name: 'personalinfo'});
+          sessionStorage.setItem("userId",userId);
         }
       }
     }
 </script>
 
 <style scoped>
+  .el-main{
+    padding: 0.5rem 0.001rem;
+  }
+  .search{
+  }
+  .searchinp{
+    float: left;
+    width: calc(100% - 6rem);
+
+  }
+  .searchbtn{
+    float: left;
+    width: 6rem;
+  }
   .release-time{
     color: #999;
-    text-decoration: none;
-    cursor: default;
+    text-decoration: none!important;
+    cursor: default!important;
   }
   #top{
     background: #fff;
@@ -295,7 +323,7 @@
     width: 70%;
   }
   .right{
-    width: 30%;
+    width: calc(30% - 2rem);
     padding: 1rem;
   }
   .one div{
@@ -370,7 +398,7 @@
     background: #fff;
   }
   .el-container{
-    /*padding: 0 20%;*/
+    /*padding: 0;*/
     background: #EEFCFE;
     display: block;
   }

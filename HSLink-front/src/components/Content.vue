@@ -2,13 +2,16 @@
   <el-container>
     <el-main>
       <div class="content">
+        <el-page-header @back="goBack" content="">
+        </el-page-header>
         <div class="header">
           <h1>{{all.title}}</h1>
           <span>作者：</span>
           <span class="blue pointer authorspan">{{all.author_name}}</span>
-          <span>发布时间:{{all.creat_time}}</span>
+          <span class="margin-right">发布时间：</span>
+          <span class="grey">{{all.create_time}}</span>
           <div class="label">
-            <span>文章标签:</span>
+            <span>文章标签：</span>
             <span class="special-text-yellow blue">{{all.label}}</span>
           </div>
         </div>
@@ -116,16 +119,23 @@
         })
       },
       methods: {
+        goBack() {
+          this.$router.back(-1)
+        },
         messages() {
           this.$prompt('请输入留言', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-            inputErrorMessage: '邮箱格式不正确'
+            inputValidator:  (value) => {
+              if(!value) {
+                return '输入不能为空';
+              }
+            },
+            inputErrorMessage: '不能为空'
           }).then(({ value }) => {
             let day2 = new Date();
             day2.setTime(day2.getTime());
-            let date = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate()+" "+day2.getHours()+"-"+day2.getMinutes()
+            let date = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate()+" "+day2.getHours()+":"+day2.getMinutes()
             this.$ajax.post("/hs/addMessage",{noticeId:sessionStorage.getItem("noticeId"),content:value,
               createTime:date,userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
               if (r == "1") {
@@ -135,7 +145,12 @@
                 });
                 this.$ajax.post("/hs/getOneContent", {
                   id: sessionStorage.getItem("noticeId")
-                }, r => {this.message = r.message;})
+                }, r => {
+                  this.message = r.message;
+                  for (let i = 0; i < this.message.length; i++) {
+                    this.message[i].header_photo = this.message[i].real_name.substring(0, 1)
+                  }
+                })
               }
             })
           }).catch(() => {
@@ -164,6 +179,9 @@
     }
 </script>
 <style lang="scss" scoped>
+  .margin-right{
+    margin-left: 1rem;
+  }
   .message{
     margin: 1rem 1rem 0 0;
     float: right;
@@ -269,7 +287,7 @@
     margin-right: 1rem;
   }
   .header span:nth-child(-n+4){
-    margin-right: 0.5rem;
+    /*margin-right: 0.5rem;*/
   }
   .content{
     padding: 1rem;

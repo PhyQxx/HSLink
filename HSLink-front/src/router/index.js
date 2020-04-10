@@ -49,7 +49,17 @@ export default new Router({
             path:'content',
             name:'content',
             component:() => import('@/components/Content')
-          }
+          },
+          {
+            path:'search',
+            name:'search',
+            component:() => import('@/components/Search')
+          },
+          {
+            path:'personalinfo',
+            name:'personalinfo',
+            component:() => import('@/components/PersonalInfo')
+          },
         ]
       }
 

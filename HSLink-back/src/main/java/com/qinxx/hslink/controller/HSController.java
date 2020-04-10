@@ -51,6 +51,14 @@ public class HSController {
         return result;
     }
 
+    //查询某些条件数据
+    @RequestMapping(value = "/getListByAttribute", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getListByAttribute(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getListByAttribute(param);
+        return result;
+    }
+
     //新增留言
     @RequestMapping(value = "/addMessage", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -58,5 +66,39 @@ public class HSController {
         Map<String,Object> result = hsService.addMessage(param);
         return result;
     }
+
+    //新增留言
+    @RequestMapping(value = "/addArticle", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> addArticle(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.addArticle(param);
+        return result;
+    }
+
+    //获取班级信息
+    @RequestMapping(value = "/getClassInfo", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getClassInfo(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getClassInfo(param);
+        return result;
+    }
+
+    //新增班级公告
+    @RequestMapping(value = "/addBulletin", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> addBulletin(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.addBulletin(param);
+        return result;
+    }
+
+    //修改班级公告
+    @RequestMapping(value = "/updateBulletin", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> updateBulletin(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.updateBulletin(param);
+        return result;
+    }
+
+
 
 }

@@ -31,6 +31,7 @@
         label,
         title,
         content,
+        user_id,
         real_name,
         release_time
         FROM
@@ -52,6 +53,7 @@
         label,
         title,
         content,
+        user_id,
         real_name,
         release_time
         FROM
@@ -73,6 +75,7 @@
         label,
         title,
         content,
+        user_id,
         real_name,
         release_time
         FROM
@@ -113,8 +116,95 @@
 		'' header_photot from hs_leave_message left join hs_user  on messager_id = user_id where notice_id = #{id} ORDER BY create_time desc
     </select>
 
+    <!--获取某些条件的数据-->
+    <select id="getListByAttribute" resultType="map" parameterType="map">
+        SELECT
+        s.id,
+        label,
+        title,
+        content,
+        user_id,
+        real_name,
+        release_time,
+        u.real_name,
+        u.integral,
+        '' header_photo,
+        type
+        FROM
+        hs_notice s left join hs_user u on s.release_id = u.user_id
+        where 1 = 1
+        <if test="releaseId != null and releaseId != ''">
+            and release_id = #{releaseId}
+        </if>
+        <if test="release_time != null and release_time != ''">
+            and release_time like CONCAT('%',#{release_time},'%')
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type}
+        </if>
+        and (label like CONCAT('%',#{text},'%')
+        or title like CONCAT('%',#{text},'%')
+        or content like CONCAT('%',#{text},'%')
+        or real_name like CONCAT('%',#{text},'%'))
+        ORDER BY release_time desc
+    </select>
+
     <!--新增留言-->
     <insert id="addMessage" parameterType="map">
        insert into hs_leave_message(id,notice_id,messager_id,content,create_time) VALUES (uuid(),#{noticeId},#{userId},#{content},#{createTime})
     </insert>
+
+    <!--新增文章-->
+    <insert id="addArticle" parameterType="map">
+        insert into hs_notice (id,label,title,content,release_id,release_time,type)
+        values
+        (uuid(),#{label},#{title},#{content},#{release_id},#{release_time},#{type})
+    </insert>
+
+    <!--获取班级公告-->
+    <select id="getClassBulletin" parameterType="map" resultType="map">
+        SELECT
+DISTINCT
+id,
+c.class_id,
+c.class_name,
+title,
+content,
+release_time
+FROM
+	hs_class_bulletin c
+	left JOIN hs_user u ON c.class_name = u.class_name
+WHERE
+	c.class_name = ( SELECT class_name FROM hs_user WHERE user_id = #{id} )
+    </select>
+
+    <!--获取班级通知-->
+    <select id="getClassNotice" parameterType="map" resultType="map">
+        select * from hs_class_notice left join hs_user on release_id = user_id
+        where hs_class_notice.class_name = (select class_name from hs_user
+        where user_id = #{id})
+        <if test="text != null and text != ''">
+            and (label like CONCAT('%',#{text},'%')
+            or title like CONCAT('%',#{text},'%')
+            or content like CONCAT('%',#{text},'%')
+            or real_name like CONCAT('%','五一','%'))
+        </if>
+        ORDER BY release_time desc
+    </select>
+
+    <!--获取班级成员-->
+    <select id="getStudents" parameterType="map" resultType="map">
+        select * from hs_user where class_name = (select class_name from hs_user where user_id = #{id})
+    </select>
+
+    <!--新增班级公告-->
+    <insert id="addBulletin" parameterType="map">
+        insert into hs_class_bulletin (id,class_id,class_name,title,content,release_time) VALUES (uuid(),#{classId},#{className},#{title},#{content},#{releaseTime})
+    </insert>
+
+    <!--修改班级公告-->
+    <update id="updateBulletin" parameterType="map">
+        update hs_class_bulletin set class_id = #{classId},class_name=#{className},title=#{title},content=#{content},release_time=#{releaseTime} where id = #{id}
+    </update>
+
 </mapper>

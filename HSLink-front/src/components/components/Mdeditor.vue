@@ -43,7 +43,7 @@
   import Vue from 'vue'
   import marked from 'marked'
   import scroll from 'vue-scroll'
-  import hljs from '../../assets/js/highlight.min.js'
+  // import ranges from '../../assets/js/highlight.min.js'
   import range from '../../assets/js/rangeFn.js'
   Vue.use(scroll)
   marked.setOptions({
@@ -55,9 +55,9 @@
     sanitize: false,
     smartLists: true,
     smartypants: false,
-    highlight: function(code) {
-      return hljs.highlightAuto(code).value
-    }
+    /*highlight: function(code) {
+      return ranges.highlightAuto(code).value
+    }*/
   });
 
   function insertContent(val, that) {

@@ -67,11 +67,80 @@ public class HSServiceImpl implements HSService {
     }
 
     @Override
+    public Map<String, Object> getListByAttribute(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getListByAttribute(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
     public Map<String, Object> addMessage(Map<String, Object> param) {
         int res = 0;
         Map<String, Object> result = new HashMap<>();
         try {
             res = hsLinkMapper.addMessage(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addArticle(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addArticle(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getClassInfo(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> res1 = hsLinkMapper.getClassBulletin(param);
+        List<Map<String, Object>> res2 = hsLinkMapper.getClassNotice(param);
+        List<Map<String, Object>> res3 = hsLinkMapper.getStudents(param);
+        res.put("bulletin",res1);
+        res.put("noticeList",res2);
+        res.put("students",res3);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addBulletin(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addBulletin(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateBulletin(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updateBulletin(param);
         } catch (Exception e) {
             e.printStackTrace();
             res = 0;

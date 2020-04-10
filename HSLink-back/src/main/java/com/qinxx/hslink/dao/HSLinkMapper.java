@@ -45,7 +45,42 @@ public interface HSLinkMapper {
     List<Map<String,Object>> getOneLeaveMessage(Map<String,Object> param);
 
     /**
+     * 查询某些条件数据
+     */
+    List<Map<String,Object>> getListByAttribute(Map<String,Object> param);
+
+    /**
      * 新增留言
      */
     int addMessage(Map<String,Object> param);
+
+    /**
+     * 新增文章
+     */
+    int addArticle(Map<String,Object> param);
+
+    /**
+     * 获取班级公告
+     */
+    Map<String,Object> getClassBulletin(Map<String,Object> param);
+
+    /**
+     * 获取班级公告
+     */
+    List<Map<String,Object>> getClassNotice(Map<String,Object> param);
+
+    /**
+     * 获取班级成员
+     */
+    List<Map<String,Object>> getStudents(Map<String,Object> param);
+
+    /**
+     * 新增班级公告
+     */
+    int addBulletin(Map<String,Object> param);
+
+    /**
+     * 修改班级公告
+     */
+    int updateBulletin(Map<String,Object> param);
 }

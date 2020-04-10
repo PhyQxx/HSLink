@@ -29,7 +29,32 @@ public interface HSService {
     Map<String,Object> getOneContent(Map<String,Object> param);
 
     /**
+     * 查询某些条件数据
+     */
+    Map<String,Object> getListByAttribute(Map<String,Object> param);
+
+    /**
      * 新增留言
      */
     Map<String,Object> addMessage(Map<String,Object> param);
+
+    /**
+     * 新增留言
+     */
+    Map<String,Object> addArticle(Map<String,Object> param);
+
+    /**
+     * 获取班级信息
+     */
+    Map<String,Object> getClassInfo(Map<String,Object> param);
+
+    /**
+     * 新增班级公告
+     */
+    Map<String,Object> addBulletin(Map<String,Object> param);
+
+    /**
+     * 修改班级公告
+     */
+    Map<String,Object> updateBulletin(Map<String,Object> param);
  }
