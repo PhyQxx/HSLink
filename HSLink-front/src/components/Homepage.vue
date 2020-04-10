@@ -264,17 +264,17 @@
     display: flex;
     height: 1.5rem;
     line-height: 1.5rem;
-    padding: 0 2rem;
+    padding: 0 1rem;
   }
   .merit-student .one div:nth-child(1){
-    flex: 2;
+    flex: 3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
   }
   .merit-student .one div:nth-child(2){
-    flex: 3;
+    flex: 2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -284,20 +284,20 @@
     display: flex;
     height: 1.5rem;
     line-height: 1.5rem;
-    padding: 0 2rem;
+    padding: 0 1rem;
   }
   .prominent-teacher .one .subject{
     flex: 1!important;
   }
   .prominent-teacher .one div:nth-child(1){
-    flex: 2;
+    flex: 3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
   }
   .prominent-teacher .one div:nth-child(2){
-    flex: 3;
+    flex: 2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -373,8 +373,8 @@
   }
   .school-dynamic{
     display: flex;
-    width: 80%;
-    padding: 0 10%;
+    width: calc(100% - 2rem);
+    padding: 1rem;
     height: 24rem;
   }
   #title{

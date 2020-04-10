@@ -2,7 +2,7 @@
   <el-main class="body-background">
     <div class="left">
       <div class="top">
-        <img src="../assets/img/left-1.gif" height="83" width="142"/>
+        <img src="../assets/img/left-1.gif"/>
       </div>
       <div class="bottom">
         <el-menu
@@ -52,6 +52,7 @@
   .left img{
     display: block;
     margin: 0 auto;
+    width: 100%;
   }
   .el-main{
     padding: 1rem;
