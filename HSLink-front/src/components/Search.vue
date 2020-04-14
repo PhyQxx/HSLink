@@ -6,7 +6,8 @@
         <el-input class="searchinp" v-model="condition" placeholder="请输入内容" @keydown.enter.native="search"></el-input>
         <el-button type="primary" class="searchbtn" @click="search">搜索</el-button>
       </div>
-      <div class="list">
+      <nodate v-if="noDate"></nodate>
+      <div class="list" v-if="!noDate">
         <div class="one" v-for="item in list" >
             <div class="type">[{{item.label}}]</div>
             <div class="text" @click="getContent(item.id)">{{item.title}}</div>
@@ -25,6 +26,7 @@
 
 <script>
   import footers from './components/Footer'
+  import nodate from './components/NoData'
     export default {
         name: "Search",
       data() {
@@ -32,6 +34,7 @@
             condition: '',
             list: '',
             length: '',
+            noDate: false,
           }
       },
       mounted() {
@@ -39,6 +42,9 @@
           this.$ajax.post("/hs/getListByAttribute",{text:this.condition},r=>{
             this.list = r
             this.length = r.length
+            if (r.length === 0) {
+              this.noDate = true
+            }
           })
       },
       methods: {
@@ -62,7 +68,8 @@
         }
       },
       components: {
-          footers
+          footers,
+          nodate
       }
     }
 </script>
@@ -70,6 +77,9 @@
 <style scoped>
   .el-page-header{
     padding: 1rem;
+  }
+  .el-container{
+    margin: 1rem;
   }
   .el-main{
     background: #fff;
@@ -109,6 +119,8 @@
   }
   .one .type{
     flex: 1;
+    cursor: default;
+    text-decoration: none!important;
   }
   .one .text{
     flex: 4;
@@ -117,10 +129,12 @@
     flex: 1;
   }
   .one .release-time{
-    flex: 1;
+    flex: 1.5;
   }
   .el-aside{
     margin: -1rem 0 0 1rem;
+    width: 14rem!important;
+    overflow: hidden;
   }
   .el-main{
     padding: 0;

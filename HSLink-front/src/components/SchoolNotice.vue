@@ -77,7 +77,7 @@
         getDay(date) {
           this.dialogVisible = true
           console.log(date)
-          this.$ajax.post("/hs/getListByAttribute",{release_time: date.day,text: ''},
+          this.$ajax.post("/hs/getListByAttribute",{release_time: date.day,text: '',type:"校园通知"},
             r=> {
               this.list  = r;
               this.length  = r.length;

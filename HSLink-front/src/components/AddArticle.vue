@@ -60,13 +60,14 @@
     },
     mounted() {
       let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-      if (userInfo.user_type == "教师") {
+      if (userInfo.user_type === "教师") {
         this.$emit("editorTitle","新增校园通知")
+        // if (sessionStorage.getItem("release") == )
         this.type = "校园通知"
-      } else if (userInfo.user_type == "家长") {
+      } else if (userInfo.user_type === "家长") {
         this.$emit("editorTitle","新增家长建议")
         this.type = "家长建议"
-      } else if (userInfo.user_type == "学生") {
+      } else if (userInfo.user_type === "学生") {
         this.$emit("editorTitle","新增学生想法")
         this.type = "学生想法"
       }
@@ -103,18 +104,36 @@
             type: "warning"
           })
         } else {
-          let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-          this.$ajax.post("/hs/addArticle",{label:this.label,title:this.title,content:this.msg.mdValue,release_id:userInfo.user_id,
-            release_time:getDate(),type:this.type},r=>{
-            if (r == "1") {
-              this.$message({
-                message: "发表成功",
-                type: "success"
-              });
-              this.$emit("goInfo");
-              this.$emit("refresh");
-            }
-          })
+          if (sessionStorage.getItem("releaseType") === "classNotice") {
+            let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+            this.$ajax.post("/hs/addClassNotice",{classId:userInfo.class_id,className:userInfo.class_name,
+              label:this.label,title:this.title,content:this.msg.mdValue,releaseId:userInfo.user_id,
+              release_time:getDate(),type:this.type},r=> {
+              if (r === 1) {
+                this.$message({
+                  message: "发布成功",
+                  type: "success"
+                });
+                this.$emit("goInfo");
+                this.$emit("refresh");
+              }
+            })
+            sessionStorage.setItem("releaseType","")
+          } else {
+            let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+            this.$ajax.post("/hs/addArticle",{label:this.label,title:this.title,content:this.msg.mdValue,release_id:userInfo.user_id,
+              release_time:getDate(),type:this.type},r=>{
+              if (r === 1) {
+                this.$message({
+                  message: "发表成功",
+                  type: "success"
+                });
+                this.$emit("goInfo");
+                this.$emit("refresh");
+                this.$emit("editorTitle","个人中心");
+              }
+            })
+          }
         }
       }
     },

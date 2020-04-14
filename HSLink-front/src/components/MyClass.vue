@@ -1,11 +1,18 @@
 <template>
   <el-container>
     <el-main>
-      <div class="search">
+      <el-page-header @back="goBack" content="发布班级通知" v-if="addClassNotice"></el-page-header>
+      <addArticle
+        v-if="addClassNotice"
+        @editorTitle="editorTitle"
+        @goInfo="goInfo"
+        @refresh="refresh"
+      ></addArticle>
+      <div class="search" v-if="!addClassNotice">
         <el-input class="searchinp" v-model="condition" placeholder="请输入内容" @keydown.enter.native="search"></el-input>
         <el-button type="primary" class="searchbtn" @click="search">搜索</el-button>
       </div>
-      <div class="class-bulletin">
+      <div class="class-bulletin" v-if="!addClassNotice">
         <div class="title">班级公告</div>
         <div class="bulletin">
           <div class="text">
@@ -15,15 +22,17 @@
           <el-button class="editor" @click="editor">编辑</el-button>
         </div>
       </div>
-      <div class="list">
+      <div class="list" v-if="!addClassNotice">
         <div class="title">班级通知</div>
-        <div class="one" v-for="item in noticeList" >
+        <el-button class="releasebut" size="small" @click="release" plain>发布通知</el-button>
+        <nodate v-if="noDate"></nodate>
+        <div class="one" v-for="item in noticeList" v-if="!noDate">
           <div class="type">[{{item.label}}]</div>
           <div class="text" @click="getContent(item.id)">{{item.title}}</div>
           <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
           <div class="release-time">{{item.release_time}}</div>
         </div>
-        <p class="sum">共{{length}}条数据</p>
+        <p class="sum" v-if="!noDate">共{{length}}条数据</p>
       </div>
     </el-main>
     <el-aside>
@@ -63,10 +72,15 @@
 
 <script>
   import  { getDate } from  '../assets/js/public.js'
-    export default {
+  import nodate from './components/NoData'
+  import addArticle from './AddArticle'
+
+  export default {
         name: "MyClass",
       data() {
           return{
+            addClassNotice: false,
+            noDate: false,
             condition: '',
             editors: {
               title: '',
@@ -94,9 +108,46 @@
           this.noticeList = r. noticeList;
           this.length = r. noticeList.length;
           this.students = r.students;
+          if (r. noticeList.length === 0) {
+            this.noDate = true
+          }
         })
       },
       methods: {
+        goBack() {
+          this.addClassNotice = false
+        },
+        refresh() {
+          let userInfo = JSON.parse(sessionStorage.getItem("userInfo"))
+          this.$ajax.post("/hs/getClassInfo",{id:userInfo.user_id},r=>{
+            if (r.bulletin == null) {
+              this.isNull = true;
+            } else {
+              this.bulletin = r.bulletin;
+            }
+            this.noticeList = r. noticeList;
+            this.length = r. noticeList.length;
+            this.students = r.students;
+            if (r. noticeList.length === 0) {
+              this.noDate = true
+            }
+          })
+        },
+        editorTitle(pageTitle) {
+          this.pageTitle = pageTitle
+        },
+        goInfo() {
+          this.addClassNotice = false
+        },
+        release() {
+          let userInfo = JSON.parse(sessionStorage.getItem("userInfo"))
+          if (userInfo.user_type === "教师") {
+            this.addClassNotice = true
+            sessionStorage.setItem("releaseType","classNotice")
+          } else {
+            this.$message.error("没有权限发布通知")
+          }
+        },
         bulletinSubmit() {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"))
           if (this.isNull === false) {
@@ -160,17 +211,29 @@
         getContent(id) {
           this.$router.push({name: 'content'});
           sessionStorage.setItem("noticeId",id);
+          sessionStorage.setItem("contentType","classContent");
         },
         goPersonalInfo(userId) {
           this.$router.push({name: 'personalinfo'});
           sessionStorage.setItem("userId",userId);
         },
+      },
+      components: {
+        nodate,
+        addArticle
       }
     }
 </script>
 
 <style scoped>
-
+  .el-page-header{
+    padding: 1rem;
+    background: #fff;
+  }
+  .releasebut{
+    float: right;
+    margin: -3rem 0 0 0;
+  }
   .text .tit{
     text-align: center;
     font-size: 1.2rem;
@@ -246,7 +309,7 @@
     flex: 1;
   }
   .one .release-time{
-    flex: 1;
+    flex: 1.5;
   }
   .search{
     margin: 0 0 3rem 0;
@@ -264,7 +327,7 @@
     background: #EEFCFE;
   }
   .el-aside{
-    width: 10rem!important;
+    width: 14rem!important;
     background: #fff;
   }
   .el-aside .title{
@@ -274,6 +337,7 @@
   }
   .students .student{
     padding: 0 1rem;
+    width: 10rem;
     font-size: 0.8rem;
     display: flex;
     height: 1.5rem;

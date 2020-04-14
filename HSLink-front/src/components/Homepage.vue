@@ -353,7 +353,7 @@
     flex: 1;
   }
   .one .release-time{
-    flex: 1;
+    flex: 1.5;
   }
   .module{
     border: 1px solid #419EFF;
@@ -373,9 +373,11 @@
   }
   .school-dynamic{
     display: flex;
-    width: calc(100% - 2rem);
+    /*width: calc(100% - 2rem);*/
     padding: 1rem;
     height: 24rem;
+    width: 80%;
+    margin: 0 auto;
   }
   #title{
     color: #419EFF;

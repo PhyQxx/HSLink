@@ -20,7 +20,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="账号" prop="username">
-                <el-select
+                <!--<el-select
                   v-if="isSelect"
                   v-model="form.username"
                   filterable
@@ -36,8 +36,8 @@
                     <span style="float: left">{{ item.username}}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px" @click="deleteUser(item.username,index)"><i class="el-icon-circle-close"></i></span>
                   </el-option>
-                </el-select>
-<!--                <el-input v-model="form.username" type="text" placeholder="请输入手机号或姓名"></el-input>-->
+                </el-select>-->
+                <el-input v-model="form.username" type="text" placeholder="请输入手机号或姓名"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password" type="password" placeholder="请输入密码" @keyup.enter.native="login"></el-input>
@@ -120,7 +120,7 @@
           ],
           username: [
             { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 6, max: 11, message: '长度在 6 到 11 个字符', trigger: 'blur' }
+            { min: 2, max: 11, message: '长度在 2 到 11 个字符', trigger: 'blur' }
           ],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
@@ -163,7 +163,7 @@
     mounted() {
     },
     methods:{
-      deleteUser(username,index) {
+      /*deleteUser(username,index) {
         if (this.rememberList != null) {
           this.rememberList.forEach((item)=>{
             if (item.username == username) {
@@ -178,19 +178,19 @@
           this.form.username = '';
         },10)
         console.log(this.form.username)
-      },
-      selectUsername(event) {
-        this.rememberPassword = true
+      },*/
+      /*selectUsername(event) {
         if (this.rememberList != null) {
           this.rememberList.forEach((item)=>{
             if (item.username == event) {
               this.form = item
+              this.rememberPassword = true
             }
           })
         }
         this.isSelect = false
         this.isSelect = true
-      },
+      },*/
       forget() {
         this.$message("请联系管理员重置密码")
       },
@@ -205,7 +205,7 @@
               message: "登录成功",
               type: "success"
             });
-            if (this.rememberPassword == true) {
+            /*if (this.rememberPassword == true) {
               let one = {
                 role: this.form.role,
                 username: this.form.username,
@@ -229,7 +229,7 @@
                 rememberList.push(one)
                 sessionStorage.setItem("rememberList",JSON.stringify(rememberList));
               }
-            }
+            }*/
             this.loading = false;
             this.$router.push({
               name: "homepage"

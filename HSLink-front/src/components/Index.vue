@@ -5,7 +5,7 @@
         <div class="date default-color">{{date}}</div>
         <div class="function">
           <span class="pointer special-font-blue " v-if="!isLogin" @click="login">登录</span>
-          <span class="pointer special-font-blue " v-if="isLogin">欢迎：{{userInfo.real_name}}（{{userInfo.user_type}}）</span>
+          <span class="pointer special-font-blue " v-if="isLogin" @click="goPersonalInfo(userInfo.user_id)">欢迎：{{userInfo.real_name}}（{{userInfo.user_type}}）</span>
           <span class="pointer special-font-blue " v-if="isLogin" @click="cancellation">注销</span>
           <el-divider direction="vertical"></el-divider>
           <span class="pointer special-font-blue" @click="service">客服中心</span>
@@ -41,28 +41,40 @@
 </template>
 
 <script>
+  import  { getDate } from  '../assets/js/public.js'
   export default {
     data() {
       return{
         isCollapse: true,
         isLogin: false,
         date: '',
-        userInfo: '',
+        userInfo: {
+          real_name: '',
+          user_type: '',
+        },
       }
     },
     mounted() {
       let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-      this.userInfo = userInfo;
-      if (userInfo != '' || userInfo != null) {
+      if (userInfo == '' || userInfo === null) {
+
+      } else {
         this.isLogin = true;
+        this.userInfo = userInfo;
       }
       setInterval(()=>{
         let day2 = new Date();
         day2.setTime(day2.getTime());
-        this.date = day2.getFullYear()+"年" + (day2.getMonth()+1) + "月" + day2.getDate()+'日 星期'+"日一二三四五六".charAt(new Date().getDay())
-          +" | "+day2.getHours()+"时"+day2.getMinutes()+"分"+day2.getSeconds()+"秒";},1000)
+        this.date = day2.getFullYear()+"年" + (day2.getMonth()+1<10? "0"+(day2.getMonth()+1):day2.getMonth()+1)
+          + "月" + (day2.getDate()<10?"0"+day2.getDate():day2.getDate())+'日 星期'+"日一二三四五六".charAt(new Date().getDay())
+          +" | "+(day2.getHours()<10?"0"+day2.getHours():day2.getHours())+"时"+(day2.getMinutes()<10?"0"
+            +day2.getMinutes():day2.getMinutes())+"分"+(day2.getSeconds()<10?"0"+day2.getSeconds():day2.getSeconds())+"秒";},1000)
     },
     methods:{
+      goPersonalInfo(userId) {
+        this.$router.push({name: 'personalinfo'});
+        sessionStorage.setItem("userId",userId);
+      },
       goMore() {
         this.$message({
           message:"期待更多内容",
@@ -70,7 +82,12 @@
 
       },
       goMyClass() {
-        this.$router.push({name: "myclass"})
+        if (this.isLogin == true) {
+          this.$router.push({name: "myclass"})
+        } else {
+          this.$message.warning("请先登录")
+          this.$router.push({name: "login"})
+        }
       },
       goStudentThought() {
         this.$router.push({name: "studentthought"})
@@ -134,6 +151,9 @@
 </script>
 
 <style scoped>
+  .el-container{
+    /*height: 100%;*/
+  }
   .el-menu{
     border-radius: 5px;
   }
@@ -143,6 +163,7 @@
     width: 10rem!important;
     margin-top: 1rem;
     text-align: center;
+    height: 21rem;
   }
   .el-radio-group{
     margin-bottom: 0!important;

@@ -7,12 +7,12 @@
         <div class="header">
           <h1>{{all.title}}</h1>
           <span>作者：</span>
-          <span class="blue pointer authorspan">{{all.author_name}}</span>
+          <span class="blue pointer authorspan" @click="goPersonalInfo(all.author_id)">{{all.author_name}}</span>
           <span class="margin-right">发布时间：</span>
           <span class="grey">{{all.create_time}}</span>
           <div class="label">
             <span>文章标签：</span>
-            <span class="special-text-yellow blue">{{all.label}}</span>
+            <span class="special-text-yellow blue pointer" @click="searchLabel(all.label)">{{all.label}}</span>
           </div>
         </div>
         <div class="middle">
@@ -31,19 +31,20 @@
         </div>
         <div class="footer">
           <el-row>
-            <el-button type="primary" icon="el-icon-thumb" plain>点赞</el-button>
-            <el-button type="primary" icon="el-icon-share" plain>分享</el-button>
+            <el-button type="primary" icon="el-icon-thumb" size="mini" plain @click="follow">点 赞</el-button>
+            <el-button type="primary" icon="el-icon-share" size="mini" plain @click="follow">分 享</el-button>
           </el-row>
         </div>
       </div>
       <div class="comment-area">
         <el-button class="message" type="primary" @click="messages">留言</el-button>
         <div class="comment-list">
-          <div class="comment-one" v-for="item in message">
+          <div class="comment-one" v-for="(item,index) in message">
             <div class="comment-header">
               <div class="header-photo">{{item.header_photo}}</div>
               <div class="name">{{item.real_name}}</div>
               <div class="time">{{item.create_time}}</div>
+              <span class=" delete pointer blue delete-my" v-if="(userId == item.messager_id)" @click="deleteMy(item.id)">删除</span>
             </div>
             <div class="comment-content">{{item.content}}</div>
             <hr>
@@ -56,8 +57,8 @@
         <div class="info">
           <div class="name">
             <div class="header-photo">{{all.header_photo}}</div>
-            <div class="username">{{all.author_name}}</div>
-            <div class="go-homepage pointer">TA的个人主页 ></div>
+            <div class="username" >{{all.author_name}}</div>
+            <div class="go-homepage pointer" @click="goPersonalInfo(all.author_id)">TA的个人主页 ></div>
           </div>
           <div class="grades">
             <div class="grade">
@@ -75,8 +76,8 @@
         </div>
         <hr>
         <div class="operation">
-          <el-button type="primary" plain>关 注</el-button>
-          <el-button type="primary" plain>私信</el-button>
+          <el-button type="primary" plain size="mini" @click="follow">关 注</el-button>
+          <el-button type="primary" plain size="mini" @click="sendLetter(all.author_id,all.author_name)">私 信</el-button>
         </div>
       </div>
       <footers></footers>
@@ -85,6 +86,7 @@
 </template>
 
 <script>
+  import  { getDate } from  '../assets/js/public.js'
   import footers from './components/Footer'
   import markdown from "./components/Mdeditor";
     export default {
@@ -100,6 +102,7 @@
             mdValue:''
           },
           flag:false,
+          userId: JSON.parse(sessionStorage.getItem("userInfo")).user_id
         }
       },
       created() {
@@ -111,14 +114,82 @@
           this.all = r.content;
           this.message = r.message;
           this.msg.mdValue = r.content.content;
-          this.all.header_photo = this.all.author_name.substring(0, 1)
+          this.all.header_photo = this.all.author_name.substring(0, 1);
           for (let i = 0; i < this.message.length; i++) {
-            this.message[i].header_photo = this.message[i].real_name.substring(0, 1)
+            this.message[i].header_photo = this.message[i].real_name.substring(0, 1);
           }
           setTimeout(()=>{this.$refs.markdown.addLine()},1)
         })
       },
       methods: {
+        deleteMy(id) {
+          this.$confirm('确定删除该条留言, 是否继续?', '删除', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$ajax.post("/hs/deleteOneMessage",{id:id},r=>{
+              if (r === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.$ajax.post("/hs/getOneContent", {
+                  id: sessionStorage.getItem("noticeId")
+                }, r => {
+                  this.message = r.message;
+                  for (let i = 0; i < this.message.length; i++) {
+                    this.message[i].header_photo = this.message[i].real_name.substring(0, 1)
+                  }
+                })
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
+        sendLetter(id,name) {
+          let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+          this.$prompt('接受者：'+name, '发送私信', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputPattern: /\S/,
+            inputErrorMessage: '内容不能为空'
+          }).then(({ value }) => {
+            this.$ajax.post("/hs/sendLetter",{sendId:userInfo.user_id,receiveId:id,content:value,time:getDate()},r=>{
+              if (r === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '发送成功'
+                });
+              } else {
+                this.$message.error("发送失败")
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消输入'
+            });
+          });
+        },
+        follow() {
+          this.$message({
+            type:"success",
+            message: "喜欢就好"
+          })
+        },
+        searchLabel(label) {
+          sessionStorage.setItem("condition",label)
+          this.$router.push({name: "search"})
+        },
+        goPersonalInfo(userId) {
+          this.$router.push({name: 'personalinfo'});
+          sessionStorage.setItem("userId",userId);
+        },
         goBack() {
           this.$router.back(-1)
         },
@@ -133,11 +204,8 @@
             },
             inputErrorMessage: '不能为空'
           }).then(({ value }) => {
-            let day2 = new Date();
-            day2.setTime(day2.getTime());
-            let date = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate()+" "+day2.getHours()+":"+day2.getMinutes()
             this.$ajax.post("/hs/addMessage",{noticeId:sessionStorage.getItem("noticeId"),content:value,
-              createTime:date,userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
+              createTime:getDate(),userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
               if (r == "1") {
                 this.$message({
                   type: 'success',
@@ -179,6 +247,21 @@
     }
 </script>
 <style lang="scss" scoped>
+  .comment-one:hover .delete-my{
+    display: inline-block;
+  }
+  .delete{
+    height: 1.5rem;
+    line-height: 1.5rem;
+    margin-left: 0.2rem;
+    display: none;
+  }
+  .header h1{
+    font-size: 1.5rem;
+  }
+  .el-container{
+    margin: 1rem;
+  }
   .margin-right{
     margin-left: 1rem;
   }
@@ -297,10 +380,10 @@
     margin-top: 0.5rem;
   }
   .operation .el-button:nth-child(1){
-    margin-left: 2rem;
+    /*margin-left: 2rem;*/
   }
   .operation .el-button:nth-child(2){
-    margin-right: 2rem;
+    /*margin-right: 2rem;*/
     float: right;
   }
   .integral span:nth-child(2)，.ranking span:nth-child(2){
@@ -369,13 +452,14 @@
     text-align: center;
     float: left;
     font-size: 1.5rem;
-    margin-right: 2rem;
+    margin-right: 1rem;
   }
   .el-container{
     padding: 0;
   }
   .el-aside{
     /*margin-top: 1rem;*/
+    width: 14rem!important;
   }
   .el-main{
     padding: 0;

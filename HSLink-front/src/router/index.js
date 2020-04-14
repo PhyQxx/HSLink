@@ -61,6 +61,11 @@ export default new Router({
             name:'personalinfo',
             component:() => import('@/components/PersonalInfo')
           },
+          {
+            path:'editorcontent',
+            name:'editorcontent',
+            component:() => import('@/components/EditorContent')
+          },
         ]
       }
 

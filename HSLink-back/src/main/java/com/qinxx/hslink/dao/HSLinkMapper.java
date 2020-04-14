@@ -55,9 +55,14 @@ public interface HSLinkMapper {
     int addMessage(Map<String,Object> param);
 
     /**
-     * 新增文章
+     * 新增一篇文章
      */
     int addArticle(Map<String,Object> param);
+
+    /**
+     * 新增一条班级通知
+     */
+    int addClassNotice(Map<String,Object> param);
 
     /**
      * 获取班级公告
@@ -83,4 +88,45 @@ public interface HSLinkMapper {
      * 修改班级公告
      */
     int updateBulletin(Map<String,Object> param);
+
+    /**
+     * 修改密码
+     */
+    int updatePassword(Map<String,Object> param);
+
+    /**
+     * 编辑一条数据具体内容
+     */
+    int updateOneContent(Map<String,Object> param);
+
+    /**
+     * 删除一条数据
+     */
+    int deleteOne(Map<String,Object> param);
+
+    /**
+     * 删除一条留言
+     */
+    int deleteOneMessage(Map<String,Object> param);
+
+    /**
+     * 获取个人信息
+     */
+    Map<String,Object> getPersonalInfo(Map<String,Object> param);
+
+    /**
+     * 获取班级成员
+     */
+    List<Map<String,Object>> getPersonalPrivateLetter(Map<String,Object> param);
+
+    /**
+     * 将未读私信置位已读
+     */
+    int updateUnread(Map<String,Object> param);
+
+    /**
+     * 发送私信
+     */
+    int sendLetter(Map<String,Object> param);
+
 }

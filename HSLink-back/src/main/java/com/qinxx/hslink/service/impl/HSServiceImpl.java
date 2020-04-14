@@ -106,6 +106,21 @@ public class HSServiceImpl implements HSService {
     }
 
     @Override
+    public Map<String, Object> addClassNotice(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addClassNotice(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
     public Map<String, Object> getClassInfo(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = new HashMap<>();
@@ -141,6 +156,116 @@ public class HSServiceImpl implements HSService {
         int res = 0;
         try {
             res = hsLinkMapper.updateBulletin(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updatePassword(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updatePassword(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateOneContent(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updateOneContent(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteOne(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.deleteOne(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteOneMessage(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.deleteOneMessage(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getPersonalInfo(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        List<Map<String, Object>> res1 = hsLinkMapper.getListByAttribute(param);
+        Map<String, Object> res2 = hsLinkMapper.getPersonalInfo(param);
+        res.put("personalList",res1);
+        res.put("personalInfo",res2);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getPersonalPrivateLetter(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getPersonalPrivateLetter(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> readPrivateLetter(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        List<Map<String, Object>> res1 = hsLinkMapper.getPersonalPrivateLetter(param);
+        int res2 = hsLinkMapper.updateUnread(param);
+        res.put("onePrivateLetter",res1);
+        res.put("readStatus",res2);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> sendLetter(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.sendLetter(param);
         } catch (Exception e) {
             e.printStackTrace();
             res = 0;

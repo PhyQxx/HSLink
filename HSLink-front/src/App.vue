@@ -10,6 +10,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .el-container{
+    height: 100%;
+  }
 </style>

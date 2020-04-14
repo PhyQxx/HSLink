@@ -37,6 +37,7 @@
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where type = '校园通知'
+        and status = "1"
 	    <if test="id != null and id != ''">
             and s.id = #{id}
         </if>
@@ -59,6 +60,7 @@
         FROM
         hs_notice p left join hs_user u on p.release_id = u.user_id
         where type = '家长建议'
+        and status = "1"
         <if test="id != null and id != ''">
             and p.id = #{id}
         </if>
@@ -81,6 +83,7 @@
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where type = '学生想法'
+        and status = "1"
         <if test="id != null and id != ''">
             and s.id = #{id}
         </if>
@@ -129,10 +132,12 @@
         u.real_name,
         u.integral,
         '' header_photo,
+        signature,
         type
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where 1 = 1
+        and status = "1"
         <if test="releaseId != null and releaseId != ''">
             and release_id = #{releaseId}
         </if>
@@ -154,41 +159,50 @@
        insert into hs_leave_message(id,notice_id,messager_id,content,create_time) VALUES (uuid(),#{noticeId},#{userId},#{content},#{createTime})
     </insert>
 
-    <!--新增文章-->
+    <!--新增一篇文章-->
     <insert id="addArticle" parameterType="map">
         insert into hs_notice (id,label,title,content,release_id,release_time,type)
         values
         (uuid(),#{label},#{title},#{content},#{release_id},#{release_time},#{type})
     </insert>
 
+    <!--新增一条班级通知-->
+    <insert id="addClassNotice" parameterType="map">
+        insert into hs_notice (id,class_id,class_name,label,title,content,release_id,release_time,type)
+        values
+        (uuid(),#{classId},#{className},#{label},#{title},#{content},#{releaseId},#{release_time},"班级通知")
+    </insert>
+
     <!--获取班级公告-->
     <select id="getClassBulletin" parameterType="map" resultType="map">
         SELECT
-DISTINCT
-id,
-c.class_id,
-c.class_name,
-title,
-content,
-release_time
-FROM
-	hs_class_bulletin c
-	left JOIN hs_user u ON c.class_name = u.class_name
-WHERE
-	c.class_name = ( SELECT class_name FROM hs_user WHERE user_id = #{id} )
+        DISTINCT
+        id,
+        c.class_id,
+        c.class_name,
+        title,
+        content,
+        release_time
+        FROM
+        hs_class_bulletin c
+        left JOIN hs_user u ON c.class_name = u.class_name
+        WHERE
+        c.class_name = ( SELECT class_name FROM hs_user WHERE user_id = #{id} )
     </select>
 
     <!--获取班级通知-->
     <select id="getClassNotice" parameterType="map" resultType="map">
-        select * from hs_class_notice left join hs_user on release_id = user_id
-        where hs_class_notice.class_name = (select class_name from hs_user
+        select * from hs_notice left join hs_user on release_id = user_id
+        where hs_notice.class_name = (select class_name from hs_user
         where user_id = #{id})
         <if test="text != null and text != ''">
             and (label like CONCAT('%',#{text},'%')
             or title like CONCAT('%',#{text},'%')
             or content like CONCAT('%',#{text},'%')
-            or real_name like CONCAT('%','五一','%'))
+            or real_name like CONCAT('%',#{text},'%'))
         </if>
+        and type = "班级通知"
+        and status = "1"
         ORDER BY release_time desc
     </select>
 
@@ -207,4 +221,48 @@ WHERE
         update hs_class_bulletin set class_id = #{classId},class_name=#{className},title=#{title},content=#{content},release_time=#{releaseTime} where id = #{id}
     </update>
 
+    <!--修改密码-->
+    <update id="updatePassword" parameterType="map">
+        update hs_user set pass_word = #{password} where user_id = #{id}
+    </update>
+
+    <!--修改一条数据具体内容-->
+    <update id="updateOneContent" parameterType="map">
+        update hs_notice set label = #{label},title = #{title},content = #{content} where id = #{id}
+    </update>
+
+    <!--删除一条数据-->
+    <update id="deleteOne" parameterType="map">
+        update hs_notice set status = "0" where id = #{id}
+    </update>
+
+    <!--删除一条留言-->
+    <delete id="deleteOneMessage" parameterType="map">
+        delete from hs_leave_message where id = #{id}
+    </delete>
+
+    <!--获取个人信息-->
+    <select id="getPersonalInfo" parameterType="map" resultType="map">
+        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0") letter_number
+        from hs_user where user_id = #{releaseId}
+    </select>
+
+    <!--获取个人私信-->
+    <select id="getPersonalPrivateLetter" resultType="map" parameterType="map">
+        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId}
+        <if test="id != '' and id != null">
+            and id = #{id}
+        </if>
+    </select>
+
+    <!--将未读私信置位已读-->
+    <update id="updateUnread" parameterType="map">
+        update hs_private_letter set already_read = "1" where id = #{id}
+    </update>
+
+    <!--发送私信-->
+    <insert id="sendLetter" parameterType="map">
+        insert into hs_private_letter (id,send_id,receive_id,content,letter_create_time,status,already_read) values
+        (uuid(),#{sendId},#{receiveId},#{content},#{time},"1","0")
+    </insert>
 </mapper>
