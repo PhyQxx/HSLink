@@ -168,4 +168,12 @@ public class HSController {
         Map<String,Object> result = hsService.sendLetter(param);
         return result;
     }
+
+    //删除一条私信
+    @RequestMapping(value = "/deleteLetter", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> deleteLetter(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.deleteLetter(param);
+        return result;
+    }
 }

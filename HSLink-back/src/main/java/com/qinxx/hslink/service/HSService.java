@@ -102,4 +102,9 @@ public interface HSService {
      * 发送私信
      */
     Map<String,Object> sendLetter(Map<String,Object> param);
+
+    /**
+     * 删除一条私信
+     */
+    Map<String,Object> deleteLetter(Map<String,Object> param);
  }

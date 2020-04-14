@@ -129,4 +129,9 @@ public interface HSLinkMapper {
      */
     int sendLetter(Map<String,Object> param);
 
+    /**
+     * 删除一条私信
+     */
+    int deleteLetter(Map<String,Object> param);
+
 }

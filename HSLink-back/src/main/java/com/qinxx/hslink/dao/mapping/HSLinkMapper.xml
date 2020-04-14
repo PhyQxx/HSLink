@@ -243,13 +243,13 @@
 
     <!--获取个人信息-->
     <select id="getPersonalInfo" parameterType="map" resultType="map">
-        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0") letter_number
+        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0" and status = "1") letter_number
         from hs_user where user_id = #{releaseId}
     </select>
 
     <!--获取个人私信-->
     <select id="getPersonalPrivateLetter" resultType="map" parameterType="map">
-        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId}
+        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId} and status = "1"
         <if test="id != '' and id != null">
             and id = #{id}
         </if>
@@ -265,4 +265,9 @@
         insert into hs_private_letter (id,send_id,receive_id,content,letter_create_time,status,already_read) values
         (uuid(),#{sendId},#{receiveId},#{content},#{time},"1","0")
     </insert>
+
+    <!--删除一条私信-->
+    <update id="deleteLetter" parameterType="map">
+        update hs_private_letter set status = "0" where id = #{id}
+    </update>
 </mapper>

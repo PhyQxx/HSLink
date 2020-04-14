@@ -274,4 +274,19 @@ public class HSServiceImpl implements HSService {
         result.put("success",true);
         return result;
     }
+
+    @Override
+    public Map<String, Object> deleteLetter(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.deleteLetter(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
 }

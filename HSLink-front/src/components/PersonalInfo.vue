@@ -66,8 +66,7 @@
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose">
+      width="30%">
       <el-form :model="editorPasswordForm"
                :rules="editorPasswordRules"
                ref="editorPasswordForm"
@@ -93,8 +92,7 @@
     <el-drawer
       :visible.sync="drawer"
       :direction="direction"
-      :show-close = false
-      :before-close="handleClosePrivateLetter">
+      :show-close = false>
       <div class="privateLetterList">
         <div class="header">
           <div class="content">内容</div>
@@ -104,19 +102,25 @@
         <div class="unread">
           <p>未读：</p>
           <p v-if="unreadIsNull">暂无未读</p>
-          <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '0')" @click="read(item.id)">
-            <div class="content">{{item.content}}</div>
-            <div class="name">{{item.real_name}}</div>
-            <div class="time">{{item.letter_create_time}}</div>
+          <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '0')" >
+            <div class="box" @click="read(item.id)">
+              <div class="content">{{item.content}}</div>
+              <div class="name">{{item.real_name}}</div>
+              <div class="time">{{item.letter_create_time}}</div>
+            </div>
+            <div class="delete" @click="deleteLetter(item.id)">删除</div>
           </div>
         </div>
         <div class="already-read">
           <p>已读：</p>
           <p v-if="alreadyReadIsNull">暂无已读</p>
-          <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '1')" @click="read(item.id)">
-            <div class="content">{{item.content}}</div>
-            <div class="name">{{item.real_name}}</div>
-            <div class="time">{{item.letter_create_time}}</div>
+          <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '1')">
+            <div class="box" @click="read(item.id)">
+              <div class="content">{{item.content}}</div>
+              <div class="name">{{item.real_name}}</div>
+              <div class="time">{{item.letter_create_time}}</div>
+            </div>
+            <div class="delete" @click="deleteLetter(item.id)">删除</div>
           </div>
         </div>
 
@@ -197,6 +201,29 @@
 
       },
       methods: {
+        deleteLetter(id) {
+          this.$confirm('删除该私信？, 是否继续?', '删除', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$ajax.post("/hs/deleteLetter",{id:id},r=>{
+              if (r === 1) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                });
+              } else {
+                this.$message.error("删除失败")
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        },
         sendLetter(id,name) {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
           this.$prompt('接受者：'+name, '发送私信', {
@@ -277,13 +304,6 @@
             }
           })
         },
-        /*handleClosePrivateLetter(done) {
-          this.$confirm('确认关闭？')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {});
-        },*/
         editorSubmit() {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
           if (this.editorPasswordForm.oldPassword === userInfo.pass_word) {
@@ -316,13 +336,6 @@
             this.editorPasswordForm = {};
           }
         },
-          /*handleClose(done) {
-          this.$confirm('放弃修改密码？')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {});
-        },*/
         editorPassword() {
           this.dialogVisible = true
         },
@@ -415,6 +428,10 @@
 </script>
 
 <style scoped>
+  .privateLetterList .delete{
+    color: red;
+    flex: 0.5;
+  }
   .privateLetterList{
     padding: 1rem;
     margin-top: -1rem;
@@ -471,7 +488,11 @@
     font-size: 0.9rem;
     cursor: pointer;
   }
-  .privateLetterOne:hover{
+  .box{
+    display: flex;
+    flex: 8;
+  }
+  .box:hover{
     color: #419EFF;
   }
   .privateLetterOne div{
