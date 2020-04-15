@@ -65,7 +65,7 @@
               <span>等级:</span>
               <div class="number">
                 <span>博客</span>
-                <span>2</span>
+                <span>{{Math.floor(all.integral/1000)+1}}</span>
               </div>
             </div>
             <div class="integral">

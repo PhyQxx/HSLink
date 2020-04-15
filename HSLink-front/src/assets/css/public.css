@@ -1,3 +1,6 @@
+*{
+  user-select: none;
+}
 html {
   overflow-y: overlay;
   height: 100%;

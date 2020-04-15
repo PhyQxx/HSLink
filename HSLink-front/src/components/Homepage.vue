@@ -274,7 +274,7 @@
     cursor: pointer;
   }
   .merit-student .one div:nth-child(2){
-    flex: 2;
+    flex: 3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -297,7 +297,7 @@
     cursor: pointer;
   }
   .prominent-teacher .one div:nth-child(2){
-    flex: 2;
+    flex: 3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -353,7 +353,7 @@
     flex: 1;
   }
   .one .release-time{
-    flex: 1.5;
+    flex: 1.6;
   }
   .module{
     border: 1px solid #419EFF;

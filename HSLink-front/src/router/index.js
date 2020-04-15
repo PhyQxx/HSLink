@@ -6,15 +6,15 @@ Vue.use(Router)
 
 export default new Router({
     routes: [{
-        path: '/login',
+        path: '/',
         name: 'login',
         component:() => import('@/components/Login')
     },
       {
-        path:'/',
+        path:'/index',
         name:'index',
         component:() => import('@/components/Index'),
-        redirect: '/homepage',
+        // redirect: '/homepage',
         children: [
           {
             path:'help',

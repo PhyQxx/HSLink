@@ -181,24 +181,25 @@
           }
       },
       mounted() {
-        let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-        if (userInfo.user_id === sessionStorage.getItem("userId")) {
-          this.isOwn = true
-        } else {
-          this.isOwn = false
-        }
-        this.$ajax.post("/hs/getPersonalInfo",{text:"",releaseId: sessionStorage.getItem("userId")},r=>{
-          this.list = r.personalList;
-          this.length = r.personalList.length;
-          this.all = {
-            real_name: r.personalInfo.real_name,
-            header_photo: r.personalInfo.real_name.substring(0, 1),
-            integral: r.personalInfo.integral,
-            letter_number: r.personalInfo.letter_number,
-            user_id: r.personalInfo.user_id,
+        // setInterval(()=>{
+          let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+          if (userInfo.user_id === sessionStorage.getItem("userId")) {
+            this.isOwn = true
+          } else {
+            this.isOwn = false
           }
-        })
-
+          this.$ajax.post("/hs/getPersonalInfo",{text:"",releaseId: sessionStorage.getItem("userId")},r=>{
+            this.list = r.personalList;
+            this.length = r.personalList.length;
+            this.all = {
+              real_name: r.personalInfo.real_name,
+              header_photo: r.personalInfo.real_name.substring(0, 1),
+              integral: r.personalInfo.integral,
+              letter_number: r.personalInfo.letter_number,
+              user_id: r.personalInfo.user_id,
+            }
+          })
+        // },1000)
       },
       methods: {
         deleteLetter(id) {
@@ -209,6 +210,27 @@
           }).then(() => {
             this.$ajax.post("/hs/deleteLetter",{id:id},r=>{
               if (r === 1) {
+                let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+                this.$ajax.post("/hs/getPersonalPrivateLetter",{userId:userInfo.user_id},res=>{
+                  this.privateLetterList = res
+                  if (res.length === 0) {
+                    this.unreadIsNull = true;
+                    this.alreadyReadIsNull = true;
+                  }
+                  for (let i = 0; i < res.length; i++) {
+                    debugger
+                    if (res[i].already_read === "0") {
+                      this.unreadIsNull = false
+                    } else {
+                      this.unreadIsNull = true
+                    }
+                    if (res[i].already_read === "1") {
+                      this.alreadyReadIsNull = false
+                    } else {
+                      this.unreadIsNull = true
+                    }
+                  }
+                })
                 this.$message({
                   type: 'success',
                   message: '删除成功'
