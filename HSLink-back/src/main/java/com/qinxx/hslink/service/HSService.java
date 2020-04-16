@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author 帅气的布里茨
+ */
 public interface HSService {
 
     /**

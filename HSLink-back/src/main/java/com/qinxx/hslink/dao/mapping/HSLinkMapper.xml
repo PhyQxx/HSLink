@@ -10,7 +10,7 @@
 
     <!--注册-->
     <insert id="register" parameterType="map">
-       INSERT INTO hs_user ( user_id, pass_word,real_name, mobile, user_type, creat_time, frozen_state, error_times)
+       INSERT INTO hs_user ( user_id, pass_word,real_name, mobile, user_type, create_time, frozen_state, error_times)
         VALUES
         (
         uuid(),
