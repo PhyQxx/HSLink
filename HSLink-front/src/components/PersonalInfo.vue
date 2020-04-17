@@ -7,13 +7,13 @@
           <el-input class="searchinp" v-model="condition" placeholder="请输入内容" @keydown.enter.native="search"></el-input>
           <el-button type="primary" class="searchbtn" @click="search">搜索</el-button>
         </div>
-        <div class="list">
+        <nodate v-if="noDate"></nodate>
+        <div class="list" v-if="!noDate">
           <div class="one" v-for="item in list">
             <div class="type" @click="searchLabel(item.label)">
               [{{item.label}}]
             </div>
             <div class="text" @click="getContent(item.id)">{{item.title}}</div>
-<!--            <div class="release">{{item.real_name}}</div>-->
             <div class="release-time">{{item.release_time}}</div>
             <div class="editorbtn" @click="editorContent(item.id)" v-if="isOwn">编辑</div>
             <div class="delete" @click="deleteMy(item.id)" v-if="isOwn">删除</div>
@@ -144,6 +144,7 @@
 <script>
   import addArticle from './AddArticle'
   import footers from './components/Footer'
+  import nodate from './components/NoData'
   import {getDate} from "../assets/js/public";
     export default {
         name: "PersonalInfo",
@@ -192,6 +193,7 @@
             drawer: false,
             direction: 'rtl',
             sentList: [],
+            noDate: false,
           }
       },
       mounted() {
@@ -205,6 +207,9 @@
           this.$ajax.post("/hs/getPersonalInfo",{text:"",releaseId: sessionStorage.getItem("userId")},r=>{
             this.list = r.personalList;
             this.length = r.personalList.length;
+            if (r.personalList.length === 0) {
+              this.noDate = true;
+            }
             this.all = {
               real_name: r.personalInfo.real_name,
               header_photo: r.personalInfo.real_name.substring(0, 1),
@@ -439,6 +444,9 @@
           this.$ajax.post("/hs/getListByAttribute",{text:this.condition,releaseId: sessionStorage.getItem("userId")},r=>{
             this.list = r
             this.length = r.length
+            if (r.length === 0) {
+              this.noDate = true;
+            }
           })
         },
         getContent(id) {
@@ -482,7 +490,8 @@
       },
       components: {
         addArticle,
-        footers
+        footers,
+        nodate
       }
     }
 </script>
