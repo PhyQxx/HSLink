@@ -56,6 +56,9 @@
     },
     mounted() {
       let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+      /*setInterval(()=>{
+        this.timingTask(userInfo.user_id)
+      },60000);*/
       if (userInfo == '' || userInfo === null) {
 
       } else {
@@ -71,11 +74,15 @@
             +day2.getMinutes():day2.getMinutes())+"分"+(day2.getSeconds()<10?"0"+day2.getSeconds():day2.getSeconds())+"秒";},1000)
     },
     methods:{
+      timingTask(userId) {
+        this.$ajax.post("/hs/timingTask",{userId:userId},r=>{
+          console.log(r)
+        })
+      },
       goPersonalInfo(userId) {
         this.$router.push({name: 'personalinfo'});
         sessionStorage.setItem("userId",userId);
-        setTimeout(()=>{location.reload()},100)
-
+        setTimeout(()=>{location.reload()},1)
       },
       goMore() {
         this.$message({
@@ -84,11 +91,15 @@
 
       },
       goMyClass() {
-        if (this.isLogin == true) {
-          this.$router.push({name: "myclass"})
+        if (JSON.parse(sessionStorage.getItem("userInfo")).class_name === undefined) {
+          this.$message.warning("您没有加入任何班级")
         } else {
-          this.$message.warning("请先登录")
-          this.$router.push({name: "login"})
+          if (this.isLogin === true) {
+            this.$router.push({name: "myclass"})
+          } else {
+            this.$message.warning("请先登录")
+            this.$router.push({name: "login"})
+          }
         }
       },
       goStudentThought() {

@@ -5,6 +5,8 @@ import com.qinxx.hslink.service.HSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -241,7 +243,11 @@ public class HSServiceImpl implements HSService {
     @Override
     public Map<String, Object> getPersonalPrivateLetter(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
-        List<Map<String, Object>> res = hsLinkMapper.getPersonalPrivateLetter(param);
+        Map<String, Object> res = new HashMap<>();
+        List<Map<String, Object>> res1 = hsLinkMapper.getPersonalPrivateLetter(param);
+        List<Map<String, Object>> res2 = hsLinkMapper.getSentPrivateLetter(param);
+        res.put("privateLetter",res1);
+        res.put("sentLetter",res2);
         result.put("data",res);
         result.put("success",true);
         return result;
@@ -277,14 +283,43 @@ public class HSServiceImpl implements HSService {
 
     @Override
     public Map<String, Object> deleteLetter(Map<String, Object> param) {
+        Integer type = (Integer) param.get("type");
         Map<String, Object> result = new HashMap<>();
         int res = 0;
-        try {
-            res = hsLinkMapper.deleteLetter(param);
-        } catch (Exception e) {
-            e.printStackTrace();
-            res = 0;
+        if (type == 0) {
+            try {
+                res = hsLinkMapper.deleteLetter(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+                res = 0;
+            }
+        } else {
+            try {
+                res = hsLinkMapper.deleteSentLetter(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+                res = 0;
+            }
         }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> timingTask(Map<String, Object> param) {
+        /**定时刷新*/
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        /**更新个人积分*/
+        int res1 = hsLinkMapper.updateIntegral(param);
+        if (res1 == 1) {
+            res.put("taskIntegral","更新个人积分成功");
+        } else {
+            res.put("taskIntegral","更新个人积分失败");
+        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        res.put("time",df.format(new Date()));
         result.put("data",res);
         result.put("success",true);
         return result;

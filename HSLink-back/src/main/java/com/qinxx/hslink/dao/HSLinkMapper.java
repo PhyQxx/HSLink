@@ -115,9 +115,14 @@ public interface HSLinkMapper {
     Map<String,Object> getPersonalInfo(Map<String,Object> param);
 
     /**
-     * 获取班级成员
+     * 获取个人私信
      */
     List<Map<String,Object>> getPersonalPrivateLetter(Map<String,Object> param);
+
+    /**
+     * 获取已发送私信
+     */
+    List<Map<String,Object>> getSentPrivateLetter(Map<String,Object> param);
 
     /**
      * 将未读私信置位已读
@@ -133,5 +138,15 @@ public interface HSLinkMapper {
      * 删除一条私信
      */
     int deleteLetter(Map<String,Object> param);
+
+    /**
+     * 删除一条已读私信
+     */
+    int deleteSentLetter(Map<String,Object> param);
+
+    /**
+     * 更新个人积分
+     */
+    int updateIntegral(Map<String,Object> param);
 
 }

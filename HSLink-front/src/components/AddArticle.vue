@@ -110,6 +110,9 @@
               label:this.label,title:this.title,content:this.msg.mdValue,releaseId:userInfo.user_id,
               release_time:getDate(),type:this.type},r=> {
               if (r === 1) {
+                this.$ajax.post("/hs/timingTask",{userId:userInfo.user_id},r=>{
+                  console.log(r)
+                });
                 this.$message({
                   message: "发布成功",
                   type: "success"
@@ -117,7 +120,7 @@
                 this.$emit("goInfo");
                 this.$emit("refresh");
               }
-            })
+            });
             sessionStorage.setItem("releaseType","")
           } else {
             let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));

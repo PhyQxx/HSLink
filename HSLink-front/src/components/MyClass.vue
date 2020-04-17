@@ -48,8 +48,7 @@
     <el-dialog
       title="编辑公告"
       :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose">
+      width="30%">
       <el-form>
         <el-form-item label="标题">
           <el-input v-model="editors.title" clearable size="small"></el-input>
@@ -182,13 +181,6 @@
             })
           }
           this.dialogVisible = false
-        },
-        handleClose(done) {
-          this.$confirm('确认关闭？')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {});
         },
         editor() {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"))

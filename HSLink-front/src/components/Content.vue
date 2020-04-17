@@ -206,7 +206,7 @@
           }).then(({ value }) => {
             this.$ajax.post("/hs/addMessage",{noticeId:sessionStorage.getItem("noticeId"),content:value,
               createTime:getDate(),userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
-              if (r == "1") {
+              if (r === 1) {
                 this.$message({
                   type: 'success',
                   message: '留言成功'
@@ -220,7 +220,10 @@
                   }
                 })
               }
-            })
+            });
+            this.$ajax.post("/hs/timingTask",{userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
+              console.log(r)
+            });
           }).catch(() => {
             this.$message({
               type: 'info',

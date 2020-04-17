@@ -243,16 +243,17 @@
 
     <!--获取个人信息-->
     <select id="getPersonalInfo" parameterType="map" resultType="map">
-        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0" and status = "1") letter_number
+        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0" and receive_status = "1") letter_number
         from hs_user where user_id = #{releaseId}
     </select>
 
     <!--获取个人私信-->
     <select id="getPersonalPrivateLetter" resultType="map" parameterType="map">
-        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId} and status = "1"
+        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId} and receive_status = "1"
         <if test="id != '' and id != null">
             and id = #{id}
         </if>
+        ORDER BY letter_create_time desc
     </select>
 
     <!--将未读私信置位已读-->
@@ -262,12 +263,38 @@
 
     <!--发送私信-->
     <insert id="sendLetter" parameterType="map">
-        insert into hs_private_letter (id,send_id,receive_id,content,letter_create_time,status,already_read) values
-        (uuid(),#{sendId},#{receiveId},#{content},#{time},"1","0")
+        insert into hs_private_letter (id,send_id,receive_id,content,letter_create_time) values
+        (uuid(),#{sendId},#{receiveId},#{content},#{time})
     </insert>
 
     <!--删除一条私信-->
     <update id="deleteLetter" parameterType="map">
-        update hs_private_letter set status = "0" where id = #{id}
+        update hs_private_letter set receive_status = "0" where id = #{id}
     </update>
+
+    <!--删除一条已读私信-->
+    <delete id="deleteSentLetter" parameterType="map">
+        update hs_private_letter set send_status = "0" where id = #{id}
+    </delete>
+
+    <!--更新个人积分-->
+    <delete id="updateIntegral" parameterType="map">
+        UPDATE hs_user
+        SET integral = (
+        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = #{userId} ) * 100 ) +
+        ( ( SELECT count( * ) FROM hs_leave_message WHERE messager_id = #{userId} ) * 10 )
+        )
+        WHERE
+	    user_id = #{userId}
+    </delete>
+
+    <!--获取已发送私信-->
+    <select id="getSentPrivateLetter" resultType="map" parameterType="map">
+        select * from hs_private_letter left join hs_user on send_id = user_id where send_id = #{userId} and send_status = "1"
+        <if test="id != '' and id != null">
+            and id = #{id}
+        </if>
+        ORDER BY letter_create_time desc
+    </select>
+
 </mapper>

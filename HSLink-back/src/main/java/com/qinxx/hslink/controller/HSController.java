@@ -178,4 +178,12 @@ public class HSController {
         Map<String,Object> result = hsService.deleteLetter(param);
         return result;
     }
+
+    /**定时任务*/
+    @RequestMapping(value = "/timingTask", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> timingTask(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.timingTask(param);
+        return result;
+    }
 }

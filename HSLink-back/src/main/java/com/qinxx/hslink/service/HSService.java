@@ -110,4 +110,9 @@ public interface HSService {
      * 删除一条私信
      */
     Map<String,Object> deleteLetter(Map<String,Object> param);
+
+    /**
+     * 定时任务
+     */
+    Map<String,Object> timingTask(Map<String,Object> param);
  }
