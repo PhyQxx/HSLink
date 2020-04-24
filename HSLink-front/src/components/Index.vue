@@ -82,7 +82,7 @@
       goPersonalInfo(userId) {
         this.$router.push({name: 'personalinfo'});
         sessionStorage.setItem("userId",userId);
-        setTimeout(()=>{location.reload()},1)
+        setTimeout(()=>{location.reload()},500)
       },
       goMore() {
         this.$message({

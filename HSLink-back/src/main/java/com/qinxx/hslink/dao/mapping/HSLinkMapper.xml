@@ -249,7 +249,16 @@
 
     <!--获取个人私信-->
     <select id="getPersonalPrivateLetter" resultType="map" parameterType="map">
-        select * from hs_private_letter left join hs_user on send_id = user_id where receive_id = #{userId} and receive_status = "1"
+        select * from hs_private_letter left join hs_user on receive_id = user_id where receive_id = #{userId} and receive_status = "1"
+        <if test="id != '' and id != null">
+            and id = #{id}
+        </if>
+        ORDER BY letter_create_time desc
+    </select>
+
+    <!--获取已读私信内容-->
+    <select id="getSentPrivateLetterContent" resultType="map" parameterType="map">
+        select * from hs_private_letter left join hs_user on send_id = user_id where send_id = #{userId} and send_status = "1"
         <if test="id != '' and id != null">
             and id = #{id}
         </if>
@@ -296,5 +305,6 @@
         </if>
         ORDER BY letter_create_time desc
     </select>
+
 
 </mapper>

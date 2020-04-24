@@ -103,7 +103,7 @@
           <p>未读：</p>
           <p v-if="unreadIsNull">暂无未读</p>
           <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '0')" >
-            <div class="box" @click="read(item.id)">
+            <div class="box" @click="read(item.id,0)">
               <div class="content">{{item.content}}</div>
               <div class="name">{{item.real_name}}</div>
               <div class="time">{{item.letter_create_time}}</div>
@@ -115,7 +115,7 @@
           <p>已读：</p>
           <p v-if="alreadyReadIsNull">暂无已读</p>
           <div class="privateLetterOne" v-for="item in privateLetterList" v-if="(item.already_read === '1')">
-            <div class="box" @click="read(item.id)">
+            <div class="box" @click="read(item.id,0)">
               <div class="content">{{item.content}}</div>
               <div class="name">{{item.real_name}}</div>
               <div class="time">{{item.letter_create_time}}</div>
@@ -127,7 +127,7 @@
         <p>已发送：</p>
         <p v-if="sentIsNull">暂无发送</p>
         <div class="privateLetterOne" v-for="item in sentList">
-          <div class="box" @click="read(item.id)">
+          <div class="box" @click="read(item.id,1)">
             <div class="content">{{item.content}}</div>
             <div class="name">{{item.real_name}}</div>
             <div class="time">{{item.letter_create_time}}</div>
@@ -227,6 +227,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            debugger
             this.$ajax.post("/hs/deleteLetter",{id:id,type:type},r=>{
               if (r === 1) {
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -251,7 +252,7 @@
                     if (res.privateLetter[i].already_read === "1") {
                       this.alreadyReadIsNull = false
                     } else {
-                      this.unreadIsNull = true
+                      this.alreadyReadIsNull = true
                     }
                   }
                 })
@@ -304,49 +305,62 @@
             });
           });
         },
-        read(id) {
+        read(id,type) {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-          this.$ajax.post("/hs/readPrivateLetter",{userId:userInfo.user_id,id:id},r=>{
-            this.$confirm(`<p style="font-size: 0.9rem">发送者：${r.onePrivateLetter[0].real_name}</p>
+          if (type === 0) {
+            this.$ajax.post("/hs/readPrivateLetter",{userId:userInfo.user_id,id:id,type},r=>{
+              this.$confirm(`<p style="font-size: 0.9rem">发送者：${r.onePrivateLetter[0].real_name}</p>
                   <p style="font-size: 0.9rem">内容：${r.onePrivateLetter[0].content}</p>
                   <p style="font-size: 0.9rem">发送时间：${r.onePrivateLetter[0].letter_create_time}</p>
                 `, '私信', {
-              distinguishCancelAndClose: true,
-              cancelButtonText: '回复',
-              dangerouslyUseHTMLString: true
-            }).catch(action => {
-              console.log("action",action)
-              if (action === 'cancel') {
-                this.sendLetter(r.onePrivateLetter[0].user_id,r.onePrivateLetter[0].real_name)
-              }
-            });
-            this.$ajax.post("/hs/getPersonalPrivateLetter",{userId:userInfo.user_id},r=>{
-              this.privateLetterList = r.privateLetter
-              for (let i = 0; i < r.privateLetter.length; i++) {
-                if (r.privateLetter[i].already_read === "0") {
-                  this.unreadIsNull = false
-                } else {
-                  this.unreadIsNull = true
+                distinguishCancelAndClose: true,
+                cancelButtonText: '回复',
+                dangerouslyUseHTMLString: true
+              }).catch(action => {
+                console.log("action",action)
+                if (action === 'cancel') {
+                  this.sendLetter(r.onePrivateLetter[0].user_id,r.onePrivateLetter[0].real_name)
                 }
-                if (r[i].privateLetter.already_read === "1") {
-                  this.alreadyReadIsNull = false
-                } else {
-                  this.unreadIsNull = true
+              });
+              this.$ajax.post("/hs/getPersonalPrivateLetter",{userId:userInfo.user_id},r=>{
+                this.privateLetterList = r.privateLetter
+                for (let i = 0; i < r.privateLetter.length; i++) {
+                  if (r.privateLetter[i].already_read === "0") {
+                    this.unreadIsNull = false
+                  } else {
+                    this.unreadIsNull = true
+                  }
+                  if (r[i].privateLetter.already_read === "1") {
+                    this.alreadyReadIsNull = false
+                  } else {
+                    this.unreadIsNull = true
+                  }
                 }
-              }
+              })
+              this.$ajax.post("/hs/getPersonalInfo",{text:"",releaseId: sessionStorage.getItem("userId")},r=>{
+                this.list = r.personalList;
+                this.length = r.personalList.length;
+                this.all = {
+                  real_name: r.personalInfo.real_name,
+                  header_photo: r.personalInfo.real_name.substring(0, 1),
+                  integral: r.personalInfo.integral,
+                  letter_number: r.personalInfo.letter_number,
+                  user_id: r.personalInfo.user_id,
+                }
+              })
             })
-            this.$ajax.post("/hs/getPersonalInfo",{text:"",releaseId: sessionStorage.getItem("userId")},r=>{
-              this.list = r.personalList;
-              this.length = r.personalList.length;
-              this.all = {
-                real_name: r.personalInfo.real_name,
-                header_photo: r.personalInfo.real_name.substring(0, 1),
-                integral: r.personalInfo.integral,
-                letter_number: r.personalInfo.letter_number,
-                user_id: r.personalInfo.user_id,
-              }
+          } else {
+            this.$ajax.post("/hs/readPrivateLetter", {userId: userInfo.user_id, id: id, type}, r => {
+              this.$confirm(`<p style="font-size: 0.9rem">发送者：${r.onePrivateLetter[0].real_name}</p>
+                  <p style="font-size: 0.9rem">内容：${r.onePrivateLetter[0].content}</p>
+                  <p style="font-size: 0.9rem">发送时间：${r.onePrivateLetter[0].letter_create_time}</p>
+                `, '私信', {
+                // distinguishCancelAndClose: true,
+                showCancelButton:false,
+                dangerouslyUseHTMLString: true
+              })
             })
-          })
+          }
         },
         privateLetter() {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -418,7 +432,9 @@
             this.all = {
               real_name: r[0].real_name,
               header_photo: r[0].real_name.substring(0, 1),
-              integral: r[0].integral
+              integral: r[0].integral,
+              letter_number: r[0].letter_number,
+              user_id: r[0].user_id,
             }
           })
         },

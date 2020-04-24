@@ -257,8 +257,16 @@ public class HSServiceImpl implements HSService {
     public Map<String, Object> readPrivateLetter(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = new HashMap<>();
-        List<Map<String, Object>> res1 = hsLinkMapper.getPersonalPrivateLetter(param);
-        int res2 = hsLinkMapper.updateUnread(param);
+        Integer type = (Integer) param.get("type");
+        List<Map<String, Object>> res1;
+        int res2;
+        if (type == 0) {
+            res1 = hsLinkMapper.getPersonalPrivateLetter(param);
+            res2= hsLinkMapper.updateUnread(param);
+        } else {
+            res1 = hsLinkMapper.getSentPrivateLetterContent(param);
+            res2= 0;
+        }
         res.put("onePrivateLetter",res1);
         res.put("readStatus",res2);
         result.put("data",res);

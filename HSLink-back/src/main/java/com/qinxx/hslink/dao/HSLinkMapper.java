@@ -115,9 +115,14 @@ public interface HSLinkMapper {
     Map<String,Object> getPersonalInfo(Map<String,Object> param);
 
     /**
-     * 获取个人私信
+     * 获取个人私信内容
      */
     List<Map<String,Object>> getPersonalPrivateLetter(Map<String,Object> param);
+
+    /**
+     * 获取已读私信内容
+     */
+    List<Map<String,Object>> getSentPrivateLetterContent(Map<String,Object> param);
 
     /**
      * 获取已发送私信

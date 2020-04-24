@@ -127,6 +127,9 @@
             this.$ajax.post("/hs/addArticle",{label:this.label,title:this.title,content:this.msg.mdValue,release_id:userInfo.user_id,
               release_time:getDate(),type:this.type},r=>{
               if (r === 1) {
+                this.$ajax.post("/hs/timingTask",{userId:userInfo.user_id},r=>{
+                  console.log(r)
+                });
                 this.$message({
                   message: "发表成功",
                   type: "success"
