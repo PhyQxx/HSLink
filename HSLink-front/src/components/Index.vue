@@ -30,7 +30,7 @@
         <el-menu-item index="3" @click="goMyClass">我的班级</el-menu-item>
         <el-menu-item index="4" @click="goParentsOpinion">家长意见</el-menu-item>
         <el-menu-item index="5" @click="goStudentThought">学生想法</el-menu-item>
-        <el-menu-item index="6" @click="goMore">更多···</el-menu-item>
+        <el-menu-item index="6" @click="goMore" disabled>更多···</el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>
