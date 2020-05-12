@@ -204,10 +204,10 @@
 
 <style scoped>
   .el-main{
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
   .search{
-    padding: 1rem;
+    padding: 1rem 1rem 0;
   }
   .searchinp{
     float: left;
@@ -401,8 +401,9 @@
     background: #fff;
   }
   .el-container{
+    display: flex;
+    flex-flow: column;
     /*padding: 0;*/
     background: #EEFCFE;
-    display: block;
   }
 </style>
