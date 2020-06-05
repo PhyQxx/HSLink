@@ -28,7 +28,7 @@
       </div>
       <div id="bottom">
         <div class="left">
-          <el-tabs v-model="activeName" @tab-click="">
+          <el-tabs v-model="activeName" @tab-click=""  v-loading="tabLoading">
             <el-tab-pane label="校园通知" name="first">
               <div class="newest-notice module">
                 <div class="title">
@@ -113,6 +113,7 @@
         name: "Hompage",
       data() {
         return{
+          tabLoading: false,
           condition: '',
           newestNotice: '',
           goodAdvice: '',
@@ -175,7 +176,9 @@
         }
       },
       mounted() {
+          this.tabLoading = true;
           this.$ajax.post("/hs/getAllContent",{},r=>{
+            this.tabLoading = false;
             this.newestNotice = r.schoolNoticeList.slice(0,12);
             this.goodAdvice = r.parentAdvice.slice(0,12);
             this.magicalThinking = r.studentThinking.slice(0,12);
