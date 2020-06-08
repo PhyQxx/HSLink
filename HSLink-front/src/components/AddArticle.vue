@@ -119,6 +119,7 @@
                 });
                 this.$emit("goInfo");
                 this.$emit("refresh");
+                this.$emit("getUserInfo");
               }
             });
             sessionStorage.setItem("releaseType","")
