@@ -34,7 +34,7 @@
       </el-menu>
     </el-aside>
     <el-main>
-      <router-view></router-view>
+      <router-view ref="child"></router-view>
     </el-main>
     </el-container>
   </el-container>
@@ -80,9 +80,9 @@
         })
       },
       goPersonalInfo(userId) {
-        this.$router.push({name: 'personalinfo'});
         sessionStorage.setItem("userId",userId);
-        setTimeout(()=>{location.reload()},500)
+        this.$refs.child.getUserInfo();
+        this.$router.push({name: 'personalinfo'});
       },
       goMore() {
         this.$message({

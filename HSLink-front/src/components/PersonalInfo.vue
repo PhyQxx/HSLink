@@ -197,7 +197,10 @@
           }
       },
       mounted() {
-        // setInterval(()=>{
+          this.getUserInfo();
+      },
+      methods: {
+        getUserInfo() {
           let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
           if (userInfo.user_id === sessionStorage.getItem("userId")) {
             this.isOwn = true
@@ -218,9 +221,7 @@
               user_id: r.personalInfo.user_id,
             }
           })
-        // },1000)
-      },
-      methods: {
+        },
         deleteLetter(id,type) {
           this.$confirm('删除该私信？, 是否继续?', '删除', {
             confirmButtonText: '确定',
