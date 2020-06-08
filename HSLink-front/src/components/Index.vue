@@ -81,8 +81,8 @@
       },
       goPersonalInfo(userId) {
         sessionStorage.setItem("userId",userId);
-        this.$refs.child.getUserInfo();
         this.$router.push({name: 'personalinfo'});
+        this.$refs.child.getUserInfo();
       },
       goMore() {
         this.$message({
