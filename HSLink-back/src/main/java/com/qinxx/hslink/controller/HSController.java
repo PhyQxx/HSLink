@@ -1,9 +1,22 @@
 package com.qinxx.hslink.controller;
 
 import com.qinxx.hslink.service.HSService;
+import org.apache.ibatis.annotations.Param;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,14 +27,19 @@ import java.util.Map;
 @RequestMapping("/hs")
 public class HSController {
 
-    @Autowired
+    /**
+     * 日志
+     */
+    private static Logger logger = LogManager.getLogger(HSController.class);
+
+    @Resource
     HSService hsService;
 
     /**登录验证*/
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Map<String,Object> hello(@RequestBody Map<String,Object> param) {
-        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> result = new HashMap<>(32);
         result = hsService.login(param);
         return result;
     }
@@ -30,7 +48,7 @@ public class HSController {
     @RequestMapping(value = "/register", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public Map<String,Object> register(@RequestBody Map<String,Object> param) {
-        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> result = new HashMap<>(32);
         result = hsService.register(param);
         return result;
     }
@@ -186,4 +204,62 @@ public class HSController {
         Map<String,Object> result = hsService.timingTask(param);
         return result;
     }
+
+    /**
+     * 使用 httpServletRequest作为参数
+     * @param  httpServletRequest
+     * @return
+     */
+    @PostMapping("/upload")
+    @ResponseBody
+    public Map<String, Object> upload(HttpServletRequest httpServletRequest){
+        return hsService.upload(httpServletRequest);
+    }
+
+    /**
+     * 获取文件列表
+     */
+    @PostMapping("/getFileList")
+    @ResponseBody
+    public Map<String, Object> getFileList(String[] fileList){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.getFileList(fileList);
+        return result;
+    }
+
+    /**
+     * 文件下载
+     */
+    @RequestMapping("/fileDownload")
+    public void fileDownload(HttpServletRequest request, HttpServletResponse response) {
+        hsService.fileDownload(request.getParameter("fileId"),request,response);
+    }
+
+    /**
+     * 查询轮播图列表
+     */
+    @PostMapping("/getRotationPhotoList")
+    @ResponseBody
+    public Map<String, Object> getRotationPhotoList(){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.getRotationPhotoList();
+        return result;
+    }
+
+    /**
+     * 获取管理员文章审核列表
+     */
+
+
+    /**
+     * 测试接口
+     */
+    @PostMapping("/test")
+    @ResponseBody
+    public Map<String, Object> test(String page, String limit){
+        Map<String, Object> result = new HashMap<>();
+
+        return result;
+    }
+
 }

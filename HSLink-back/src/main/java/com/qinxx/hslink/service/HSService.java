@@ -2,6 +2,8 @@ package com.qinxx.hslink.service;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -115,4 +117,25 @@ public interface HSService {
      * 定时任务
      */
     Map<String,Object> timingTask(Map<String,Object> param);
- }
+
+    /**
+     * 上传文件
+     */
+    Map<String, Object> upload(HttpServletRequest httpServletRequest);
+
+    /**
+     * 获取文件列表
+     */
+    Map<String, Object> getFileList(String[] fileList);
+
+    /**
+     * 文件下载
+     */
+    void fileDownload(String fileId,HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 查询轮播图列表
+     * @return
+     */
+    Map<String, Object> getRotationPhotoList();
+}

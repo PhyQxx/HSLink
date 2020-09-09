@@ -11,17 +11,8 @@
             校<br>园<br>动<br>态
           </div>
           <el-carousel indicator-position="outside">
-            <el-carousel-item>
-              <img src="../assets/img/carousel/carousel1.jpg" height="100%" width="100%"/>
-            </el-carousel-item>
-            <el-carousel-item>
-              <img src="../assets/img/carousel/carousel2.jpg" height="100%" width="100%"/>
-            </el-carousel-item>
-            <el-carousel-item>
-              <img src="../assets/img/carousel/carousel3.jpg" height="100%" width="100%"/>
-            </el-carousel-item>
-            <el-carousel-item>
-              <img src="../assets/img/carousel/carousel4.jpg" height="100%" width="100%"/>
+            <el-carousel-item v-for="(item,index) in rotationPhotoList" :key="index">
+              <img :src="item.fileName" height="100%" width="100%"/>
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -113,6 +104,8 @@
         name: "Hompage",
       data() {
         return{
+          //轮播图片
+          rotationPhotoList: [],
           tabLoading: false,
           condition: '',
           newestNotice: '',
@@ -176,17 +169,38 @@
         }
       },
       mounted() {
+          this.getRotationPhotoList();
+          this.getNoticeList();
+      },
+      methods: {
+          //获取通知列表
+        getNoticeList() {
           this.tabLoading = true;
           this.$ajax.post("/hs/getAllContent",{},r=>{
             this.tabLoading = false;
             this.newestNotice = r.schoolNoticeList.slice(0,12);
             this.goodAdvice = r.parentAdvice.slice(0,12);
             this.magicalThinking = r.studentThinking.slice(0,12);
-        })
-      },
-      methods: {
+          })
+        },
+          //获取轮播图片
+        getRotationPhotoList() {
+          this.$ajax.post('/hs/getRotationPhotoList',{},res=>{
+            console.log("轮播图列表",res);
+            this.rotationPhotoList = [];
+            for (let i = 0; i < res.rotationPhotoList.length; i++) {
+              this.rotationPhotoList.push(
+                {
+                  id: res.rotationPhotoList[i].id,
+                  fileId: res.rotationPhotoList[i].fileId,
+                  fileName: require('../assets/img/carousel/'+res.rotationPhotoList[i].fileName)},
+              );
+            }
+            console.log("rotationPhotoList",this.rotationPhotoList)
+          })
+        },
         searchLabel(label) {
-          sessionStorage.setItem("condition",label)
+          sessionStorage.setItem("condition",label);
           this.$router.push({name: "search"})
         },
         search() {

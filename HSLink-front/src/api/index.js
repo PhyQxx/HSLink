@@ -2,8 +2,8 @@
 import de from "element-ui/src/locale/lang/de";
 
 // let root = 'http://192.168.10.29:8048'
-let root = 'http://123.57.22.91:8048'
-// let root = 'http://127.0.0.1:8048'
+// let root = 'http://123.57.22.91:8048'
+let root = 'http://127.0.0.1:8048'
 // 引用axios
 let axios = require('axios')
 // 自定义判断元素类型JS

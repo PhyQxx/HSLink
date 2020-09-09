@@ -8,13 +8,15 @@ import router from './router'
 import '@/assets/css/public.css'
 // 引用API文件
 import api from './api/index.js'
+import axios from 'axios'
+Vue.prototype.$axios = axios;
 // 将API方法绑定到全局
 import marked from 'marked'
 import scroll from 'vue-scroll'
-Vue.prototype.$ajax = api
-Vue.config.productionTip = false
+Vue.prototype.$ajax = api;
+Vue.config.productionTip = false;
 Vue.use(ElementUI);
-Vue.use(scroll)
+Vue.use(scroll);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

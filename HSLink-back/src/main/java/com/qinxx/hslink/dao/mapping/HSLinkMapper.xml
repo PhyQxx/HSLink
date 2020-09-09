@@ -306,5 +306,43 @@
         ORDER BY letter_create_time desc
     </select>
 
+    <!--保存文件路径-->
+    <insert id="insertFilePath" parameterType="map">
+        insert into hs_file_info
+        (id,file_name,file_encryption,file_path,create_time)
+        values
+        (#{id},#{fileName},#{fileEncryption},#{filePath},now())
+    </insert>
+
+    <!--获取文件信息-->
+    <select id="getFileList" resultType="java.util.Map">
+       select
+        id,
+        file_name fileName,
+        file_encryption fileEncryption,
+        file_path filePath,
+        create_time createTime
+        from
+        hs_file_info
+        order by
+        create_time desc
+    </select>
+
+    <!--查询轮播图列表-->
+    <select id="getRotationPhotoList" resultType="java.util.Map">
+        SELECT
+        t.id,
+        file_id fileId,
+        file_name fileName,
+        file_encryption fileEncryption,
+        file_path filePath,
+        type_code typeCode,
+        type_name typeName,
+        i.create_time createTime
+        FROM hs_file_type t
+        left join hs_file_info i on t.file_id = i.id
+        where type_code = 'rotationChart'
+        ORDER BY i.create_time
+    </select>
 
 </mapper>

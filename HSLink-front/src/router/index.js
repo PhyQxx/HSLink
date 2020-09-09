@@ -9,7 +9,34 @@ export default new Router({
         path: '/',
         name: 'login',
         component:() => import('@/components/Login')
-    },
+      },
+      {
+        path: '/upload',
+        name: 'upload',
+        component:() => import('@/view/upload')
+      },
+      {
+        path: '/admin',
+        name: 'admin',
+        component:() => import('@/view/admin/Admin'),
+        children: [
+          {
+            path: '/articlereview',
+            name: 'articlereview',
+            component:() => import('@/view/admin/articleReview/ArticleReview')
+          },
+          {
+            path: '/personnelmanagement',
+            name: 'personnelmanagement',
+            component:() => import('@/view/admin/personnelManagement/PersonnelManagement')
+          },
+          {
+            path: '/homepagemanagement',
+            name: 'homepagemanagement',
+            component:() => import('@/view/admin/homepageManagement/HomepageManagement')
+          }
+        ]
+      },
       {
         path:'/index',
         name:'index',

@@ -154,4 +154,19 @@ public interface HSLinkMapper {
      */
     int updateIntegral(Map<String,Object> param);
 
+    /**
+     * 保存文件路径
+     */
+    int insertFilePath(Map<String,Object> param);
+
+    /**
+     * 获取文件信息
+     */
+    List<Map<String,Object>> getFileList();
+
+    /**
+     * 查询轮播图列表
+     * @return
+     */
+    List<Map<String,Object>> getRotationPhotoList();
 }

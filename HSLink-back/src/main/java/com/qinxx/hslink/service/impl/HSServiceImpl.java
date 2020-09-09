@@ -1,20 +1,36 @@
 package com.qinxx.hslink.service.impl;
 
+import com.qinxx.hslink.controller.HSController;
 import com.qinxx.hslink.dao.HSLinkMapper;
 import com.qinxx.hslink.service.HSService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Service
 public class HSServiceImpl implements HSService {
 
-    @Autowired
+    /**
+     * 日志
+     */
+    private static Logger logger = LogManager.getLogger(HSServiceImpl.class);
+    @Resource
     HSLinkMapper hsLinkMapper;
+    /**文件路径*/
+    @Value("${filePath}")
+    private String filePath;
 
     @Override
     public Map<String, Object> login(Map<String, Object> param) {
@@ -331,5 +347,134 @@ public class HSServiceImpl implements HSService {
         result.put("data",res);
         result.put("success",true);
         return result;
+    }
+
+    @Override
+    public Map<String, Object> upload(HttpServletRequest httpServletRequest) {
+        boolean flag = false;
+        MultipartHttpServletRequest multipartHttpServletRequest = null;
+        //强制转换为MultipartHttpServletRequest接口对象 (它包含所有HttpServletRequest的方法)
+        if(httpServletRequest instanceof MultipartHttpServletRequest){
+            multipartHttpServletRequest = (MultipartHttpServletRequest) httpServletRequest;
+        }else{
+            return dealResultMap(false, "上传失败");
+        }
+        //获取MultipartFile文件信息(注意参数为前端对应的参数名称)
+        MultipartFile mf = multipartHttpServletRequest.getFile("file");
+        //获取源文件名称
+        String fileName = mf.getOriginalFilename();
+        //存储路径可在配置文件中指定
+        File pfile = new File(filePath);
+        if (!pfile.exists()) {
+            pfile.mkdirs();
+        }
+        String id = UUID.randomUUID().toString();
+        File file = new File(pfile,id+fileName);
+        /* //指定好存储路径
+        File file = new File(fileName);*/
+        try {
+            //保存文件
+            //使用此方法保存必须要绝对路径且文件夹必须已存在,否则报错
+            mf.transferTo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return dealResultMap(false, "上传失败");
+        }
+        //保存文件路径
+        Map<String,Object> param = new HashMap<>();
+        param.put("id", id);
+        param.put("fileName",fileName);
+        param.put("fileEncryption",id+fileName);
+        param.put("filePath",String.valueOf(file));
+        hsLinkMapper.insertFilePath(param);
+        return dealResultMap(true, "上传成功");
+    }
+
+    @Override
+    public Map<String, Object> getFileList(String[] fileList) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        res.put("fileList",hsLinkMapper.getFileList());
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public void fileDownload(String fileId,HttpServletRequest request, HttpServletResponse response) {
+        // 下载的文件名
+        Map<String, String> fileMap = new HashMap<>();
+        fileMap.put("NAME","test.png");
+        fileMap.put("ID","");
+        String fileName = fileMap.get("NAME");
+        String id = fileMap.get("ID");
+        String prefix = fileName.substring(fileName.lastIndexOf("."));
+        // 文件路径
+        String path = "D:\\office\\phy\\HSLink\\HSLink-back\\src\\main\\static\\files\\test.png";
+        InputStream bis = null;
+        BufferedOutputStream out = null;
+        // 获取输入流
+        try {
+            bis = new BufferedInputStream(new FileInputStream(new File(path)), 1024 * 10);
+            // 假如以中文名下载的话
+            // 转码，免得文件名中文乱码
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+            // 设置文件下载头
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            // 设置文件ContentType类型，这样设置，会自动判断下载文件类型
+            response.setContentType("multipart/form-data");
+            out = new BufferedOutputStream(response.getOutputStream());
+            int len = 0;
+            int i = bis.available();
+            byte[] buff = new byte[i];
+            while ((len = bis.read(buff)) > 0) {
+                out.write(buff, 0, len);
+                out.flush();
+            }
+        } catch (FileNotFoundException e) {
+            logger.error("文件未找到" + e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            logger.error("不支持的编码异常：" + e.getMessage());
+        } catch (IOException e) {
+            logger.error("IO异常：" + e.getMessage());
+        } finally {
+            try {
+                if (null != bis) {
+                    bis.close();
+                }
+            } catch (IOException e) {
+                logger.error("流关闭异常" + e.getMessage());
+            }
+            try {
+                if (null != out) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                logger.error("流关闭异常" + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public Map<String, Object> getRotationPhotoList() {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        res.put("rotationPhotoList",hsLinkMapper.getRotationPhotoList());
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 返回参数
+     * @param flag
+     * @param message
+     * @return
+     */
+    private Map<String, Object> dealResultMap(boolean flag, String message) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("flag",flag);
+        map.put("message",message);
+        return map;
     }
 }

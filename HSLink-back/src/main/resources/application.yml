@@ -19,3 +19,6 @@ spring:
     db-name: hslink
     filters: log4j,wall,mergeStat
     driverClassName: com.mysql.cj.jdbc.Driver
+
+##文件保存路径
+filePath: D:\office\phy\HSLink\HSLink-front\src\assets\file
