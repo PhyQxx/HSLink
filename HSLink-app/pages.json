@@ -1,0 +1,148 @@
+{
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "登录",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/homepage/homepage",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "首页",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/homepage/data-details",
+			"style":	{
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "文章内容",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/follow/follow",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "关注",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/release/release",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "发布",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/message/message",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "消息",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/tabbar/my/my",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "我",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/release-detial/release-release/release-release",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "发图文",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/release-detial/release-video/release-video",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "发视频",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		},
+		{
+			"path": "pages/release-detial/release-qa/release-qa",
+			"style": {
+				"enablePullDownRefresh": true,
+				 "navigationBarTitleText": "提问",//顶部名称
+				 "navigationBarBackgroundColor": "#333",//顶部背景色
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+			 }
+		}
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"borderStyle": "black",
+		"backgroundColor": "#333",
+		"color": "#FFFFFF",
+		"selectedColor": "#f33e54",
+		"list": [{
+				"pagePath": "pages/tabbar/homepage/homepage",
+				"iconPath": "static/img/tabbar/home.png",
+				"selectedIconPath": "static/img/tabbar/homeactive.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/follow/follow",
+				"iconPath": "static/img/tabbar/guanzhu.png",
+				"selectedIconPath": "static/img/tabbar/guanzhuactive.png",
+				"text": "关注"
+			},
+			//#ifdef MP-WEIXIN
+			{
+				"pagePath": "pages/tabbar/release/release",
+				"iconPath": "static/img/tabbar/add.png",
+				"selectedIconPath": "static/img/tabbar/addactive.png",
+				"text": "发布"
+			},
+			//#endif
+			//#ifndef MP-WEIXIN
+			{
+				"pagePath": "pages/tabbar/release/release",
+				"iconPath": "static/img/tabbar/add.png",
+				"selectedIconPath": "static/img/tabbar/addactive.png"
+			},
+			//#endif
+			{
+				"pagePath": "pages/tabbar/message/message",
+				"iconPath": "static/img/tabbar/news.png",
+				"selectedIconPath": "static/img/tabbar/newsactive.png",
+				"text": "消息"
+			},
+			{
+				"pagePath": "pages/tabbar/my/my",
+				"iconPath": "static/img/tabbar/me.png",
+				"selectedIconPath": "static/img/tabbar/meactive.png",
+				"text": "我"
+			}
+		]
+	}
+}
