@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -460,6 +461,54 @@ public class HSServiceImpl implements HSService {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = new HashMap<>();
         res.put("rotationPhotoList",hsLinkMapper.getRotationPhotoList());
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 获取个人私信
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional
+    public Map<String, Object> getPersonalPrivateLetterApp(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        List<Map<String, Object>> list = hsLinkMapper.getLetterOtherInfo(param);
+        for (Map<String, Object> item : list) {
+            Map<String, Object> res = new HashMap<>();
+            res.put("userInfo",item);
+            param.put("otherId",item.get("user_id"));
+            List<Map<String, Object>> letterList = hsLinkMapper.getCommunicationLetter(param);
+            res.put("letterList",letterList);
+            resultList.add(res);
+        }
+        result.put("data",resultList);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getTwoLetterApp(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getCommunicationLetter(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateReadApp(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updateReadApp(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
         result.put("data",res);
         result.put("success",true);
         return result;

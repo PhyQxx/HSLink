@@ -40,7 +40,7 @@ public interface HSLinkMapper {
     Map<String,Object> getOneContent(Map<String,Object> param);
 
     /**
-     * 获取一条数据具体内容
+     * 获取一条数据具体内容（留言）
      */
     List<Map<String,Object>> getOneLeaveMessage(Map<String,Object> param);
 
@@ -169,4 +169,25 @@ public interface HSLinkMapper {
      * @return
      */
     List<Map<String,Object>> getRotationPhotoList();
+
+    /**
+     * 获取私信其他人信息
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> getLetterOtherInfo(Map<String,Object> param);
+
+    /**
+     * 获取两个人交流的私信
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> getCommunicationLetter(Map<String,Object> param);
+
+    /**
+     * 私信改为已读
+     * @param param
+     * @return
+     */
+    int updateReadApp(Map<String, Object> param);
 }

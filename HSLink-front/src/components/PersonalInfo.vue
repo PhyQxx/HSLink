@@ -228,7 +228,6 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            debugger
             this.$ajax.post("/hs/deleteLetter",{id:id,type:type},r=>{
               if (r === 1) {
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));

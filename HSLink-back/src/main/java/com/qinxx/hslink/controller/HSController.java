@@ -173,6 +173,34 @@ public class HSController {
         return result;
     }
 
+    /**app获取个人私信*/
+    @RequestMapping(value = "/getPersonalPrivateLetterApp", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getPersonalPrivateLetterApp(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getPersonalPrivateLetterApp(param);
+        return result;
+    }
+
+    /**app获取两个人的私信*/
+    @RequestMapping(value = "/getTwoLetterApp", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getTwoLetterApp(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getTwoLetterApp(param);
+        return result;
+    }
+
+    /**
+     * 私信改为已读
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/updateReadApp", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> updateReadApp(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.updateReadApp(param);
+        return result;
+    }
+
     /**阅读私信*/
     @RequestMapping(value = "/readPrivateLetter", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody

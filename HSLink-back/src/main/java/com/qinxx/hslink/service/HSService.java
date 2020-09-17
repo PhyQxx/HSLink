@@ -94,7 +94,7 @@ public interface HSService {
     Map<String,Object> getPersonalInfo(Map<String,Object> param);
 
     /**
-     * 获取个人信息
+     * 获取个人私信
      */
     Map<String,Object> getPersonalPrivateLetter(Map<String,Object> param);
 
@@ -138,4 +138,21 @@ public interface HSService {
      * @return
      */
     Map<String, Object> getRotationPhotoList();
+
+    /**
+     * 获取个人私信
+     */
+    Map<String, Object> getPersonalPrivateLetterApp(Map<String, Object> param);
+
+    /**
+     * 获取两个人的私信
+     */
+    Map<String, Object> getTwoLetterApp(Map<String, Object> param);
+
+    /**
+     * 私信改为已读
+     * @param param
+     * @return
+     */
+    Map<String, Object> updateReadApp(Map<String, Object> param);
 }
