@@ -15,7 +15,11 @@
 			</view>
 		</view>
 		<view class="content">
-			{{noticeInfo.content}}
+			<textarea placeholder="请输入文章内容"
+						v-model="noticeInfo.content"
+						auto-height="true"
+						disabled="true"
+			></textarea>
 		</view>
 		<view class="feedback">
 			<view class="reading-volume">
@@ -27,7 +31,7 @@
 				<text>点赞 123</text>
 			</view>
 		</view>
-		<view class="no-message" v-if="noMessage === true">
+		<view class="no-message" v-if="noMessage === true"  @tap="addMessage">
 			写留言
 		</view>
 		<view class="leave-message" v-if="noMessage === false">
@@ -39,7 +43,7 @@
 					写留言
 				</view>
 			</view>
-			<view class="one-message" v-for="item in messageList">
+			<view class="one-message" v-for="(item,index) in messageList" :key="index">
 				<view class="left">
 					<view class="header-photo">
 						{{item.real_name.slice(0,1)}}
@@ -60,13 +64,23 @@
 				</view>
 			</view>
 		</view>
-		
+		<prompt :visible.sync="promptVisible" 
+				placeholder="请输入留言" 
+				defaultValue="" 
+				@confirm="clickPromptConfirm" 
+				mainColor="#1296DB">
+		  <!-- 这里放入slot内容-->
+		</prompt>
 	</view>
 </template>
 
 <script>
+	import Prompt from '@/components/prompt/index.vue';
 	import request from '@/util/request.js';
 	export default {
+		components: {
+			Prompt: Prompt
+		},
 		data() {
 			let noticeInfo = uni.getStorageSync('notice');
 			noticeInfo.fabulous = true;
@@ -77,7 +91,10 @@
 				//有无留言
 				noMessage: false,
 				//留言列表
-				messageList: []
+				messageList: [],
+				// 控制弹框输入框显示
+			    promptVisible: false,
+				
 			}
 		},
 		onLoad() {
@@ -87,26 +104,48 @@
 			this.getMessageList()
 		},
 		methods: {
-			//获取留言
+			/**
+			 * 点击留言弹出输入框确定
+			 */
+			clickPromptConfirm(message) {
+			    request.post('/hs/addMessage',{
+					noticeId: this.noticeInfo.id,
+					userId: uni.getStorageSync("userInfo").user_id,
+					content: message
+					}).then(res=>{
+						console.log("新增留言结果",res);
+						if (res.data === 1) {
+							this.promptVisible = false;
+							uni.showToast({
+								icon: 'loading',
+								title: '留言成功',
+							});
+							setTimeout(()=>{
+								this.getMessageList();
+							},1000)
+						}
+					},err=>{
+						console.log("err",err);
+			  	})
+			},
+			/** 
+			 * 获取留言 
+			 */
 			getMessageList() {
 				request.post('/hs/getOneContent',{id: this.noticeInfo.id})
 				.then(res=>{
-					this.noMessage = res.data.data.message.length === 0 ? true : false;
-					this.messageList = res.data.data.message;
+					this.noMessage = res.data.message.length === 0 ? true : false;
+					this.messageList = res.data.message;
 					console.log("一条数据数据",res);
 				},err=>{
 					console.log("err",err);
 				})
 			},
+			/**
+			 * 新增留言（打开弹框）
+			 */
 			addMessage() {
-				request.post('/hs/addMessage',{
-					noticeId: this.noticeInfo.id
-					// userId: 
-					}).then(res=>{
-						console.log("新增留言结果",res);
-					},err=>{
-						console.log("err",err);
-					})
+				this.promptVisible = true;
 			}
 			
 		}
@@ -114,6 +153,14 @@
 </script>
 
 <style scoped>
+	.content textarea{
+		background-color: #F1F1F1;
+		padding: 20rpx;
+		width: 100%;
+		border-radius: 10rpx;
+		text-indent: 40rpx;
+		min-height: 140rpx;
+	}
 	.message-title .left{
 		color: #a7a7a7;
 	}
@@ -196,11 +243,6 @@
 	.title{
 		padding: 20rpx;
 		font-size: 36rpx;
-	}
-	.page{
-		margin: 20rpx;
-		background-color: #FFFFFF;
-		border-radius: 10rpx;
 	}
 	
 </style>

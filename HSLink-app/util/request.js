@@ -14,9 +14,15 @@ const get = (url, data) => {
         dataType: 'json',
     }
     let promise = new Promise(function(resolve, reject) {
-        uni.request(httpDefaultOpts).then(
-            (res) => {
-                resolve(res[1])
+        uni.request(httpDefaultOpts).then((res) => {
+        	if (res[1].data.success === true && res[1].data.data !== null) {
+        			resolve(res[1].data)
+        		} else {
+					uni.showToast({
+						icon: 'none',
+						title: '服务器出现异常'
+					});
+        		}
             }
         ).catch(
             (response) => {
@@ -38,9 +44,14 @@ const post = (url, data) => {
         dataType: 'json',
     }
     let promise = new Promise(function(resolve, reject) {
-        uni.request(httpDefaultOpts).then(
-            (res) => {
-                resolve(res[1])
+        uni.request(httpDefaultOpts).then((res) => {
+			if (res[1].data.success === true && res[1].data.data !== null) {
+					resolve(res[1].data)
+				} else {
+					resolve({
+						message: "服务器出现异常"
+					})
+				}
             }
         ).catch(
             (response) => {

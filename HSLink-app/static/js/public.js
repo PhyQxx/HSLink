@@ -55,10 +55,3 @@ const  sortBy = function(attr,rev){
     }
 };
 export { sortBy }
-
-//获取专业列表
-const getMajorList = function() {
-	let majorList = request.get('/rest/v2/services/saftyedutrain_AppOnlineQAService/getMajor')
-	return majorList;
-};
-export { getMajorList }

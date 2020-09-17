@@ -16,7 +16,9 @@
 					<view class="cu-item arrow" style="min-height: 90rpx;padding-top: 10rpx;">
 						<view class="action">
 							<view class="action">
-								<view class='cu-tag radius bg-orange light margin-right-xs'>{{item.type}}</view>
+								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
+								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
+								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
 								<text class="text-black text-lg">{{item.title}}</text>
 							</view>
 						</view>
@@ -43,6 +45,7 @@
 	import request from '@/util/request.js';
     import mSearch from '@/components/mehaotian-search/mehaotian-search.vue';
 	import noData from '@/components/noData/noData.vue';
+	import { sortBy } from '@/static/js/public.js';
 export default {
 	components: {
 	    mSearch,
@@ -75,27 +78,32 @@ export default {
 		this.getAllData();
 	},
 	methods: {
-		//跳转详情页面
+		/**
+		 * 跳转详情页面
+		 * @param {Object} item
+		 */
 		goToDetails(item) {
 			uni.setStorageSync("notice",item);
 			uni.navigateTo({
 				url: '/pages/tabbar/homepage/data-details'
 			})
 		},
-		//获取首页数据
+		/**
+		 * 获取首页数据
+		 */
 		getAllData() {
 			request.post('/hs/getAllContent',{})
 			.then(res=>{
-				res.data.data.parentAdvice.forEach(item=>{
+				res.data.parentAdvice.forEach(item=>{
 					this.$set(item,'type','家长意见');
 				});
-				res.data.data.schoolNoticeList.forEach(item=>{
+				res.data.schoolNoticeList.forEach(item=>{
 					this.$set(item,'type','校园通知');
 				});
-				res.data.data.studentThinking.forEach(item=>{
+				res.data.studentThinking.forEach(item=>{
 					this.$set(item,'type','学生想法');
 				})
-				this.noticeList = res.data.data.parentAdvice.concat(res.data.data.schoolNoticeList, res.data.data.studentThinking);
+				this.noticeList = (res.data.parentAdvice.concat(res.data.schoolNoticeList, res.data.studentThinking)).sort(sortBy("release_time",false));
 				this.noData = this.noticeList.length === 0 ? true : false;
  				console.log("首页数据",this.noticeList);
 			},err=>{
@@ -109,6 +117,7 @@ export default {
 <style scoped>
 .content {
 	min-height: 85vh;
+	padding-bottom: 100rpx;
 }
 .text-gray{
 	display: inline-block;

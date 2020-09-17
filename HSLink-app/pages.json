@@ -92,7 +92,47 @@
 			 }
 		}
 		
-	],
+	    ,{
+            "path" : "pages/tabbar/my/my-article/my-article",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "我的文章",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/notice-edit/notice-edit",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "编辑文章",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white", //文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				   "bounce": "none", //关闭窗口回弹效果
+				   "titleNView": {
+					   "buttons": [ //原生标题栏按钮配置,
+						   {
+								"type":"none",
+								"text":"删除 ",
+								"fontSize":"16px",
+								"float":"right"
+						   }
+						]
+					}
+				}
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/message/chat-page",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

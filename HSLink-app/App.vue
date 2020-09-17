@@ -36,6 +36,11 @@ export default {
 		/* display: flex; */
 		font-size: 16px;
 	}
+	.page{
+		margin: 20rpx;
+		border-radius: 10rpx;
+		padding-bottom: 100rpx;
+	}
 
 	/* #ifdef MP-BAIDU */
 	page {

@@ -1,139 +1,133 @@
 <template>
-	<view class="content" :class="{'active':active}">
-		<image class="logo" :class="{'active':active}" src="../../../static/logo.png"  mode="aspectFit"></image>
-		<view class="tabbar-box-wrap">
-			<view class="tabbar-box">
-				<view class="tabbar-box-item" @click="goToPage('/pages/release-detial/release-release/release-release')">
-					<image class="box-image" src="../../../static/img/release.png" mode="aspectFit"></image>
-					<text class="explain">发图文</text>
-				</view>
-				<view class="tabbar-box-item" @click="goToPage('/pages/release-detial/release-release/release-video')">
-					<image class="box-image" src="../../../static/img/video.png" mode="aspectFit"></image>
-					<text class="explain">发视频</text>
-				</view>
-				<view class="tabbar-box-item" @click="goToPage('/pages/release-detial/release-release/release-qa')">
-					<image class="box-image" src="../../../static/img/qa.png" mode="aspectFit"></image>
-					<text class="explain">提问</text>
-				</view>
+	<view class="page">
+		<view class="cu-item height">
+			<view class="action">
+				<text class="text-black">文章名称：</text>
 			</view>
 		</view>
+		<view class="cu-item title">
+			<textarea placeholder="请输入文章名称"
+						v-model="noticeInfo.title"
+						maxlength=50
+			></textarea>
+		</view>
+		<view class="cu-item height">
+			<view class="action">
+				<text class="text-black">文章标签：</text>
+			</view>
+		</view>
+		<view class="cu-item label">
+			<textarea placeholder="请输入文章标签"
+						v-model="noticeInfo.label"
+						maxlength=4
+			></textarea>
+		</view>
+		<view class="cu-item">
+			<view class="action">
+				<text class="text-black">文章内容：</text>
+			</view>
+		</view>
+		<view class="cu-item content">
+			<textarea placeholder="请输入文章内容"
+						v-model="noticeInfo.content"
+						auto-height="true"
+						maxlength=2000
+			></textarea>
+		</view>
+		<view class="button">
+			<button type="default" @tap="preservation">发表</button>
+		</view>
 	</view>
-</template> 
+</template>
 
 <script>
-export default {
-	data() {
-		return {
-			active: false
-		};
-	},
-	onLoad() {},
-	onShow() {
-		// setTimeout(() => {
-		this.active = true;
-		// }, 500);
-	},
-	onHide() {
-		this.active = false;
-	},
-	methods: {
-		goToPage(url) {
-			if (!url) return;
-			uni.navigateTo({
-				url
-			});
-		}
-	}
-};
-</script>
-
-<style lang="scss" scoped>
-.content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	/* #ifdef H5 */
-	height: calc(100vh - var(--window-bottom) - var(--window-top));
-	/* #endif */
-	/* #ifndef H5 */
-	height: 100vh;
-	/* #endif */
-	transition: opacity 0.3s;
-	background: #999;
-	opacity: 0;
-	&.active {
-		opacity: 1;
-	}
-	.logo {
-		position: relative;
-		margin-top: -400upx;
-		width: 200upx;
-		height: 200upx;
-		// z-index: -1;
-		opacity: 0;
-		transition: opacity 0.3s;
-		&.active {
-			opacity: 1;
-		}
-	}
-}
-.tabbar-box-wrap {
-	position: absolute;
-	width: 100%;
-	padding: 50upx;
-	box-sizing: border-box;
-	bottom: 0;
-	left: 0;
-	.tabbar-box {
-		position: relative;
-		display: flex;
-		width: 100%;
-		background: #fff;
-		border-radius: 20upx;
-		padding: 15upx 20upx;
-		box-sizing: border-box;
-		z-index: 2;
-		box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.1);
-		&:after {
-			content: '';
-			position: absolute;
-			bottom: -16upx;
-			left: 0;
-			right: 0;
-			margin: auto;
-			width: 50upx;
-			height: 50upx;
-			transform: rotate(45deg);
-			background: #fff;
-			z-index: 1;
-			box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.1);
-			border-radius: 2px;
-		}
-		&:before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: #ffffff;
-			border-radius: 20upx;
-			z-index: 2;
-		}
-		.tabbar-box-item {
-			// position: relative;
-			width: 100%;
-			z-index: 3;
-			margin: 10upx;
-			color: $uni-color-subtitle;
-			text-align: center;
-			font-size: $uni-font-size-base;
-			.box-image {
-				width: 100%;
-				height: $uni-img-size-lg;
+	import request from '@/util/request.js';
+	export default {
+		components: {
+		},
+		data() {
+			return {
+				//文章信息
+				noticeInfo: {
+					title: '',
+					label: '',
+					content: ''
+				},
+			}
+		},
+		onShow() {
+			this.noticeInfo = {
+					title: '',
+					label: '',
+					content: ''
+				}
+		},
+		mounted() {
+		},
+		methods: {
+			/**
+			 * 发表
+			 */
+			preservation() {
+				const NOTICE_TYPE = {
+					"学生": "学生想法",
+					"家长": "家长建议",
+					"教师": "校园通知"
+				}
+				request.post('/hs/addArticle',{
+					id: this.noticeInfo.id,
+					label: this.noticeInfo.label,
+					title: this.noticeInfo.title,
+					content: this.noticeInfo.content,
+					release_id: uni.getStorageSync("userInfo").user_id,
+					type: NOTICE_TYPE[uni.getStorageSync("userInfo").user_type]
+				}).then(res => {
+					console.log("发表文章",res);
+					if (res.data === 1) {
+						uni.showToast({
+							icon: 'loading',
+							title: '发表成功'
+						});
+						setTimeout(() => {
+							uni.switchTab({
+							    url: '/pages/tabbar/homepage/homepage'
+							});
+						},1000)
+					}
+				},err=>{
+					console.log("err",err);
+				})
 			}
 		}
 	}
-}
+</script>
+
+<style scoped>
+	.button{
+		padding: 40rpx 100rpx 80rpx;
+	}
+	.cu-item{
+		padding: 20rpx;
+	}
+	.title{
+		padding-top: 0;
+	}
+	.title textarea, .label textarea, .content textarea{
+		background-color: #F1F1F1;
+		padding: 20rpx;
+		width: 100%;
+		border-radius: 10rpx;
+	}
+	.title textarea{
+		height: 128rpx;
+		font-weight: bold;
+	}
+	.label textarea{
+		height: 80rpx;
+	}
+	.content textarea{
+		min-height: 400rpx;
+		text-indent: 40rpx;
+	}
+	
 </style>
