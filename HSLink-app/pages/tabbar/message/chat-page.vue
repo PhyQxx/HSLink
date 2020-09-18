@@ -45,12 +45,21 @@
 				//消息内容
 				messageContent: '',
 				//私信列表
-				letterList: []
+				letterList: [],
+				//定时任务
+				interval: {}
 			}
 		},
 		onShow() {
 			this.updateRead();
 			this.getTwoLetterApp();
+			
+			this.interval = setInterval(() => {
+				this.getTwoLetterApp();
+			} ,1000);
+		},
+		onBackPress() {
+			clearInterval(this.interval);
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
