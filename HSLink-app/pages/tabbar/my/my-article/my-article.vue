@@ -83,6 +83,9 @@ export default {
 	onShow() {
 		this.getAllData();
 	},
+	onPullDownRefresh () {
+		this.getAllData();
+	},
 	methods: {
 		/**
 		 * 编辑页面
@@ -114,6 +117,7 @@ export default {
 			}).then(res=>{
  				console.log("我的文章",res);
 				this.noticeList = res.data;
+				uni.startPullDownRefresh();
 				this.noData = this.noticeList.length === 0 ? true : false;
 			},err=>{
 				console.log("err",err);

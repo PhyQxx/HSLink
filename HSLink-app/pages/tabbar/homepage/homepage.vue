@@ -77,6 +77,9 @@ export default {
 	onShow() {
 		this.getAllData();
 	},
+	onPullDownRefresh () {
+		this.getAllData();
+	},
 	methods: {
 		/**
 		 * 跳转详情页面
@@ -104,6 +107,7 @@ export default {
 					this.$set(item,'type','学生想法');
 				})
 				this.noticeList = (res.data.parentAdvice.concat(res.data.schoolNoticeList, res.data.studentThinking)).sort(sortBy("release_time",false));
+				uni.startPullDownRefresh();
 				this.noData = this.noticeList.length === 0 ? true : false;
  				console.log("首页数据",this.noticeList);
 			},err=>{

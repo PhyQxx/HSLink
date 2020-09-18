@@ -42,6 +42,9 @@
 		onShow() {
 			this.getPersonalPrivateLetter();
 		},
+		onPullDownRefresh () {
+			this.getPersonalPrivateLetter();
+		},
 		methods: {
 			/**
 			 * 跳转到消息页面
@@ -85,6 +88,7 @@
 							this.message.splice(index,1);
 						}
 					});
+					uni.startPullDownRefresh();
 					console.log("私信",res);
 				},err=>{
 					console.log("err",err);
