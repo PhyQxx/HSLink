@@ -1,25 +1,27 @@
 <template>
 	<view class="page">
-		<view class="title">
-			{{noticeInfo.title}}
-		</view>
-		<view class="label">
-			{{noticeInfo.label}}
-		</view>
-		<view class="author-and-time">
-			<view class="author">
-				{{noticeInfo.real_name}}
+		<view class="top">
+			<view class="title">
+				{{noticeInfo.title}}
 			</view>
-			<view class="time">
-				{{noticeInfo.release_time}}
+			<view class="label">
+				{{noticeInfo.label}}
 			</view>
-		</view>
-		<view class="content">
-			<textarea placeholder="请输入文章内容"
-						v-model="noticeInfo.content"
-						auto-height="true"
-						disabled="true"
-			></textarea>
+			<view class="author-and-time">
+				<view class="author">
+					{{noticeInfo.real_name}}
+				</view>
+				<view class="time">
+					{{noticeInfo.release_time}}
+				</view>
+			</view>
+			<view class="content">
+				<textarea placeholder="请输入文章内容"
+							v-model="noticeInfo.content"
+							auto-height="true"
+							disabled="true"
+				></textarea>
+			</view>
 		</view>
 		<view class="feedback">
 			<view class="reading-volume">
@@ -103,30 +105,40 @@
 		mounted() {
 			this.getMessageList()
 		},
+		onPullDownRefresh () {
+			uni.startPullDownRefresh();
+		},
 		methods: {
 			/**
 			 * 点击留言弹出输入框确定
 			 */
 			clickPromptConfirm(message) {
-			    request.post('/hs/addMessage',{
-					noticeId: this.noticeInfo.id,
-					userId: uni.getStorageSync("userInfo").user_id,
-					content: message
-					}).then(res=>{
-						console.log("新增留言结果",res);
-						if (res.data === 1) {
-							this.promptVisible = false;
-							uni.showToast({
-								icon: 'loading',
-								title: '留言成功',
-							});
-							setTimeout(()=>{
-								this.getMessageList();
-							},1000)
-						}
-					},err=>{
-						console.log("err",err);
-			  	})
+				if (message === '') {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入留言，亲'
+					})
+				} else {
+					request.post('/hs/addMessage',{
+						noticeId: this.noticeInfo.id,
+						userId: uni.getStorageSync("userInfo").user_id,
+						content: message
+						}).then(res=>{
+							console.log("新增留言结果",res);
+							if (res.data === 1) {
+								this.promptVisible = false;
+								uni.showToast({
+									icon: 'loading',
+									title: '留言成功',
+								});
+								setTimeout(()=>{
+									this.getMessageList();
+								},1000)
+							}
+						},err=>{
+							console.log("err",err);
+					})
+				}
 			},
 			/** 
 			 * 获取留言 
@@ -153,6 +165,11 @@
 </script>
 
 <style scoped>
+	.page .top, .one-message{
+		background-color: #FFFFFF;
+		border-radius: 10rpx;
+		padding: 20rpx;
+	}
 	.content textarea{
 		background-color: #F1F1F1;
 		padding: 20rpx;
@@ -213,9 +230,10 @@
 		display: inline-block;
 	}
 	.label{
-		margin-left: 20rpx;
+		margin: 20rpx 0 20rpx 20rpx;
 		border-radius: 10rpx;
 		width: 4rem;
+		font-size: 30rpx;
 		text-align: center;
 		color: #ff9041;
 		border: 1rpx solid #ff9041;

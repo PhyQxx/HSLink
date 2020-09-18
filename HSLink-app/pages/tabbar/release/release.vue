@@ -64,6 +64,9 @@
 		},
 		mounted() {
 		},
+		onPullDownRefresh () {
+			uni.startPullDownRefresh();
+		},
 		methods: {
 			/**
 			 * 发表
@@ -103,6 +106,10 @@
 </script>
 
 <style scoped>
+	.page{
+		background-color: #FFFFFF;
+		border-radius: 10rpx;
+	}
 	.button{
 		padding: 40rpx 100rpx 80rpx;
 	}

@@ -11,7 +11,7 @@
 					</view>
 				</view>
 				<view class="header-photo cu-avatar radius" v-if="item.send_id === userInfo.user_id">
-					{{messageInfo.userInfo.real_name.slice(0,1)}}
+					{{userInfo.real_name.slice(0,1)}}
 				</view>
 				<view class="date">{{item.letter_create_time}}</view>
 			</view>
@@ -53,10 +53,9 @@
 		onShow() {
 			this.updateRead();
 			this.getTwoLetterApp();
-			
 			this.interval = setInterval(() => {
 				this.getTwoLetterApp();
-			} ,1000);
+			} ,5000);
 		},
 		onBackPress() {
 			clearInterval(this.interval);
@@ -97,19 +96,27 @@
 			 * 发送消息
 			 */
 			sendMessage() {
-				request.post('/hs/sendLetter',{
-					sendId: uni.getStorageSync("userInfo").user_id,
-					receiveId: this.messageInfo.userInfo.user_id,
-					content: this.messageContent
-				}).then(res => {
-					console.log("发送消息",res);
-					if (res.data === 1) {
-						this.getTwoLetterApp();
+				if (this.messageContent === '') {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入消息，亲'
+					})
+				} else {
+					request.post('/hs/sendLetter',{
+						sendId: uni.getStorageSync("userInfo").user_id,
+						receiveId: this.messageInfo.userInfo.user_id,
+						content: this.messageContent
+					}).then(res => {
 						this.messageContent = '';
-					}
-				},err=>{
-					console.log("err",err);
-				})
+						console.log("发送消息",res);
+						if (res.data === 1) {
+							this.getTwoLetterApp();
+							this.messageContent = '';
+						}
+					},err=>{
+						console.log("err",err);
+					})
+				}
 			},
 			/**
 			 * 改为已读
