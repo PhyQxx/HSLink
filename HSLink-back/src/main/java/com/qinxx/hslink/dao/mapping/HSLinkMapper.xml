@@ -136,8 +136,7 @@
         type
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
-        where 1 = 1
-        and status = "1"
+        where status = "1"
         <if test="releaseId != null and releaseId != ''">
             and release_id = #{releaseId}
         </if>
@@ -147,10 +146,12 @@
         <if test="type != null and type != ''">
             and type = #{type}
         </if>
-        and (label like CONCAT('%',#{text},'%')
-        or title like CONCAT('%',#{text},'%')
-        or content like CONCAT('%',#{text},'%')
-        or real_name like CONCAT('%',#{text},'%'))
+        <if test="text != null and text != ''">
+            and (label like CONCAT('%',#{text},'%')
+            or title like CONCAT('%',#{text},'%')
+            or content like CONCAT('%',#{text},'%')
+            or real_name like CONCAT('%',#{text},'%'))
+        </if>
         ORDER BY release_time desc
     </select>
 
@@ -244,8 +245,22 @@
 
     <!--获取个人信息-->
     <select id="getPersonalInfo" parameterType="map" resultType="map">
-        select * , (select count(*) from hs_private_letter where receive_id = #{releaseId} and already_read = "0" and receive_status = "1") letter_number
-        from hs_user where user_id = #{releaseId}
+        SELECT
+            *,
+            (
+        SELECT
+            count( * )
+        FROM
+            hs_private_letter
+        WHERE
+            receive_id = '201610060129' and already_read = "0" and receive_status = "1") letter_number,
+            (SELECT count(*) from hs_follow where user_id = #{userId} and follow_id = #{releaseId}) isFollow,
+            (SELECT count(*) from hs_follow where user_id = #{releaseId}) followNumber,
+            (SELECT count(*) from hs_follow where follow_id = #{releaseId}) fansNumber
+        FROM
+            hs_user
+        WHERE
+            user_id = #{releaseId}
     </select>
 
     <!--获取个人私信-->
@@ -306,6 +321,16 @@
 	    user_id = #{userId}
     </delete>
 
+    <!--取消关注-->
+    <delete id="cancelFollow" parameterType="map">
+        DELETE
+        FROM
+            hs_follow
+        WHERE
+            user_id = #{userId}
+            AND follow_id = #{followId}
+    </delete>
+
     <!--获取已发送私信-->
     <select id="getSentPrivateLetter" resultType="map" parameterType="map">
         select * from hs_private_letter left join hs_user on send_id = user_id where send_id = #{userId} and send_status = "1"
@@ -321,6 +346,13 @@
         (id,file_name,file_encryption,file_path,create_time)
         values
         (#{id},#{fileName},#{fileEncryption},#{filePath},now())
+    </insert>
+
+    <!--加关注-->
+    <insert id="addFollow">
+        INSERT INTO hs_follow ( id, user_id, follow_id, create_time )
+        VALUES
+            ( uuid(), #{userId}, #{followId}, now() )
     </insert>
 
     <!--获取文件信息-->
@@ -386,6 +418,37 @@
             OR ( receive_id = #{userId} AND send_id = #{otherId} )
         ORDER BY
             letter_create_time
+    </select>
+
+    <!--获取关注列表-->
+    <select id="getFollowList" resultType="map" parameterType="map">
+        SELECT
+            p.id,
+            label,
+            title,
+            type,
+            content,
+            user_id,
+            real_name,
+            release_time
+        FROM
+            hs_notice p
+            LEFT JOIN hs_user u ON p.release_id = u.user_id
+        WHERE
+            release_id IN ( SELECT follow_id FROM hs_follow WHERE user_id = #{userId} )
+            AND STATUS = "1"
+        ORDER BY
+            release_time DESC
+    </select>
+
+    <!--获取关注列表-->
+    <select id="getFollowPeopleList" resultType="map" parameterType="map">
+        SELECT
+            *
+        FROM
+            hs_user
+        WHERE
+            user_id IN ( SELECT follow_id FROM hs_follow WHERE user_id = #{userId} )
     </select>
 
 </mapper>

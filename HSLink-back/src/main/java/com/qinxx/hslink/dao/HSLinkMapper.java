@@ -190,4 +190,32 @@ public interface HSLinkMapper {
      * @return
      */
     int updateReadApp(Map<String, Object> param);
+
+    /**
+     * 获取关注列表
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getFollowList(Map<String, Object> param);
+
+    /**
+     * 取消关注
+     * @param param
+     * @return
+     */
+    int cancelFollow(Map<String, Object> param);
+
+    /**
+     * 加关注
+     * @param param
+     * @return
+     */
+    int addFollow(Map<String, Object> param);
+
+    /**
+     * 获取关注人员列表
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getFollowPeopleList(Map<String, Object> param);
 }

@@ -86,13 +86,15 @@
 				userOtherInfo: {}
 			}
 		},
+		onShow() {
+			this.getUserInfo();
+		},
 		onLoad() {
 		},
 		onPullDownRefresh () {
 			this.getUserInfo();
 		},
 		mounted() {
-			this.getUserInfo();
 		},
 		methods: {
 			/**

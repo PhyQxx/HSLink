@@ -275,8 +275,57 @@ public class HSController {
     }
 
     /**
-     * 获取管理员文章审核列表
+     * 获取关注列表
+     * @param param
+     * @return
      */
+    @PostMapping("/getFollowList")
+    @ResponseBody
+    public Map<String, Object> getFollowList(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.getFollowList(param);
+        return result;
+    }
+
+    /**
+     * 取消关注
+     * @param param
+     * @return
+     */
+    @PostMapping("/cancelFollow")
+    @ResponseBody
+    public Map<String, Object> cancelFollow(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.cancelFollow(param);
+        return result;
+    }
+
+    /**
+     * 加关注
+     * @param param
+     * @return
+     */
+    @PostMapping("/addFollow")
+    @ResponseBody
+    public Map<String, Object> addFollow(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.addFollow(param);
+        return result;
+    }
+
+    /**
+     * 获取关注人员列表
+     * @param param
+     * @return
+     */
+    @PostMapping("/getFollowPeopleList")
+    @ResponseBody
+    public Map<String, Object> getFollowPeopleList(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.getFollowPeopleList(param);
+        return result;
+    }
+
 
 
     /**

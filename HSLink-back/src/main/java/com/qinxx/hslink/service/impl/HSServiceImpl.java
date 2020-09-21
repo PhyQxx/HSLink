@@ -514,6 +514,54 @@ public class HSServiceImpl implements HSService {
         return result;
     }
 
+    @Override
+    public Map<String, Object> getFollowList(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getFollowList(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> cancelFollow(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.cancelFollow(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addFollow(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addFollow(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getFollowPeopleList(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getFollowPeopleList(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
     /**
      * 返回参数
      * @param flag

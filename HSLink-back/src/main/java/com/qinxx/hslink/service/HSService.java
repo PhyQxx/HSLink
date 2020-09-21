@@ -155,4 +155,32 @@ public interface HSService {
      * @return
      */
     Map<String, Object> updateReadApp(Map<String, Object> param);
+
+    /**
+     * 获取关注列表
+     * @param param
+     * @return
+     */
+    Map<String, Object> getFollowList(Map<String, Object> param);
+
+    /**
+     * 取消关注
+     * @param param
+     * @return
+     */
+    Map<String, Object> cancelFollow(Map<String, Object> param);
+
+    /**
+     * 加关注
+     * @param param
+     * @return
+     */
+    Map<String, Object> addFollow(Map<String, Object> param);
+
+    /**
+     * 获取关注人员列表
+     * @param param
+     * @return
+     */
+    Map<String, Object> getFollowPeopleList(Map<String, Object> param);
 }
