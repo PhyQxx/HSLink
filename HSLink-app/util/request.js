@@ -1,5 +1,6 @@
 
-const baseUrl = 'http://106.53.113.158:8048';  //服务器地址
+// const baseUrl = 'http://106.53.113.158:8048';  //服务器地址
+const baseUrl = 'http://192.168.10.29:8048';  //服务器地址
 
 const get = (url, data) => {
     let httpDefaultOpts = {

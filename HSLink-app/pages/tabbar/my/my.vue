@@ -2,17 +2,27 @@
 	<view class="page">
 		<view class="top">
 			<view class="header-photo">
-				裴
+				{{userInfo.real_name.slice(0,1)}}
 			</view>
 			<view class="user-info">
-				<view class="name">
-					姓名：裴浩宇
+				<view class="info-left">
+					<view class="name">
+						姓名：{{userInfo.real_name}}
+					</view>
+					<view class="grade">
+						等级：<text class="l">天才</text><text class="r">{{Math.floor((userInfo.integral)/1000)+1}}</text>
+					</view>
+					<view class="score">
+						积分：{{userInfo.integral}}
+					</view>
 				</view>
-				<view class="grade">
-					等级：<text class="l">博客</text><text class="r">{{Math.floor(1520/1000)+1}}</text>
-				</view>
-				<view class="score">
-					积分：1520
+				<view class="info-right">
+					<view class="score" @tap="goPage('followList')">
+						关注：{{userOtherInfo.followNumber}}
+					</view>
+					<view class="score" @tap="goPage('fansList')">
+						粉丝：{{userOtherInfo.fansNumber}}
+					</view>
 				</view>
 			</view>
 		</view>
@@ -33,6 +43,7 @@
 </template>
 
 <script>
+	import request from '@/util/request.js';
 	export default {
 		data() {
 			return {
@@ -70,13 +81,48 @@
 						name: '帮助',
 						code: 'help'
 					},
-				]
+				],
+				userInfo: uni.getStorageSync("userInfo"),
+				userOtherInfo: {}
 			}
 		},
 		onLoad() {
-
+		},
+		onPullDownRefresh () {
+			this.getUserInfo();
+		},
+		mounted() {
+			this.getUserInfo();
 		},
 		methods: {
+			/**
+			 * 跳转页面
+			 * @param {Object} pageName 页面名称
+			 */
+			goPage(pageName) {
+				const FUNCTION_CODE = {
+					'followList': '/pages/tabbar/follow/follow-list',
+					'fansList': '/pages/tabbar/follow/fans-list',
+				}
+				uni.navigateTo({
+					url: `${FUNCTION_CODE[pageName]}`
+				})
+			},
+			/**
+			 * 获取个人信息
+			 */
+			getUserInfo() {
+				request.post("/hs/getPersonalInfo",{
+					userId: uni.getStorageSync("userInfo").user_id,
+					releaseId: uni.getStorageSync("userInfo").user_id
+				}).then(res => {
+					uni.startPullDownRefresh();
+					console.log("个人信息",res);
+					this.userOtherInfo = res.data.personalInfo;
+				},err => {
+					console.log("err",err);
+				}) 
+			},
 			/**
 			 * 跳转页面
 			 * @param {Object} item
@@ -88,11 +134,10 @@
 					'personInfo': '',
 					'settings': '',
 					'help': ''
-				}
+				};
 				uni.navigateTo({
 					url: `${FUNCTION_CODE[item.code]}`
 				})
-				console.log(item)
 			}
 		}
 	}
@@ -115,16 +160,17 @@
 		background-color: #2D5315;
 	}
 	.user-info view{
-		padding: 10rpx 50rpx;
+		padding: 10rpx 10rpx;
 	}
 	.user-info{
 		color: #FFFFFF;
 		display: flex;
-		flex-flow: column;
+		flex-flow: nowrap;
 		justify-content: center;
 		border: 1rpx solid #b0b0b0;
 		border-radius: 10rpx;
-		width: 60%;
+		width: 70%;
+		font-size: 32rpx;
 		background-color: #ced8d8;
 	}
 	.header-photo{

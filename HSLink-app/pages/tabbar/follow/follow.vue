@@ -1,437 +1,168 @@
 <template>
 	<view class="content">
-		页面 - 2
+		<m-search
+				:show="false"
+				placeholder="搜索"
+				button="none"
+				backgroundColor="#efecec"
+				v-model="searchStr"
+		></m-search>
+		<view class="noData" v-if="noData === true">
+			<noData :custom="true"><view class="title" @tap="update()">暂无数据,点击重新加载</view></noData>
+		</view>
+		<view class="list cu-card article dynamic" v-else-if="noData === false">
+			<view class="cu-item" style="padding:0" v-for="(item,index) in noticeListQuery" :key="index">
+				<view class="cu-list menu solid-bottom" @click="goToDetails(item)">
+					<view class="cu-item arrow" style="min-height: 90rpx;padding-top: 10rpx;">
+						<view class="action">
+							<view class="action">
+								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
+								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
+								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
+								<text class="text-black text-lg">{{item.title}}</text>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="text-content" style="margin:10rpx 0 0 0;">
+					<text class="text-gray">文章标签：</text>
+					<text class="">{{item.label}}</text>
+				</view>
+				<view class="text-content" style="margin:10rpx 0 0 0;">
+					<text class="text-gray">发表人：</text>
+					<text class="">{{item.real_name}}</text>
+					<text class="cancel" @tap="cancelFollow(item)">取消关注</text>
+				</view>
+				<view class="text-content" style="margin:10rpx 0 0 0;">
+					<text class="text-gray">发表时间：</text>
+					<text class="">{{item.release_time}}</text>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: 'Hello',
-				list: [{
-		"_entityName": "uap_Menu",
-		"id": "2eb4cb5f-4e80-019e-9d46-ac1b55d010bf",
-		"orderNo": 1,
-		"level": 1,
-		"version": 2,
-		"levelText": "1级菜单",
-		"name": "预警发布",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
+	import request from '@/util/request.js';
+    import mSearch from '@/components/mehaotian-search/mehaotian-search.vue';
+	import noData from '@/components/noData/noData.vue';
+	import { sortBy } from '@/static/js/public.js';
+export default {
+	components: {
+	    mSearch,
+		noData
+	},
+	data() {
+		return {
+			//无数据
+			noData: false,
+			//搜索关键字
+			searchStr: '',
+			//首页数据
+			noticeList: [],
+		};
+	},
+	computed: {
+	    // 模糊查询 
+	    noticeListQuery(){
+	        return this.noticeList.filter(notice => {
+	          return notice.title.indexOf(this.searchStr) != -1 || notice.type.indexOf(this.searchStr) != -1
+			  || notice.real_name.indexOf(this.searchStr) != -1
+	        })
+	    }
+		
+	},
+	onLoad() {
+		
+	},
+	onShow() {
+		this.getAllData();
+	},
+	onPullDownRefresh () {
+		this.getAllData();
+	},
+	methods: {
+		/**
+		 * 更新方法
+		 */
+		update() {
+			this.getAllData();
 		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "7b406372-7da6-c396-b944-4ea3ea93de23",
-		"orderNo": 2,
-		"level": 1,
-		"version": 1,
-		"levelText": "1级菜单",
-		"name": "预警反馈",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "f71d90fe-a394-8104-88eb-4bb651491420",
-		"orderNo": 3,
-		"level": 1,
-		"version": 3,
-		"levelText": "1级菜单",
-		"name": "风险预警统计",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "f7dc6070-4b7a-4501-c459-c47ee54727ac",
-		"orderNo": 4,
-		"level": 1,
-		"version": 4,
-		"levelText": "1级菜单",
-		"name": "到岗到位人员关联",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "02c9ac9c-2acd-b03b-beb4-80701b2e6fd3",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "7b406372-7da6-c396-b944-4ea3ea93de23",
-			"orderNo": 2,
-			"level": 1,
-			"version": 1,
-			"levelText": "1级菜单",
-			"name": "预警反馈",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 1,
-		"appButtons": "/static/early_warning_feedback.png",
-		"level": 2,
-		"appUrl": "/pages/early-warning-feedback/early-warning-feedback-management",
-		"version": 3,
-		"url": "srm_WarnFeedback.browse",
-		"levelText": "2级菜单",
-		"name": "预警反馈管理",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "66afd592-d13b-09bb-44f9-64c853302b13",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "f71d90fe-a394-8104-88eb-4bb651491420",
-			"orderNo": 3,
-			"level": 1,
-			"version": 3,
-			"levelText": "1级菜单",
-			"name": "风险预警统计",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 1,
-		"level": 2,
-		"version": 2,
-		"url": "srm_WarnInfoReleaseStatistics.browse",
-		"levelText": "2级菜单",
-		"name": "安全风险预警发布统计",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "98118247-3b5b-9b29-cf9b-5ef67e60e174",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "2eb4cb5f-4e80-019e-9d46-ac1b55d010bf",
-			"orderNo": 1,
-			"level": 1,
-			"version": 2,
-			"levelText": "1级菜单",
-			"name": "预警发布",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 1,
-		"appButtons": "/static/early_warning_release.png",
-		"level": 2,
-		"appUrl": "/pages/early-warning-release/early-warning-notice",
-		"version": 2,
-		"url": "srm_WarnInfo.browse",
-		"levelText": "2级菜单",
-		"name": "预警发布管理",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "9060b850-abdb-7637-6ea3-4cc0ea80b96d",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "f7dc6070-4b7a-4501-c459-c47ee54727ac",
-			"orderNo": 4,
-			"level": 1,
-			"version": 4,
-			"levelText": "1级菜单",
-			"name": "到岗到位人员关联",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 1,
-		"level": 2,
-		"version": 10,
-		"url": "srm_PersonOnDuty.browse",
-		"levelText": "2级菜单",
-		"name": "到岗到位人员管理",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "0c706e19-e26f-3ded-174b-efc8d6fa5ee3",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "f71d90fe-a394-8104-88eb-4bb651491420",
-			"orderNo": 3,
-			"level": 1,
-			"version": 3,
-			"levelText": "1级菜单",
-			"name": "风险预警统计",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 2,
-		"level": 2,
-		"version": 2,
-		"url": "srm_WarnInfoCloseLoop.browse",
-		"levelText": "2级菜单",
-		"name": "安全风险预警闭环统计",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "46be89dc-a558-5167-f74d-e5848019dc06",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "f71d90fe-a394-8104-88eb-4bb651491420",
-			"orderNo": 3,
-			"level": 1,
-			"version": 3,
-			"levelText": "1级菜单",
-			"name": "风险预警统计",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 3,
-		"level": 2,
-		"version": 2,
-		"url": "srm_WarnInfoFutureSevenDaysPowerGridStatistics.browse",
-		"levelText": "2级菜单",
-		"name": "未来七日电网风险预警统计",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}, {
-		"_entityName": "uap_Menu",
-		"id": "4e0e395f-049f-4494-aa37-38f54f0bd8f4",
-		"parent": {
-			"_entityName": "uap_Menu",
-			"id": "f71d90fe-a394-8104-88eb-4bb651491420",
-			"orderNo": 3,
-			"level": 1,
-			"version": 3,
-			"levelText": "1级菜单",
-			"name": "风险预警统计",
-			"operationSystem": {
-				"_entityName": "uap_OperationSystem",
-				"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-				"type": "INTERNAL",
-				"version": 1,
-				"url": "#",
-				"name": "安全风险管理",
-				"createUser": "admin",
-				"status": "ENABLE"
-			},
-			"showIcon": "FALSE",
-			"status": "ENABLE"
-		},
-		"orderNo": 4,
-		"level": 2,
-		"version": 2,
-		"url": "srm_WarnInfoFutureSevenDaysTaskStatistics.browse",
-		"levelText": "2级菜单",
-		"name": "未来七日作业风险预警统计",
-		"operationSystem": {
-			"_entityName": "uap_OperationSystem",
-			"id": "57b5aadb-3dac-1272-65e2-f17510151a3b",
-			"type": "INTERNAL",
-			"version": 1,
-			"url": "#",
-			"name": "安全风险管理",
-			"createUser": "admin",
-			"status": "ENABLE"
-		},
-		"showIcon": "FALSE",
-		"status": "ENABLE"
-	}],
-			}
-		},
-		onLoad() {
-
-		},
-		mounted() {
-			console.log("data",this.list);
-			this.ergodic();
-		},
-		methods: {
-			//遍历数组
-			ergodic() {
-				let menuList = [];
-				this.list.forEach(item=>{
-					if (item.level === 1) {
-						menuList.push({
-							id: item.id,
-							menuName: item.name,
-							subMenuList: []
-						});
-					}
-				});
-				this.list.forEach(item=>{
-					if (item.level === 2) {
-						menuList.forEach(i=>{
-							if (i.id === item.parent.id) {
-								i.subMenuList.push({
-									menuName: item.name,
-									url: item.appUrl
-								})
+		/**
+		 * 取消关注
+		 * @param {Object} item
+		 */
+		cancelFollow(item) {
+			uni.showModal({
+				title: '取消关注',
+				content: '确认取消关注？',
+				success(res) {
+					if (res.confirm) {
+						request.post("/hs/cancelFollow",{
+							userId: uni.getStorageSync("userInfo").user_id,
+							followId: item.user_id
+						}).then(res => {
+							console.log("取消关注",res);
+							if (res.data === 1) {
+								this.getAllData();
 							}
+						},err => {
+							console.log("err",err);
 						})
+					} else if (res.cancel) {
+						console.log("取消");
 					}
-				});
-				console.log("menuList",menuList);
-			}
+ 				}
+			})
+		},
+		/**
+		 * 跳转详情页面
+		 * @param {Object} item
+		 */
+		goToDetails(item) {
+			uni.setStorageSync("notice",item);
+			uni.navigateTo({
+				url: '/pages/tabbar/homepage/data-details'
+			})
+		},
+		/**
+		 * 获取首页数据
+		 */
+		getAllData() {
+			request.post('/hs/getFollowList',{
+				userId: uni.getStorageSync("userInfo").user_id
+			})
+			.then(res=>{
+				this.noticeList = res.data;
+				uni.startPullDownRefresh();
+				this.noData = this.noticeList.length === 0 ? true : false;
+ 				console.log("关注页面数据",res.data);
+			},err=>{
+				console.log("err",err);
+			})
 		}
 	}
+};
 </script>
 
-<style>
-	.content {
-		text-align: center;
-		height: 400upx;
-		margin-top: 200upx;
+<style scoped>
+	.cancel{
+		float: right;
+		margin-right: 32rpx;
+		padding: 0 5rpx;
+		color: red;
+		border: 1rpx solid red;
+		border-radius: 10rpx;
 	}
+.content {
+	min-height: 85vh;
+	padding-bottom: 100rpx;
+}
+.text-gray{
+	display: inline-block;
+	width: 4rem;
+}
+.cu-card>.cu-item{
+	margin: 20rpx!important;
+}
 </style>

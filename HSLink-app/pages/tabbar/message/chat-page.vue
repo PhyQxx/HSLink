@@ -2,7 +2,7 @@
 	<view class="pages">
 		<view class="cu-chat" id="chart-page">
 			<view class="cu-item" :class="isMy(item,'self')" v-for="(item,index) in letterList" :key="index">
-				<view class="header-photo cu-avatar radius" v-if="item.send_id !== userInfo.user_id">
+				<view class="header-photo cu-avatar radius" v-if="item.send_id !== userInfo.user_id" @tap="goToOther(item)">
 					{{messageInfo.userInfo.real_name.slice(0,1)}}
 				</view>
 				<view class="main">
@@ -10,7 +10,7 @@
 						<text>{{item.content}}</text>
 					</view>
 				</view>
-				<view class="header-photo cu-avatar radius" v-if="item.send_id === userInfo.user_id">
+				<view class="header-photo cu-avatar radius" v-if="item.send_id === userInfo.user_id" @tap="goToMy">
 					{{userInfo.real_name.slice(0,1)}}
 				</view>
 				<view class="date">{{item.letter_create_time}}</view>
@@ -53,12 +53,16 @@
 		onShow() {
 			this.updateRead();
 			this.getTwoLetterApp();
-			this.interval = setInterval(() => {
+			let timesRun = 0;
+			let interval = setInterval(() => {
 				this.getTwoLetterApp();
-			} ,5000);
+			timesRun += 1;
+			if(timesRun === 5){
+			clearInterval(interval);
+			}
+			}, 2000);
 		},
 		onBackPress() {
-			clearInterval(this.interval);
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
@@ -67,13 +71,31 @@
 		},
 		watch: {
 			letterList() {
-				console.log("messageList change");
 				this.$nextTick(() => {
 					uni.pageScrollTo({scrollTop: 99999, duration: 0});
 				})
 			}
 		},
 		methods: {
+			/**
+			 * 跳转到其他人的主页
+			 * @param {Object} item
+			 */
+			goToOther(item) {
+				uni.navigateTo({
+					url: `/pages/person-info-page/person-info-page?userId=${item.send_id}`
+				})
+			},
+			/**
+			 * 跳转到我的主页
+			 * @param {Object} item
+			 */
+			goToMy() {
+				uni.switchTab({
+				    url: '/pages/tabbar/my/my'
+				});
+			},
+			
 			/**
 			 * 获取两个人的私信
 			 */

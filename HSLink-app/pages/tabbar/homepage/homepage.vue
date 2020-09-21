@@ -28,7 +28,7 @@
 					<text class="text-gray">文章标签：</text>
 					<text class="">{{item.label}}</text>
 				</view>
-				<view class="text-content" style="margin:10rpx 0 0 0;">
+				<view class="text-content" style="margin:10rpx 0 0 0;" @tap="goToUserInfo(item)">
 					<text class="text-gray">发表人：</text>
 					<text class="">{{item.real_name}}</text>
 				</view>
@@ -81,6 +81,20 @@ export default {
 		this.getAllData();
 	},
 	methods: {
+		/**
+		 * @param {Object} item
+		 */
+		goToUserInfo(item) {
+			if (item.user_id === uni.getStorageSync("userInfo").user_id) {
+				uni.switchTab({
+				    url: '/pages/tabbar/my/my'
+				});
+			} else {
+				uni.navigateTo({
+					url: `/pages/person-info-page/person-info-page?userId=${item.user_id}`
+				})
+			}
+		},
 		/**
 		 * 跳转详情页面
 		 * @param {Object} item

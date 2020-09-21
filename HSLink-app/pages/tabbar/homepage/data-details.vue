@@ -8,7 +8,7 @@
 				{{noticeInfo.label}}
 			</view>
 			<view class="author-and-time">
-				<view class="author">
+				<view class="author" @tap="goToUserInfo(noticeInfo)">
 					{{noticeInfo.real_name}}
 				</view>
 				<view class="time">
@@ -109,6 +109,20 @@
 			uni.startPullDownRefresh();
 		},
 		methods: {
+			/**
+			 * @param {Object} item
+			 */
+			goToUserInfo(item) {
+				if (item.user_id === uni.getStorageSync("userInfo").user_id) {
+					uni.switchTab({
+					    url: '/pages/tabbar/my/my'
+					});
+				} else {
+					uni.navigateTo({
+						url: `/pages/person-info-page/person-info-page?userId=${item.user_id}`
+					})
+				}
+			},
 			/**
 			 * 点击留言弹出输入框确定
 			 */
