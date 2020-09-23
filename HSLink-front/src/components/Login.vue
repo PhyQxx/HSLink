@@ -17,6 +17,7 @@
                   <el-option value="学生"></el-option>
                   <el-option value="家长"></el-option>
                   <el-option value="教师"></el-option>
+                  <el-option value="管理员"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="账号" prop="username">
