@@ -337,7 +337,7 @@ public class HSServiceImpl implements HSService {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = new HashMap<>();
         /**更新个人积分*/
-        int res1 = hsLinkMapper.updateIntegral(param);
+        int res1 = hsLinkMapper.updateOneIntegral(param);
         if (res1 == 1) {
             res.put("taskIntegral","更新个人积分成功");
         } else {
@@ -559,6 +559,81 @@ public class HSServiceImpl implements HSService {
         List<Map<String, Object>> res = hsLinkMapper.getFollowPeopleList(param);
         result.put("data",res);
         result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updatePhone(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updatePhone(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getDictionariesData(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getDictionariesData(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getHistoryHelpList(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getHistoryHelpList(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addHelpQuestion(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addHelpQuestion(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updatePersonalInfo(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updatePersonalInfo(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateIntegral() {
+        Map<String, Object> result = new HashMap<>();
+        int res1 = hsLinkMapper.updateIntegral();
+        if (res1 > 0) {
+            result.put("taskIntegral","更新个人积分成功");
+        } else {
+            result.put("taskIntegral","更新个人积分失败");
+        }
         return result;
     }
 

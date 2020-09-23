@@ -2,8 +2,10 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
-
-		setTimeout(() => {
+		/**
+		 * 主页面tab标签红标显示
+		 */
+		/* setTimeout(() => {
 			uni.setTabBarBadge({
 				index: 1,
 				text: '31'
@@ -11,7 +13,7 @@ export default {
 			uni.showTabBarRedDot({
 				index: 3
 			});
-		}, 1000);
+		}, 1000); */
 	},
 	onShow: function() {
 		console.log('App Show');

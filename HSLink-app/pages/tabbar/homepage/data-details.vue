@@ -8,7 +8,7 @@
 				{{noticeInfo.label}}
 			</view>
 			<view class="author-and-time">
-				<view class="author" @tap="goToUserInfo(noticeInfo)">
+				<view class="author" @tap="goToUserInfo(noticeInfo)" style="padding: 0;">
 					{{noticeInfo.real_name}}
 				</view>
 				<view class="time">
@@ -28,9 +28,12 @@
 				阅读 245
 			</view>
 			<view class="fabulous">
-				<image src="@/static/img/fabuloused.png" mode="" v-if="noticeInfo.fabulous === true"></image>
-				<image src="@/static/img/fabulous.png" mode="" v-if="noticeInfo.fabulous === false">
-				<text>点赞 123</text>
+				<uni-fav 	:checked="checked" 
+							class="favBtn" 
+							circle="true" 
+							bg-color="#FFFFFF"
+							bg-color-checked="#1296DB" 
+							@click="onClick"></uni-fav>
 			</view>
 		</view>
 		<view class="no-message" v-if="noMessage === true"  @tap="addMessage">
@@ -59,44 +62,54 @@
 						</view>
 					</view>
 				</view>
-				<view class="message-fabulous">
-					<image src="@/static/img/fabuloused.png" mode="" v-if="noticeInfo.messageFabulous === true"></image>
-					<image src="@/static/img/fabulous.png" mode="" v-if="noticeInfo.messageFabulous === false">
-					<text>123</text>
+			</view>
+		</view>
+		<view class="cu-modal" :class="messageDialog ? 'show' : ''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">留言</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					<input type="text" v-model="messageContent" placeholder="请输入留言"/>
+				</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-blue text-blue" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-blue margin-left" @tap="clickPromptConfirm">确定</button>
+					</view>
 				</view>
 			</view>
 		</view>
-		<prompt :visible.sync="promptVisible" 
-				placeholder="请输入留言" 
-				defaultValue="" 
-				@confirm="clickPromptConfirm" 
-				mainColor="#1296DB">
-		  <!-- 这里放入slot内容-->
-		</prompt>
 	</view>
 </template>
 
 <script>
-	import Prompt from '@/components/prompt/index.vue';
 	import request from '@/util/request.js';
+	import uniFav from '@/components/uni-fav/uni-fav.vue';
 	export default {
 		components: {
-			Prompt: Prompt
+			uniFav
 		},
 		data() {
 			let noticeInfo = uni.getStorageSync('notice');
 			noticeInfo.fabulous = true;
 			noticeInfo.messageFabulous = true;
 			return {
+				//是否已收藏
+				checked: true,
 				//文章信息
 				noticeInfo: noticeInfo,
 				//有无留言
 				noMessage: false,
 				//留言列表
 				messageList: [],
-				// 控制弹框输入框显示
-			    promptVisible: false,
-				
+				//留言窗口
+				messageDialog: false,
+				//留言内容
+				messageContent: '',
 			}
 		},
 		onLoad() {
@@ -109,6 +122,12 @@
 			uni.startPullDownRefresh();
 		},
 		methods: {
+			/**
+			 * 关闭留言窗口
+			 */
+			hideModal() {
+				this.messageDialog = false;
+			},
 			/**
 			 * @param {Object} item
 			 */
@@ -126,8 +145,8 @@
 			/**
 			 * 点击留言弹出输入框确定
 			 */
-			clickPromptConfirm(message) {
-				if (message === '') {
+			clickPromptConfirm() {
+				if (this.messageContent === '') {
 					uni.showToast({
 						icon: 'none',
 						title: '请输入留言，亲'
@@ -136,11 +155,11 @@
 					request.post('/hs/addMessage',{
 						noticeId: this.noticeInfo.id,
 						userId: uni.getStorageSync("userInfo").user_id,
-						content: message
+						content: this.messageContent
 						}).then(res=>{
 							console.log("新增留言结果",res);
 							if (res.data === 1) {
-								this.promptVisible = false;
+								this.messageDialog = false;
 								uni.showToast({
 									icon: 'loading',
 									title: '留言成功',
@@ -171,7 +190,7 @@
 			 * 新增留言（打开弹框）
 			 */
 			addMessage() {
-				this.promptVisible = true;
+				this.messageDialog = true;
 			}
 			
 		}
@@ -179,18 +198,29 @@
 </script>
 
 <style scoped>
+	.padding-xl input{
+		background-color: #FFFFFF;
+		text-align: left;
+	}
+	.one-message{
+		margin-bottom: 20rpx;
+	}
 	.page .top, .one-message{
 		background-color: #FFFFFF;
 		border-radius: 10rpx;
 		padding: 20rpx;
 	}
-	.content textarea{
+	.content {
 		background-color: #F1F1F1;
-		padding: 20rpx;
 		width: 100%;
+		padding: 20rpx;
 		border-radius: 10rpx;
-		text-indent: 40rpx;
-		min-height: 140rpx;
+	}
+	textarea{
+		text-indent: 32rpx;
+		line-height: 1.5;
+		width: 100%;
+		height: 100%;
 	}
 	.message-title .left{
 		color: #a7a7a7;
@@ -244,7 +274,7 @@
 		display: inline-block;
 	}
 	.label{
-		margin: 20rpx 0 20rpx 20rpx;
+		margin: 20rpx 0;
 		border-radius: 10rpx;
 		width: 4rem;
 		font-size: 30rpx;
@@ -254,6 +284,11 @@
 	}
 	.content{
 		padding: 20rpx!important;
+	}
+	.feedback{
+		padding: 20rpx;
+		background-color: #FFFFFF;
+		margin-top: 20rpx;
 	}
 	.author-and-time, .feedback{
 		display: flex;
@@ -273,7 +308,7 @@
 		line-height: 60rpx;
 	}
 	.title{
-		padding: 20rpx;
+		padding: 20rpx 0;
 		font-size: 36rpx;
 	}
 	

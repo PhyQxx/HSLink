@@ -151,5 +151,7 @@
 	.content textarea{
 		text-indent: 40rpx;
 	}
-	
+	.page{
+		background-color: #FFFFFF;
+	}
 </style>

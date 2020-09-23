@@ -82,6 +82,7 @@ export default {
 	},
 	methods: {
 		/**
+		 * 跳转个人主页页面
 		 * @param {Object} item
 		 */
 		goToUserInfo(item) {

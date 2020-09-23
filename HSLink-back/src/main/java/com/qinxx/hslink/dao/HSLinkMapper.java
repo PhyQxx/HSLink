@@ -152,7 +152,7 @@ public interface HSLinkMapper {
     /**
      * 更新个人积分
      */
-    int updateIntegral(Map<String,Object> param);
+    int updateOneIntegral(Map<String,Object> param);
 
     /**
      * 保存文件路径
@@ -218,4 +218,45 @@ public interface HSLinkMapper {
      * @return
      */
     List<Map<String, Object>> getFollowPeopleList(Map<String, Object> param);
+
+    /**
+     * 修改手机号
+     * @param param
+     * @return
+     */
+    int updatePhone(Map<String, Object> param);
+
+    /**
+     * 获取字典项数据
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getDictionariesData(Map<String, Object> param);
+
+    /**
+     * 获取帮助历史提问
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getHistoryHelpList(Map<String, Object> param);
+
+    /**
+     * 新增一条帮助提问
+     * @param param
+     * @return
+     */
+    int addHelpQuestion(Map<String, Object> param);
+
+    /**
+     * 编辑个人信息
+     * @param param
+     * @return
+     */
+    int updatePersonalInfo(Map<String, Object> param);
+
+    /**
+     * 定时更新积分
+     * @return
+     */
+    int updateIntegral();
 }

@@ -44,6 +44,7 @@
 		},
 		onPullDownRefresh () {
 			this.getPersonalPrivateLetter();
+			uni.startPullDownRefresh();
 		},
 		methods: {
 			/**
@@ -51,7 +52,7 @@
 			 * @param {Object} item
 			 */
 			goToMessage(item) {
-				uni.setStorageSync("messageInfo",item);
+				uni.setStorageSync("otherInfo",item.userInfo);
 				uni.navigateTo({
 					url: "/pages/tabbar/message/chat-page"
 				})
@@ -88,7 +89,6 @@
 							this.message.splice(index,1);
 						}
 					});
-					uni.startPullDownRefresh();
 					console.log("私信",res);
 				},err=>{
 					console.log("err",err);

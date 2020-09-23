@@ -26,6 +26,19 @@
 				</view>
 			</view>
 		</view>
+		<view class="middle">
+			<view class="cu-item signature">
+				<view class="action">
+					<text class="text-black">个性签名：</text>
+				</view>
+			</view>
+			<view class="cu-item content">
+				<textarea v-model="userInfo.signature"
+							auto-height="true"
+							maxlength=2000
+				></textarea>
+			</view>
+		</view>
 		<view class="bottom">
 			<view class="cu-list grid" :class="['col-' + gridCol,gridBorder?'':'no-border']">
 				<view class="cu-item" 
@@ -44,6 +57,7 @@
 
 <script>
 	import request from '@/util/request.js';
+	import { updateUserInfo } from "@/static/js/public.js";
 	export default {
 		data() {
 			return {
@@ -82,12 +96,21 @@
 						code: 'help'
 					},
 				],
-				userInfo: uni.getStorageSync("userInfo"),
+				userInfo: {},
 				userOtherInfo: {}
 			}
 		},
 		onShow() {
 			this.getUserInfo();
+			this.userInfo = uni.getStorageSync("userInfo");
+			let timesRun = 0;
+			let interval = setInterval(() => {
+				updateUserInfo();
+			timesRun += 1;
+			if(timesRun === 5){
+			clearInterval(interval);
+			}
+			}, 10000);
 		},
 		onLoad() {
 		},
@@ -133,9 +156,9 @@
 				const FUNCTION_CODE = {
 					'collection': '',
 					'myArticle': '/pages/tabbar/my/my-article/my-article',
-					'personInfo': '',
-					'settings': '',
-					'help': ''
+					'personInfo': '/pages/tabbar/my/edit-info/edit-info',
+					'settings': '/pages/tabbar/my/settings/settings',
+					'help': '/pages/tabbar/my/help/help'
 				};
 				uni.navigateTo({
 					url: `${FUNCTION_CODE[item.code]}`
@@ -146,6 +169,22 @@
 </script>
 
 <style scoped>
+	.signature{
+		font-size: 30rpx;
+		font-weight: bold;
+		padding-bottom: 10rpx;
+	}
+	.content {
+		background-color: #F1F1F1;
+		width: 100%;
+		padding: 20rpx;
+		border-radius: 10rpx;
+	}
+	textarea{
+		line-height: 1.5;
+		width: 100%;
+		height: 100%;
+	}
 	.bottom{
 		display: flex;
 		flex-flow: column;
@@ -187,11 +226,15 @@
 		line-height: 180rpx;
 		margin: 20rpx;
 	}
+	.middle{
+		padding: 40rpx 20rpx;
+		border-top: 1rpx solid rgba(18,150,219,0.5);
+		border-bottom: 1rpx solid rgba(18,150,219,0.5);
+	}
 	.top{
 		display: flex;
 		justify-content: space-between;
 		padding-bottom: 40rpx;
-		border-bottom: 1rpx solid rgba(18,150,219,0.5);
 	}
 	.page{
 		padding: 20rpx;

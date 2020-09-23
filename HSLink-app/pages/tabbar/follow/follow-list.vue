@@ -11,7 +11,7 @@
 			<noData :custom="true"><view class="title" @tap="update()">暂无数据,点击重新加载</view></noData>
 		</view>
 		<view class="list cu-card article dynamic" v-else-if="noData === false">
-			<view class="cu-item one" style="padding:0" v-for="(item,index) in followList" :key="index">
+			<view class="cu-item one" style="padding:0" v-for="(item,index) in followList" :key="index" @tap="goToUserInfo(item)">
 				<view class="one-left-two">
 					<view class="one-left">
 						{{item.headerPhoto}}
@@ -64,10 +64,22 @@
 		onPullDownRefresh () {
 			this.getFollowPeopleList();
 		},
+		onShow() {
+			this.getAllData();
+		},
 		mounted() {
 			this.getFollowPeopleList();
 		},
 		methods: {
+			/**
+			 * 跳转个人主页页面
+			 * @param {Object} item
+			 */
+			goToUserInfo(item) {
+				uni.navigateTo({
+					url: `/pages/person-info-page/person-info-page?userId=${item.user_id}`
+				})
+			},
 			/**
 			 * 取消关注
 			 * @param {Object} userInfo
@@ -110,7 +122,6 @@
 							item.headerPhoto = item.real_name.slice(0,1);
 						});
 					}
-					
 				},err => {
 					console.log("err",err)
 				})

@@ -95,6 +95,12 @@
 		onPullDownRefresh () {
 			this.getUserInfo();
 		},
+		onNavigationBarButtonTap() {
+			uni.setStorageSync("otherInfo",this.userInfo);
+			uni.navigateTo({
+				url: "/pages/tabbar/message/chat-page"
+			})
+		},
 		methods: {
 			/**
 			 * 加关注
@@ -170,6 +176,7 @@
 <style scoped>
 	.cu-item{
 		background-color: #cfcfcf!important;
+		margin: 16rpx 0!important;
 	}
 	.follow-button-ed{
 		width: 80%;

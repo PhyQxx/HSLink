@@ -30,7 +30,7 @@
 				</view>
 				<view class="text-content" style="margin:10rpx 0 0 0;">
 					<text class="text-gray">发表人：</text>
-					<text class="">{{item.real_name}}</text>
+					<text class=""  @tap="goToUserInfo(item)">{{item.real_name}}</text>
 					<text class="cancel" @tap="cancelFollow(item)">取消关注</text>
 				</view>
 				<view class="text-content" style="margin:10rpx 0 0 0;">
@@ -82,6 +82,15 @@ export default {
 		this.getAllData();
 	},
 	methods: {
+		/**
+		 * 跳转个人主页页面
+		 * @param {Object} item
+		 */
+		goToUserInfo(item) {
+			uni.navigateTo({
+				url: `/pages/person-info-page/person-info-page?userId=${item.user_id}`
+			})
+		},
 		/**
 		 * 更新方法
 		 */

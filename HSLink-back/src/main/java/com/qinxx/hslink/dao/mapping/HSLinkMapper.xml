@@ -305,13 +305,37 @@
             send_id = #{otherId} and receive_id = #{userId}
     </update>
 
+    <!--修改手机号-->
+    <update id="updatePhone" parameterType="map">
+        update hs_user set mobile = #{mobile} where user_id = #{id}
+    </update>
+
+    <!--编辑个人信息-->
+    <update id="updatePersonalInfo" parameterType="map">
+        update hs_user set
+        sex = #{sex},
+        birthday = #{birthday},
+        address = #{address},
+        signature = #{signature}
+        where user_id = #{userId}
+    </update>
+
+    <!--定时更新所有人积分-->
+    <update id="updateIntegral">
+        UPDATE hs_user u
+        SET integral = (
+        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = u.user_id ) * 100 ) +
+        ( ( SELECT count( * ) FROM hs_leave_message WHERE messager_id = u.user_id ) * 10 )
+        )
+    </update>
+
     <!--删除一条已读私信-->
     <delete id="deleteSentLetter" parameterType="map">
         update hs_private_letter set send_status = "0" where id = #{id}
     </delete>
 
     <!--更新个人积分-->
-    <delete id="updateIntegral" parameterType="map">
+    <update id="updateOneIntegral" parameterType="map">
         UPDATE hs_user
         SET integral = (
         ( ( SELECT count( * ) FROM hs_notice WHERE release_id = #{userId} ) * 100 ) +
@@ -319,7 +343,7 @@
         )
         WHERE
 	    user_id = #{userId}
-    </delete>
+    </update>
 
     <!--取消关注-->
     <delete id="cancelFollow" parameterType="map">
@@ -353,6 +377,12 @@
         INSERT INTO hs_follow ( id, user_id, follow_id, create_time )
         VALUES
             ( uuid(), #{userId}, #{followId}, now() )
+    </insert>
+
+    <!--新增一条帮助问题-->
+    <insert id="addHelpQuestion" parameterType="map">
+        INSERT into hs_help (id,create_id,create_time,question)
+         VALUES (uuid(),#{userId},now(),#{question})
     </insert>
 
     <!--获取文件信息-->
@@ -449,6 +479,16 @@
             hs_user
         WHERE
             user_id IN ( SELECT follow_id FROM hs_follow WHERE user_id = #{userId} )
+    </select>
+
+    <!--获取字典项数据-->
+    <select id="getDictionariesData" resultType="map" parameterType="map">
+        SELECT * from hs_dd where dd_code = #{code}
+    </select>
+
+    <!--获取帮助历史提问-->
+    <select id="getHistoryHelpList" resultType="map" parameterType="map">
+        SELECT h.*,u.real_name from hs_help h left join hs_user u on h.answer_id = u.user_id where create_id = #{userId}
     </select>
 
 </mapper>

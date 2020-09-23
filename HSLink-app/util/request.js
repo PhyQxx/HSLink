@@ -47,19 +47,26 @@ const post = (url, data) => {
     let promise = new Promise(function(resolve, reject) {
         uni.request(httpDefaultOpts).then((res) => {
 			if (res[1].data.success === true && res[1].data.data !== null) {
-					resolve(res[1].data)
-				} else {
-					resolve({
-						message: "服务器出现异常"
+				if (res[1].data.data === 0) {
+					uni.showToast({
+						icon: "none",
+						title: "服务器出小差了，请稍后再试"
 					})
+				} else {
+					resolve(res[1].data)
 				}
-            }
-        ).catch(
-            (response) => {
-                reject(response)
-            }
-        )
-    })
+			} else {
+				resolve({
+					message: "服务器出现异常"
+				})
+			}
+		}
+	).catch(
+		(response) => {
+			reject(response)
+		}
+	)
+})
     return promise
 };
 //带Token请求

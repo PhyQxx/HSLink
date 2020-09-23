@@ -27,15 +27,12 @@
 				<text class="text-black">文章内容：</text>
 			</view>
 		</view>
-		<view class="cu-item content">
+		<view class="cu-item content ">
 			<textarea placeholder="请输入文章内容"
 						v-model="noticeInfo.content"
 						auto-height="true"
 						maxlength=2000
 			></textarea>
-		</view>
-		<view class="button">
-			<button type="default" @tap="preservation">发表</button>
 		</view>
 	</view>
 </template>
@@ -55,7 +52,7 @@
 				},
 			}
 		},
-		onShow() {
+		onLoad() {
 			this.noticeInfo = {
 					title: '',
 					label: '',
@@ -66,6 +63,9 @@
 		},
 		onPullDownRefresh () {
 			uni.startPullDownRefresh();
+		},
+		onNavigationBarButtonTap() {
+			this.preservation()
 		},
 		methods: {
 			/**
@@ -109,21 +109,28 @@
 	.page{
 		background-color: #FFFFFF;
 		border-radius: 10rpx;
+		padding: 20rpx;
 	}
 	.button{
 		padding: 40rpx 100rpx 80rpx;
 	}
 	.cu-item{
-		padding: 20rpx;
+		padding: 20rpx 0;
 	}
 	.title{
 		padding-top: 0;
 	}
-	.title textarea, .label textarea, .content textarea{
+	.title, .label, .content{
 		background-color: #F1F1F1;
-		padding: 20rpx;
 		width: 100%;
+		padding: 20rpx;
 		border-radius: 10rpx;
+	}
+	textarea{
+		text-indent: 32rpx;
+		line-height: 1.5;
+		width: 100%;
+		height: 100%;
 	}
 	.title textarea{
 		height: 128rpx;

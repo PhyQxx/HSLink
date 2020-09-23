@@ -3,7 +3,7 @@
 		<view class="cu-chat" id="chart-page">
 			<view class="cu-item" :class="isMy(item,'self')" v-for="(item,index) in letterList" :key="index">
 				<view class="header-photo cu-avatar radius" v-if="item.send_id !== userInfo.user_id" @tap="goToOther(item)">
-					{{messageInfo.userInfo.real_name.slice(0,1)}}
+					{{otherInfo.real_name.slice(0,1)}}
 				</view>
 				<view class="main">
 					<view class="content shadow" :class="isMy(item,'bg-green')">
@@ -39,7 +39,7 @@
 		
 		data() {
 			return {
-				messageInfo: uni.getStorageSync("messageInfo"),
+				otherInfo: uni.getStorageSync("otherInfo"),
 				userInfo: uni.getStorageSync('userInfo'),
 				InputBottom: 0,
 				//消息内容
@@ -66,7 +66,7 @@
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
-				title: this.messageInfo.userInfo.real_name
+				title: this.otherInfo.real_name
 			});
 		},
 		watch: {
@@ -102,7 +102,7 @@
 			getTwoLetterApp() {
 				request.post('/hs/getTwoLetterApp',{
 					userId: uni.getStorageSync("userInfo").user_id,
-					otherId: this.messageInfo.userInfo.user_id,
+					otherId: this.otherInfo.user_id,
 				}).then(res => {
 					console.log("获取两个人的私信",res);
 					if (res.data !== null) {
@@ -126,7 +126,7 @@
 				} else {
 					request.post('/hs/sendLetter',{
 						sendId: uni.getStorageSync("userInfo").user_id,
-						receiveId: this.messageInfo.userInfo.user_id,
+						receiveId: this.otherInfo.user_id,
 						content: this.messageContent
 					}).then(res => {
 						this.messageContent = '';
@@ -146,7 +146,7 @@
 			updateRead() {
 				request.post('/hs/updateReadApp',{
 					userId: uni.getStorageSync("userInfo").user_id,
-					otherId: this.messageInfo.userInfo.user_id
+					otherId: this.otherInfo.user_id
 				}).then(res => {
 					console.log("改为已读",res);
 				},err=>{

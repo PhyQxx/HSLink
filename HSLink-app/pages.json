@@ -43,7 +43,20 @@
 				"enablePullDownRefresh": true,
 				 "navigationBarTitleText": "发布",//顶部名称
 				 "navigationBarBackgroundColor": "#333",//顶部背景色
-				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "navigationBarTextStyle": "white" ,//文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				    "bounce": "none", //关闭窗口回弹效果
+				    "titleNView": {
+				 	   "buttons": [ //原生标题栏按钮配置,
+				 		   {
+				 				"type":"none",
+				 				"text":"发表 ",
+				 				"fontSize":"16px",
+				 				"float":"right"
+				 		   }
+				 		]
+				 	}
+				 }
 			 }
 		},
 		{
@@ -110,7 +123,20 @@
             	"enablePullDownRefresh": true,
             	 "navigationBarTitleText": "个人主页",//顶部名称
             	 "navigationBarBackgroundColor": "#333",//顶部背景色
-            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+            	 "navigationBarTextStyle": "white",//文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				    "bounce": "none", //关闭窗口回弹效果
+				    "titleNView": {
+					    "buttons": [ //原生标题栏按钮配置,
+						    {
+							   "type":"none",
+							   "text":"私信 ",
+							   "float":"right",
+							   "fontSize":"16px"
+						    }
+					    ]
+				    }
+			    }
              }
         }
         ,{
@@ -129,6 +155,73 @@
             	 "navigationBarTitleText": "粉丝列表",//顶部名称
             	 "navigationBarBackgroundColor": "#333",//顶部背景色
             	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/settings/settings",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "设置",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/settings/account-security/account-security",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "账号与安全",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/settings/agreement/agreement",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/settings/system-information/system-information",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "系统信息",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/help/help",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "帮助",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/edit-info/edit-info",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "编辑信息",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" ,//文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				     "bounce": "none", //关闭窗口回弹效果
+				     "titleNView": {
+				 	    "buttons": [ //原生标题栏按钮配置,
+				 		    {
+				 			   "type":"none",
+				 			   "text":"保存 ",
+				 			   "float":"right",
+				 			   "fontSize":"16px"
+				 		    }
+				 	    ]
+				     }
+				 }
              }
         }
     ],

@@ -114,7 +114,7 @@ public interface HSService {
     Map<String,Object> deleteLetter(Map<String,Object> param);
 
     /**
-     * 定时任务
+     * 更新个人积分
      */
     Map<String,Object> timingTask(Map<String,Object> param);
 
@@ -183,4 +183,44 @@ public interface HSService {
      * @return
      */
     Map<String, Object> getFollowPeopleList(Map<String, Object> param);
+
+    /**
+     * 修改手机号
+     * @param param
+     * @return
+     */
+    Map<String, Object> updatePhone(Map<String, Object> param);
+
+    /**
+     * 获取字典项数据
+     * @param param
+     * @return
+     */
+    Map<String, Object> getDictionariesData(Map<String, Object> param);
+
+    /**
+     * 获取帮助历史提问列表
+     * @param param
+     * @return
+     */
+    Map<String, Object> getHistoryHelpList(Map<String, Object> param);
+
+    /**
+     * 新增一条帮助问题
+     * @param param
+     * @return
+     */
+    Map<String, Object> addHelpQuestion(Map<String, Object> param);
+
+    /**
+     * 编辑个人信息
+     * @param param
+     * @return
+     */
+    Map<String, Object> updatePersonalInfo(Map<String, Object> param);
+
+    /**
+     * 定时任务更新积分
+     */
+    Map<String,Object> updateIntegral();
 }

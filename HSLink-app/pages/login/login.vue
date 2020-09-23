@@ -55,7 +55,26 @@
 			this.username = uni.getStorageSync("userInfo").real_name;
 			this.password = uni.getStorageSync("userInfo").pass_word;
 		},
+		onShow() {
+			this.getUserType();
+		},
 		methods: {
+			/**
+			 * 获取字典项数据（用户类型）
+			 */
+			getUserType() {
+				request.post("/hs/getDictionariesData",{
+					code: "UserType"
+				}).then(res => {
+					console.log("用户类型",res);
+					this.roleList = [];
+					res.data.forEach(item => {
+						this.roleList.push(item.dd_detail)
+					});
+				},err => {
+					console.log("err",err);
+				})
+			},
 			/**
 			 * 登录
 			 */

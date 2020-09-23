@@ -225,7 +225,7 @@ public class HSController {
         return result;
     }
 
-    /**定时任务*/
+    /**更新个人积分*/
     @RequestMapping(value = "/timingTask", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public Map<String,Object> timingTask(@RequestBody Map<String,Object> param) {
@@ -326,7 +326,61 @@ public class HSController {
         return result;
     }
 
+    /**修改手机号*/
+    @RequestMapping(value = "/updatePhone", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> updatePhone(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.updatePhone(param);
+        return result;
+    }
 
+    /**
+     * 获取字典项数据
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/getDictionariesData", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getDictionariesData(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getDictionariesData(param);
+        return result;
+    }
+
+    /**
+     * 获取帮助历史提问列表
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/getHistoryHelpList", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getHistoryHelpList(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getHistoryHelpList(param);
+        return result;
+    }
+
+    /**
+     * 新增一条帮助提问
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/addHelpQuestion", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> addHelpQuestion(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.addHelpQuestion(param);
+        return result;
+    }
+
+    /**
+     * 编辑个人信息
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/updatePersonalInfo", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> updatePersonalInfo(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.updatePersonalInfo(param);
+        return result;
+    }
 
     /**
      * 测试接口
