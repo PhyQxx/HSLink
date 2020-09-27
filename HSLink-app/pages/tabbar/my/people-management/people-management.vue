@@ -11,7 +11,7 @@
 			<noData :custom="true"><view class="title" @tap="update()">暂无数据,点击重新加载</view></noData>
 		</view>
 		<view class="list cu-card article dynamic" v-else-if="noData === false">
-			<view class="cu-item one" style="padding:0" v-for="(item,index) in followList" :key="index" @tap="goToUserInfo(item)">
+			<view class="cu-item one" style="padding:0" v-for="(item,index) in peopleListQuery" :key="index" @tap="goToUserInfo(item)">
 				<view class="one-left-two">
 					<avatar :userName="item.real_name" size="50"></avatar>
 					<view class="one-right">
@@ -64,6 +64,15 @@
 				followList: [],
 				flag: true
 			}
+		},
+		computed: {
+		    // 模糊查询 
+		    peopleListQuery(){
+		        return this.followList.filter(people => {
+		          return people.real_name.indexOf(this.searchStr) != -1;
+		        })
+		    }
+			
 		},
 		onPullDownRefresh () {
 			this.getFollowPeopleList();
