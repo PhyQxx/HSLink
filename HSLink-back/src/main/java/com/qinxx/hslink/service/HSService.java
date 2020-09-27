@@ -185,6 +185,13 @@ public interface HSService {
     Map<String, Object> getFollowPeopleList(Map<String, Object> param);
 
     /**
+     * 获取粉丝人员列表
+     * @param param
+     * @return
+     */
+    Map<String, Object> getFansPeopleList(Map<String, Object> param);
+
+    /**
      * 修改手机号
      * @param param
      * @return
@@ -223,4 +230,32 @@ public interface HSService {
      * 定时任务更新积分
      */
     Map<String,Object> updateIntegral();
+
+    /**
+     * 收藏
+     * @param param
+     * @return
+     */
+    Map<String, Object> addCollection(Map<String, Object> param);
+
+    /**
+     * 取消收藏
+     * @param param
+     * @return
+     */
+    Map<String, Object> cancelCollection(Map<String, Object> param);
+
+    /**
+     * 获取收藏列表
+     * @param param
+     * @return
+     */
+    Map<String, Object> getCollectionList(Map<String, Object> param);
+
+    /**
+     * 浏览量+1
+     * @param param
+     * @return
+     */
+    Map<String, Object> updateReadNumber(Map<String, Object> param);
 }

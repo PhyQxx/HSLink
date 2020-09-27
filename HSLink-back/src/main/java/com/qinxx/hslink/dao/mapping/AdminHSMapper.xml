@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qinxx.hslink.dao.AdminHSLinkMapper">
+<mapper namespace="com.qinxx.hslink.dao.AdminHSMapper">
 
+    <!--审核文章（通过/驳回）-->
+    <update id="verifyArticle" parameterType="map">
+        UPDATE hs_notice set is_pass = #{operating} where id = #{articleId}
+    </update>
+
+    <!--人员管理（冻结/解冻）-->
+    <update id="peopleManagement" parameterType="map">
+        UPDATE hs_user set frozen_state = #{operating} where user_id = #{userId}
+    </update>
+
+    <!--解答帮助-->
+    <update id="answerHelp" parameterType="map">
+        UPDATE hs_help
+        SET answer_id = #{answerId},
+        answer = #{answer},
+        answer_time = now( )
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--获取待审核文章数据-->
+    <select id="getVerifyList" parameterType="map" resultType="map">
+        SELECT
+            n.id articleId,
+            n.title title,
+            n.label label,
+            n.release_id releaseId,
+            n.type,
+            u.real_name releaseName,
+            n.release_time releaseTime
+        FROM
+            hs_notice n
+            LEFT JOIN hs_user u ON n.release_id = u.user_id
+        WHERE
+            STATUS = '1'
+            <if test="content != '' and content != null">
+                and title like CONCAT('%',#{content},'%')
+            </if>
+            AND is_pass = '0'
+            and type != "班级通知"
+            ORDER BY release_time desc
+    </select>
+
+    <!--获取人员管理列表-->
+    <select id="getPersonnelManagement" resultType="map" parameterType="map">
+        SELECT *,
+            (SELECT count(*) from hs_follow f where f.user_id = u.user_id) followNumber,
+            (SELECT count(*) from hs_follow f where f.follow_id = u.user_id) fansNumber
+        FROM hs_user u where
+        <if test="content != '' and content != null">
+            and u.real_name like CONCAT('%',#{name},'%')
+        </if>
+         u.user_type != "管理员" order by u.user_type
+    </select>
+
+    <!--获取帮助答复列表-->
+    <select id="getHelpAnswerList" resultType="map" parameterType="map">
+        SELECT
+            h.*,
+            u.real_name answerName,
+            (SELECT real_name from hs_user where user_id = h.create_id) questionName
+        FROM
+            hs_help h
+            LEFT JOIN hs_user u ON h.answer_id = u.user_id
+            ORDER BY create_time desc
+    </select>
 
 </mapper>

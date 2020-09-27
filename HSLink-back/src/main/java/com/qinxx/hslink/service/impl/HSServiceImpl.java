@@ -563,6 +563,15 @@ public class HSServiceImpl implements HSService {
     }
 
     @Override
+    public Map<String, Object> getFansPeopleList(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getFansPeopleList(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
     public Map<String, Object> updatePhone(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         int res = 0;
@@ -634,6 +643,60 @@ public class HSServiceImpl implements HSService {
         } else {
             result.put("taskIntegral","更新个人积分失败");
         }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> addCollection(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.addCollection(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> cancelCollection(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.cancelCollection(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> getCollectionList(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = hsLinkMapper.getCollectionList(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateReadNumber(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            res = hsLinkMapper.updateReadNumber(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
         return result;
     }
 

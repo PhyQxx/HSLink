@@ -326,6 +326,19 @@ public class HSController {
         return result;
     }
 
+    /**
+     * 获取粉丝人员列表
+     * @param param
+     * @return
+     */
+    @PostMapping("/getFansPeopleList")
+    @ResponseBody
+    public Map<String, Object> getFansPeopleList(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = hsService.getFansPeopleList(param);
+        return result;
+    }
+
     /**修改手机号*/
     @RequestMapping(value = "/updatePhone", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -379,6 +392,54 @@ public class HSController {
     @ResponseBody
     public Map<String,Object> updatePersonalInfo(@RequestBody Map<String,Object> param) {
         Map<String,Object> result = hsService.updatePersonalInfo(param);
+        return result;
+    }
+
+    /**
+     * 收藏
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/addCollection", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> addCollection(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.addCollection(param);
+        return result;
+    }
+
+    /**
+     * 取消收藏
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/cancelCollection", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> cancelCollection(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.cancelCollection(param);
+        return result;
+    }
+
+    /**
+     * 获取收藏文章列表
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/getCollectionList", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> getCollectionList(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.getCollectionList(param);
+        return result;
+    }
+
+    /**
+     * 浏览量+1
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/updateReadNumber", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Map<String,Object> updateReadNumber(@RequestBody Map<String,Object> param) {
+        Map<String,Object> result = hsService.updateReadNumber(param);
         return result;
     }
 

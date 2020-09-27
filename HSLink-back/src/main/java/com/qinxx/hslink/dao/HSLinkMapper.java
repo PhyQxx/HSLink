@@ -220,6 +220,13 @@ public interface HSLinkMapper {
     List<Map<String, Object>> getFollowPeopleList(Map<String, Object> param);
 
     /**
+     * 获取关注人员列表
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getFansPeopleList(Map<String, Object> param);
+
+    /**
      * 修改手机号
      * @param param
      * @return
@@ -259,4 +266,32 @@ public interface HSLinkMapper {
      * @return
      */
     int updateIntegral();
+
+    /**
+     * 收藏
+     * @param param
+     * @return
+     */
+    int addCollection(Map<String, Object> param);
+
+    /**
+     * 取消收藏
+     * @param param
+     * @return
+     */
+    int cancelCollection(Map<String, Object> param);
+
+    /**
+     * 获取收藏文章列表
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getCollectionList(Map<String, Object> param);
+
+    /**
+     * 浏览量+1
+     * @param param
+     * @return
+     */
+    int updateReadNumber(Map<String, Object> param);
 }

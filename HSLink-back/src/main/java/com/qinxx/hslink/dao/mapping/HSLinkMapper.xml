@@ -10,7 +10,7 @@
 
     <!--注册-->
     <insert id="register" parameterType="map">
-       INSERT INTO hs_user ( user_id, pass_word,real_name, mobile, user_type, create_time, frozen_state, error_times)
+       INSERT INTO hs_user ( user_id, pass_word,real_name, mobile, user_type, create_time)
         VALUES
         (
         uuid(),
@@ -18,9 +18,7 @@
         #{realname},
         #{mobile},
         #{type},
-        now(),
-        '00',
-        '0'
+        now()
         )
     </insert>
 
@@ -37,7 +35,7 @@
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where type = '校园通知'
-        and status = "1"
+        and status = "1" and is_pass = "1"
 	    <if test="id != null and id != ''">
             and s.id = #{id}
         </if>
@@ -60,7 +58,7 @@
         FROM
         hs_notice p left join hs_user u on p.release_id = u.user_id
         where type = '家长建议'
-        and status = "1"
+        and status = "1" and is_pass = "1"
         <if test="id != null and id != ''">
             and p.id = #{id}
         </if>
@@ -83,7 +81,7 @@
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where type = '学生想法'
-        and status = "1"
+        and status = "1" and is_pass = "1"
         <if test="id != null and id != ''">
             and s.id = #{id}
         </if>
@@ -104,7 +102,11 @@
         title,
         content,
         integral,
-        '' header_photo
+        '' header_photo,
+        read_number,
+        case when (select count(*) from hs_collection where user_id = #{userId} and article_id = #{id}) > 0
+        then 1 else 0 end isCollection,
+        is_pass
         from hs_notice n left join hs_user u on n.release_id = u.user_id
         where id = #{id}
     </select>
@@ -133,10 +135,15 @@
         u.integral,
         '' header_photo,
         signature,
-        type
+        status,
+        type,
+        is_pass
         FROM
         hs_notice s left join hs_user u on s.release_id = u.user_id
         where status = "1"
+        <if test="isPass == null and isPass == ''">
+            and is_pass = "1"
+        </if>
         <if test="releaseId != null and releaseId != ''">
             and release_id = #{releaseId}
         </if>
@@ -196,6 +203,7 @@
         select * from hs_notice left join hs_user on release_id = user_id
         where hs_notice.class_name = (select class_name from hs_user
         where user_id = #{id})
+        and status = "1" and is_pass = "1"
         <if test="text != null and text != ''">
             and (label like CONCAT('%',#{text},'%')
             or title like CONCAT('%',#{text},'%')
@@ -229,8 +237,8 @@
 
     <!--修改一条数据具体内容-->
     <update id="updateOneContent" parameterType="map">
-        update hs_notice set label = #{label},title = #{title},content = #{content}, release_time = now() where id =
-        #{id}
+        update hs_notice set label = #{label},title = #{title},content = #{content}, release_time = now(), is_pass = "0"
+        where id = #{id}
     </update>
 
     <!--删除一条数据-->
@@ -253,8 +261,9 @@
         FROM
             hs_private_letter
         WHERE
-            receive_id = '201610060129' and already_read = "0" and receive_status = "1") letter_number,
-            (SELECT count(*) from hs_follow where user_id = #{userId} and follow_id = #{releaseId}) isFollow,
+            receive_id = #{releaseId} and already_read = "0" and receive_status = "1") letter_number,
+            (case when (SELECT count(*) from hs_follow where user_id = #{userId} and follow_id = #{releaseId}) > 0
+            then 1 else 0 end ) isFollow,
             (SELECT count(*) from hs_follow where user_id = #{releaseId}) followNumber,
             (SELECT count(*) from hs_follow where follow_id = #{releaseId}) fansNumber
         FROM
@@ -324,7 +333,7 @@
     <update id="updateIntegral">
         UPDATE hs_user u
         SET integral = (
-        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = u.user_id ) * 100 ) +
+        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = u.user_id and status = "1" and is_pass = "1") * 100 ) +
         ( ( SELECT count( * ) FROM hs_leave_message WHERE messager_id = u.user_id ) * 10 )
         )
     </update>
@@ -338,11 +347,16 @@
     <update id="updateOneIntegral" parameterType="map">
         UPDATE hs_user
         SET integral = (
-        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = #{userId} ) * 100 ) +
+        ( ( SELECT count( * ) FROM hs_notice WHERE release_id = #{userId}  and status = "1" and is_pass = "1") * 100 ) +
         ( ( SELECT count( * ) FROM hs_leave_message WHERE messager_id = #{userId} ) * 10 )
         )
         WHERE
 	    user_id = #{userId}
+    </update>
+
+    <!--浏览量+1-->
+    <update id="updateReadNumber" parameterType="map">
+        update hs_notice set read_number = #{number} where id = #{noticeId}
     </update>
 
     <!--取消关注-->
@@ -353,6 +367,10 @@
         WHERE
             user_id = #{userId}
             AND follow_id = #{followId}
+    </delete>
+
+    <delete id="cancelCollection" parameterType="map">
+        delete from hs_collection where user_id = #{userId} and article_id = #{noticeId}
     </delete>
 
     <!--获取已发送私信-->
@@ -383,6 +401,11 @@
     <insert id="addHelpQuestion" parameterType="map">
         INSERT into hs_help (id,create_id,create_time,question)
          VALUES (uuid(),#{userId},now(),#{question})
+    </insert>
+
+    <!--收藏-->
+    <insert id="addCollection" parameterType="map">
+        insert into hs_collection (id, user_id, article_id, create_time) value (uuid(), #{userId}, #{noticeId}, now())
     </insert>
 
     <!--获取文件信息-->
@@ -418,7 +441,7 @@
 
     <!--获取私信其他人信息-->
     <select id="getLetterOtherInfo" resultType="map" parameterType="map">
-        select * from 	hs_user where user_id in (SELECT
+        select * from hs_user where user_id in (SELECT
         DISTINCT
             receive_id id
         FROM
@@ -450,10 +473,10 @@
             letter_create_time
     </select>
 
-    <!--获取关注列表-->
+    <!--获取关注列表文章-->
     <select id="getFollowList" resultType="map" parameterType="map">
         SELECT
-            p.id,
+            n.id,
             label,
             title,
             type,
@@ -462,11 +485,11 @@
             real_name,
             release_time
         FROM
-            hs_notice p
-            LEFT JOIN hs_user u ON p.release_id = u.user_id
+            hs_notice n
+            LEFT JOIN hs_user u ON n.release_id = u.user_id
         WHERE
             release_id IN ( SELECT follow_id FROM hs_follow WHERE user_id = #{userId} )
-            AND STATUS = "1"
+            AND STATUS = "1" and is_pass = "1"
         ORDER BY
             release_time DESC
     </select>
@@ -474,11 +497,25 @@
     <!--获取关注列表-->
     <select id="getFollowPeopleList" resultType="map" parameterType="map">
         SELECT
-            *
+           *,
+            (SELECT count(*) from hs_follow f where f.user_id = u.user_id) followNumber,
+            (SELECT count(*) from hs_follow f where f.follow_id = u.user_id) fansNumber
         FROM
-            hs_user
+            hs_user u
         WHERE
-            user_id IN ( SELECT follow_id FROM hs_follow WHERE user_id = #{userId} )
+           u.user_id IN ( SELECT follow_id FROM hs_follow f WHERE f.user_id = #{userId} )
+    </select>
+
+    <!--获取粉丝列表-->
+    <select id="getFansPeopleList" resultType="map" parameterType="map">
+        SELECT
+           *,
+            (SELECT count(*) from hs_follow f where f.user_id = u.user_id) followNumber,
+            (SELECT count(*) from hs_follow f where f.follow_id = u.user_id) fansNumber
+        FROM
+            hs_user u
+        WHERE
+           u.user_id IN ( SELECT user_id FROM hs_follow f WHERE f.follow_id = #{userId} )
     </select>
 
     <!--获取字典项数据-->
@@ -488,7 +525,30 @@
 
     <!--获取帮助历史提问-->
     <select id="getHistoryHelpList" resultType="map" parameterType="map">
-        SELECT h.*,u.real_name from hs_help h left join hs_user u on h.answer_id = u.user_id where create_id = #{userId}
+        SELECT h.*,u.real_name from hs_help h left join hs_user u on h.answer_id = u.user_id
+        where create_id = #{userId}
+    </select>
+
+    <!--获取收藏文章列表-->
+    <select id="getCollectionList" resultType="map" parameterType="map">
+        SELECT
+            p.id,
+            label,
+            title,
+            type,
+            content,
+            u.user_id,
+            real_name,
+            release_time
+        FROM
+            hs_notice p
+            LEFT JOIN hs_user u ON p.release_id = u.user_id
+                        left join hs_collection c on p.id = c.article_id
+        WHERE
+            c.user_id = #{userId}
+            AND STATUS = "1" and is_pass ="1"
+        ORDER BY
+            release_time DESC
     </select>
 
 </mapper>
