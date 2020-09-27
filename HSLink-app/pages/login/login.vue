@@ -38,7 +38,7 @@
 		data() {
 			return {
 				//角色列表
-				roleList: ["教师","家长","学生"],
+				roleList: [],
 				//角色序号
 				roleIndex: -1,
 				//角色
@@ -96,15 +96,25 @@
 					})
 				} else {
 					request.post('/hs/login',{
-						role:this.role,
+						role: this.role,
 						username: this.username,
-						password:this.password
+						password: this.password
 						}).then(res => {
 							console.log("登录信息",res)
 							if (res.data === null) {
 								uni.showToast({
 									icon: 'none',
 									title: '账号或密码错误'
+								})
+							} else if (res.data.frozen_state === "1") {
+								uni.showToast({
+									icon: 'none',
+									title: '该账号已冻结'
+								})
+							} else if (res.data.user_type !== this.role) {
+								uni.showToast({
+									icon: 'none',
+									title: '角色不匹配'
 								})
 							} else {
 								uni.setStorageSync("userInfo", res.data);

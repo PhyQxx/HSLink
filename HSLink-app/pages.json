@@ -224,6 +224,46 @@
 				 }
              }
         }
+        ,{
+            "path" : "pages/components/avatar/avatar",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/tabbar/my/collection/collection",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "收藏列表",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/article-management/article-management",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "文章管理",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/people-management/people-management",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "人员管理",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/help-answer/help-answer",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "帮助答复",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

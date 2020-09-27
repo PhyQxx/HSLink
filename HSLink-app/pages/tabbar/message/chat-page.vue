@@ -1,17 +1,17 @@
 <template>
 	<view class="pages">
-		<view class="cu-chat" id="chart-page">
+		<view class="cu-chat" id="chart-page" :style="[{'margin-bottom': 50+InputBottom+'px'}]">
 			<view class="cu-item" :class="isMy(item,'self')" v-for="(item,index) in letterList" :key="index">
-				<view class="header-photo cu-avatar radius" v-if="item.send_id !== userInfo.user_id" @tap="goToOther(item)">
-					{{otherInfo.real_name.slice(0,1)}}
+				<view class="cu-avatar radius" v-if="item.send_id !== userInfo.user_id" @tap="goToOther(item)">
+					<avatar :userName="otherInfo.real_name" size="45"></avatar>
 				</view>
 				<view class="main">
 					<view class="content shadow" :class="isMy(item,'bg-green')">
 						<text>{{item.content}}</text>
 					</view>
 				</view>
-				<view class="header-photo cu-avatar radius" v-if="item.send_id === userInfo.user_id" @tap="goToMy">
-					{{userInfo.real_name.slice(0,1)}}
+				<view class="cu-avatar radius" v-if="item.send_id === userInfo.user_id" @tap="goToMy">
+					<avatar :userName="userInfo.real_name" size="45"></avatar>
 				</view>
 				<view class="date">{{item.letter_create_time}}</view>
 			</view>
@@ -35,8 +35,11 @@
 <script>
 	import request from '@/util/request.js';
 	import $ from '@/static/js/jquery-1.12.2.js';
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
-		
+		components: {
+			avatar
+		},
 		data() {
 			return {
 				otherInfo: uni.getStorageSync("otherInfo"),
@@ -77,6 +80,20 @@
 			}
 		},
 		methods: {
+			/**
+			 * 调整弹框高度
+			 */
+			InputFocus(e) {
+				setTimeout(() => {
+				this.InputBottom = e.detail.height;
+				console.log(this.InputBottom)
+				},500)
+			},
+			InputBlur(e) {
+				setTimeout(() => {
+					this.InputBottom = 0
+				},500)
+			},
 			/**
 			 * 跳转到其他人的主页
 			 * @param {Object} item
@@ -160,23 +177,22 @@
 			isMy(item,classText) {
 				return item.send_id === uni.getStorageSync("userInfo").user_id ? classText : ''
 			},
-			InputFocus(e) {
-				this.InputBottom = e.detail.height
-			},
-			InputBlur(e) {
-				this.InputBottom = 0
-			}
 		}
 	}
 </script>
 
 <style scoped>
-	.header-photo{
-		text-align: center;
-		background-color: #1296DB;
+	/* .cu-item .date{
 		color: #FFFFFF;
-		font-size: 40rpx;
-		font-weight: bold;
+	}
+	.pages{
+		background-image: url("@/static/img/chat-bg.jpg");
+		background-size: 100% 100%;
+		height: calc(100vh - 100rpx);
+		overflow: scroll;
+	} */
+	.cu-avatar{
+		background-color: rgba(0,0,0,0);
 	}
 .cu-chat{
 	margin-bottom: 100rpx;

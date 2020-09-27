@@ -13,20 +13,19 @@
 		<view class="list cu-card article dynamic" v-else-if="noData === false">
 			<view class="cu-item one" style="padding:0" v-for="(item,index) in followList" :key="index" @tap="goToUserInfo(item)">
 				<view class="one-left-two">
-					<view class="one-left">
-						{{item.headerPhoto}}
-					</view>
+					<avatar :userName="item.real_name" size="50"></avatar>
 					<view class="one-right">
 						<view class="name">
 							{{item.real_name}}
 						</view>
-						<view class="grade">
-							<view class="grade-left">
-								<view class="grade">
-									等级:<text class="l">天才</text><text class="r">{{Math.floor((item.integral)/1000)+1}}</text>
-								</view>
+						<view class="other-info">
+							<view class="other-info-left">
+								关注:{{item.followNumber}}
 							</view>
-							<view class="grade-right">
+							<view class="other-info-middle">
+								粉丝:{{item.fansNumber}}
+							</view>
+							<view class="other-info-right">
 								积分:{{item.integral}}
 							</view>
 						</view>
@@ -45,10 +44,12 @@
 	import mSearch from '@/components/mehaotian-search/mehaotian-search.vue';
 	import noData from '@/components/noData/noData.vue';
 	import { sortBy } from '@/static/js/public.js';
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
 		components: {
 		    mSearch,
-			noData
+			noData,
+			avatar
 		},
 		data() {
 			return {
@@ -131,6 +132,14 @@
 </script>
 
 <style scoped>
+	.other-info-middle{
+		padding: 0 20rpx;
+	}
+	.other-info{
+		display: flex;
+		color: #9a9a9a;
+		font-size: 30rpx;
+	}
 	.one-right{
 		margin-left: 20rpx;
 	}
@@ -145,7 +154,7 @@
 		background-color: #269FDE;
 		color: #FFFFFF;
 		font-size: 32rpx;
-		padding: 10rpx;
+		padding: 4rpx 10rpx;
 	}
 	.ed{
 		background-color: #FFFFFF;

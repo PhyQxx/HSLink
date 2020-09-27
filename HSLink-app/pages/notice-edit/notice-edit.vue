@@ -103,7 +103,7 @@
 					id: this.noticeInfo.id,
 					label: this.noticeInfo.label,
 					title: this.noticeInfo.title,
-					content: this.noticeInfo.content
+					content: this.noticeInfo.content,
 				}).then(res => {
 					console.log("保存文章",res);
 					if (res.data === 1) {
@@ -135,11 +135,14 @@
 	.title{
 		padding-top: 0;
 	}
-	.title textarea, .label textarea, .content textarea{
+	.title, .label, .content{
 		background-color: #F1F1F1;
-		padding: 20rpx;
-		width: 100%;
 		border-radius: 10rpx;
+		padding: 20rpx;
+		margin: 20rpx;
+	}
+	.title textarea, .label textarea, .content textarea{
+		width: 100%;
 	}
 	.title textarea{
 		height: 128rpx;
@@ -147,9 +150,6 @@
 	}
 	.label textarea{
 		height: 80rpx;
-	}
-	.content textarea{
-		text-indent: 40rpx;
 	}
 	.page{
 		background-color: #FFFFFF;

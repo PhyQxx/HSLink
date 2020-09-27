@@ -17,7 +17,7 @@
 						<view class="action">
 							<view class="action">
 								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
-								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
+								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长建议'">{{item.type}}</view>
 								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
 								<text class="text-black text-lg">{{item.title}}</text>
 							</view>
@@ -101,9 +101,8 @@ export default {
 		 * @param {Object} item
 		 */
 		goToDetails(item) {
-			uni.setStorageSync("notice",item);
 			uni.navigateTo({
-				url: '/pages/tabbar/homepage/data-details'
+				url: '/pages/tabbar/homepage/data-details?noticeId='+item.id
 			})
 		},
 		/**
@@ -113,7 +112,7 @@ export default {
 			request.post('/hs/getAllContent',{})
 			.then(res=>{
 				res.data.parentAdvice.forEach(item=>{
-					this.$set(item,'type','家长意见');
+					this.$set(item,'type','家长建议');
 				});
 				res.data.schoolNoticeList.forEach(item=>{
 					this.$set(item,'type','校园通知');

@@ -16,9 +16,9 @@
 					<view class="cu-item arrow" style="min-height: 90rpx;padding-top: 10rpx;">
 						<view class="action">
 							<view class="action">
-								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
-								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
-								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
+								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.is_pass === '0'">未发布</view>
+								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.is_pass === '1'">已发布</view>
+								<view class='cu-tag radius bg-red light margin-right-xs' v-if="item.is_pass === '2'">已驳回</view>
 								<text class="text-black text-lg">{{item.title}}</text>
 							</view>
 						</view>
@@ -117,9 +117,8 @@ export default {
 		 * @param {Object} item
 		 */
 		goToDetails(item) {
-			uni.setStorageSync("notice",item);
 			uni.navigateTo({
-				url: '/pages/tabbar/homepage/data-details'
+				url: '/pages/tabbar/homepage/data-details?noticeId='+item.id
 			})
 		},
 		/**
@@ -128,7 +127,8 @@ export default {
 		getAllData() {
 			request.post('/hs/getListByAttribute',{
 				text: '',
-				releaseId: uni.getStorageSync("userInfo").user_id
+				releaseId: uni.getStorageSync("userInfo").user_id,
+				isPass: "1"
 			}).then(res=>{
  				console.log("我的文章",res);
 				this.noticeList = res.data;

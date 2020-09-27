@@ -2,36 +2,36 @@
 	<view class="page">
 		<view class="top">
 			<view class="left">
-				<view class="header-photo">
-					{{userInfo.headerPhoto}}
-				</view>
+				<avatar :userName="userInfo.real_name" size="90"></avatar>
 			</view>
 			<view class="user-info">
-				<view class="info-top">
-					<view class="info-left">
-						<view class="name">
-								姓名：{{userInfo.real_name}}
-						</view>
-						<view class="grade">
-							等级：<text class="l">博客</text><text class="r">{{Math.floor((userInfo.integral)/1000)+1}}</text>
-						</view>
-						<view class="score">
-							积分：{{userInfo.integral}}
-						</view>
+				<view class="other-info">
+					<view class="follow">
+						<view class="one-top">{{userInfo.followNumber}}</view>
+						<view class="one-bottom">关注</view>
 					</view>
-					<view class="info-right">
-						<view class="follow">
-							关注：{{userInfo.followNumber}}
-						</view>
-						<view class="fans">
-							粉丝：{{userInfo.fansNumber}}
-						</view>
+					<view class="fans">
+						<view class="one-top">{{userInfo.fansNumber}}</view>
+						<view class="one-bottom">粉丝</view>
+					</view>
+					<view class="score">
+						<view class="one-top">{{userInfo.integral}}</view>
+						<view class="one-bottom">积分</view>
 					</view>
 				</view>
 				<view class="info-bottom">
 					<view class="follow-button" v-if="userInfo.isFollow === 0" @tap="addFollow(userInfo)">关注</view>
 					<view class="follow-button-ed" v-if="userInfo.isFollow === 1" @tap="cancelFollow(userInfo)">已关注</view>
 				</view>
+			</view>
+		</view>
+		<view class="middle">
+			<view class="cu-item content">
+				<textarea v-model="userInfo.signature"
+							auto-height="true"
+							maxlength=2000
+							disabled="false"
+				></textarea>
 			</view>
 		</view>
 		<view class="bottom">
@@ -45,7 +45,7 @@
 							<view class="action">
 								<view class="action">
 									<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
-									<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
+									<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长建议'">{{item.type}}</view>
 									<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
 									<text class="text-black text-lg">{{item.title}}</text>
 								</view>
@@ -69,10 +69,12 @@
 <script>
 	import request from '@/util/request.js';
 	import noData from '@/components/noData/noData.vue';
-	import { sortBy } from '@/static/js/public.js';
+	import { sortBy } from '@/static/js/public.js';	
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
 		components: {
-			noData
+			noData,
+			avatar
 		},
 		data() {
 			return {
@@ -146,9 +148,8 @@
 			 * @param {Object} item
 			 */
 			goToDetails(item) {
-				uni.setStorageSync("notice",item);
 				uni.navigateTo({
-					url: '/pages/tabbar/homepage/data-details'
+					url: '/pages/tabbar/homepage/data-details?noticeId='+item.id
 				})
 			},
 			/**
@@ -165,6 +166,9 @@
 					this.userInfo.headerPhoto = this.userInfo.real_name.slice(0,1);
 					this.noticeList = res.data.personalList;
 					this.noData = res.data.personalList.length === 0 ? true : false;
+					uni.setNavigationBarTitle({
+						title: this.userInfo.real_name
+					})
 				},err => {
 					console.log("err",err);
 				}) 
@@ -174,13 +178,17 @@
 </script>
 
 <style scoped>
+	.middle{
+		padding-bottom: 20rpx;
+		border-bottom: 1rpx solid rgba(18,150,219,0.5);
+	}
 	.cu-item{
 		background-color: #cfcfcf!important;
 		margin: 16rpx 0!important;
 	}
 	.follow-button-ed{
 		width: 80%;
-		background-color: #FFFFFF;
+		border: 1rpx solid #969696;
 		color: #8d8d8d;
 		text-align: center;
 		border-radius: 10rpx;
@@ -197,6 +205,7 @@
 		margin-bottom: 10rpx;
 	}
 	.follow-button{
+		color: #FFFFFF;
 		width: 80%;
 		background-color: #269FDE;
 		text-align: center;
@@ -216,38 +225,43 @@
 	.user-info view{
 		padding: 10rpx 10rpx;
 	}
+	.other-info .one-top, .other-info .one-bottom{
+		text-align: center;
+	}
+	.other-info{
+		display: flex;
+		justify-content: space-between;
+		padding: 20rpx 40rpx;
+		color: #9a9a9a;
+		font-size: 30rpx;
+	}
 	.info-top{
 		display: flex;
 		flex-flow: nowrap;
+		color: #7f7f7f;
 	}
 	.user-info{
-		color: #FFFFFF;
 		display: flex;
 		flex-flow: column;
 		justify-content: center;
-		border: 1rpx solid #b0b0b0;
 		border-radius: 10rpx;
 		width: 70%;
 		font-size: 32rpx;
-		background-color: #ced8d8;
 	}
-	.header-photo{
-		font-size: 80rpx;
-		font-family: 'Courier New', Courier, monospace;
-		color: #1296DB;
-		border: 5rpx solid #1296DB;
-		border-radius: 50%;
-		width: 180rpx;
-		height: 180rpx;
-		text-align: center;
-		line-height: 180rpx;
-		margin: 20rpx;
+	.content {
+		background-color: #F1F1F1;
+		width: 100%;
+		padding: 20rpx;
+		border-radius: 10rpx;
+	}
+	textarea{
+		line-height: 1.5;
+		width: 100%;
+		height: 100%;
 	}
 	.top{
 		display: flex;
 		justify-content: space-between;
-		padding-bottom: 40rpx;
-		border-bottom: 1rpx solid rgba(18,150,219,0.5);
 	}
 	.page{
 		padding: 20rpx;

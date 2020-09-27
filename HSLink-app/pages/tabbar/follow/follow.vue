@@ -17,7 +17,7 @@
 						<view class="action">
 							<view class="action">
 								<view class='cu-tag radius bg-orange light margin-right-xs' v-if="item.type === '校园通知'">{{item.type}}</view>
-								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长意见'">{{item.type}}</view>
+								<view class='cu-tag radius bg-blue light margin-right-xs' v-if="item.type === '家长建议'">{{item.type}}</view>
 								<view class='cu-tag radius bg-green light margin-right-xs' v-if="item.type === '学生想法'">{{item.type}}</view>
 								<text class="text-black text-lg">{{item.title}}</text>
 							</view>
@@ -102,6 +102,7 @@ export default {
 		 * @param {Object} item
 		 */
 		cancelFollow(item) {
+			let _this = this;
 			uni.showModal({
 				title: '取消关注',
 				content: '确认取消关注？',
@@ -113,7 +114,7 @@ export default {
 						}).then(res => {
 							console.log("取消关注",res);
 							if (res.data === 1) {
-								this.getAllData();
+								_this.getAllData();
 							}
 						},err => {
 							console.log("err",err);
@@ -129,13 +130,12 @@ export default {
 		 * @param {Object} item
 		 */
 		goToDetails(item) {
-			uni.setStorageSync("notice",item);
 			uni.navigateTo({
-				url: '/pages/tabbar/homepage/data-details'
+				url: '/pages/tabbar/homepage/data-details?noticeId='+item.id
 			})
 		},
 		/**
-		 * 获取首页数据
+		 * 获取关注人员文章数据
 		 */
 		getAllData() {
 			request.post('/hs/getFollowList',{

@@ -1,6 +1,7 @@
 
 // const baseUrl = 'http://106.53.113.158:8048';  //服务器地址
 const baseUrl = 'http://192.168.10.29:8048';  //服务器地址
+// const baseUrl = 'http://127.0.0.1:8048';  //服务器地址
 
 const get = (url, data) => {
     let httpDefaultOpts = {
@@ -27,7 +28,11 @@ const get = (url, data) => {
             }
         ).catch(
             (response) => {
-                reject(response)
+                reject(response);
+				uni.showToast({
+					icon: 'none',
+					title: '服务器出现异常'
+				});
             }
         )
     })
@@ -57,8 +62,9 @@ const post = (url, data) => {
 				}
 			} else {
 				resolve({
-					message: "服务器出现异常"
-				})
+					message: "服务器出现异常",
+					data: res[1].data
+				});
 			}
 		}
 	).catch(

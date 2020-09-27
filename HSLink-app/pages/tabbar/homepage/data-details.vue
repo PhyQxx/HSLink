@@ -9,10 +9,10 @@
 			</view>
 			<view class="author-and-time">
 				<view class="author" @tap="goToUserInfo(noticeInfo)" style="padding: 0;">
-					{{noticeInfo.real_name}}
+					{{noticeInfo.author_name}}
 				</view>
 				<view class="time">
-					{{noticeInfo.release_time}}
+					{{noticeInfo.create_time}}
 				</view>
 			</view>
 			<view class="content">
@@ -25,15 +25,16 @@
 		</view>
 		<view class="feedback">
 			<view class="reading-volume">
-				阅读 245
+				阅读 {{noticeInfo.read_number}}
 			</view>
 			<view class="fabulous">
-				<uni-fav 	:checked="checked" 
+				<uni-fav 	:checked="noticeInfo.isCollection === 0 ? false : true" 
+							:class="noticeInfo.isCollection === 0 ? 'grey' : 'blue'"
 							class="favBtn" 
 							circle="true" 
 							bg-color="#FFFFFF"
 							bg-color-checked="#1296DB" 
-							@click="onClick"></uni-fav>
+							@tap="collection(noticeInfo.isCollection)"></uni-fav>
 			</view>
 		</view>
 		<view class="no-message" v-if="noMessage === true"  @tap="addMessage">
@@ -64,16 +65,21 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-modal" :class="messageDialog ? 'show' : ''">
+		<view class="cu-modal" :class="messageDialog ? 'show' : ''" :style="[{'margin-top': -InputBottom/2+'px'}]">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="content">留言</view>
+					<view class="title-content">留言</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
 				<view class="padding-xl">
-					<input type="text" v-model="messageContent" placeholder="请输入留言"/>
+					<input type="text"  :adjust-position="false" 
+										:focus="false" 
+										v-model="messageContent" 
+										@focus="InputFocus" 
+										@blur="InputBlur"
+										placeholder="请输入留言"/>
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
@@ -94,14 +100,13 @@
 			uniFav
 		},
 		data() {
-			let noticeInfo = uni.getStorageSync('notice');
-			noticeInfo.fabulous = true;
-			noticeInfo.messageFabulous = true;
 			return {
-				//是否已收藏
-				checked: true,
+				//键盘高度
+				InputBottom: 0,
 				//文章信息
-				noticeInfo: noticeInfo,
+				noticeInfo: {},
+				//文章ID
+				noticeId: '',
 				//有无留言
 				noMessage: false,
 				//留言列表
@@ -112,16 +117,70 @@
 				messageContent: '',
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			this.noticeId = option.noticeId;
+		},
+		onReady() {
 			
 		},
-		mounted() {
-			this.getMessageList()
+		async mounted() {
+			await this.getMessageList();
+			await this.updateReadNumber();
 		},
 		onPullDownRefresh () {
 			uni.startPullDownRefresh();
 		},
 		methods: {
+			/**
+			 * 浏览量+1
+			 */
+			updateReadNumber() {
+				request.post("/hs/updateReadNumber",{
+					noticeId: this.noticeInfo.id,
+					number: Number(this.noticeInfo.read_number)+1
+					}).then(res=>{
+						console.log("浏览量+1",res);
+						if (res.data > 0) {
+							this.getMessageList()
+						} else {
+							uni.showToast({
+								icon: "none",
+								title: "服务器出了小差，请稍后再试"
+							})
+						}
+					},err => {
+						console.log("err",err)
+					})
+			},
+			/**
+			 * 收藏
+			 */
+			collection(option) {
+				const URL = {
+					"0": "/hs/addCollection",
+					"1": "/hs/cancelCollection",
+				}
+				request.post(URL[option],{
+					noticeId: this.noticeInfo.id,
+					userId: uni.getStorageSync("userInfo").user_id,
+					}).then(res=>{
+						console.log("收藏/取消收藏",res);
+						if (res.data > 0) {
+							this.getMessageList()
+						}
+					},err => {
+						console.log("err",err)
+					})
+			},
+			/**
+			 * 调整弹框高度
+			 */
+			InputFocus(e) {
+				this.InputBottom = e.detail.height
+			},
+			InputBlur(e) {
+				this.InputBottom = 0
+			},
 			/**
 			 * 关闭留言窗口
 			 */
@@ -129,16 +188,17 @@
 				this.messageDialog = false;
 			},
 			/**
+			 * 跳转人员页面
 			 * @param {Object} item
 			 */
 			goToUserInfo(item) {
-				if (item.user_id === uni.getStorageSync("userInfo").user_id) {
+				if (item.author_id === uni.getStorageSync("userInfo").user_id) {
 					uni.switchTab({
 					    url: '/pages/tabbar/my/my'
 					});
 				} else {
 					uni.navigateTo({
-						url: `/pages/person-info-page/person-info-page?userId=${item.user_id}`
+						url: `/pages/person-info-page/person-info-page?userId=${item.author_id}`
 					})
 				}
 			},
@@ -166,7 +226,7 @@
 								});
 								setTimeout(()=>{
 									this.getMessageList();
-								},1000)
+								},1000);
 							}
 						},err=>{
 							console.log("err",err);
@@ -177,14 +237,17 @@
 			 * 获取留言 
 			 */
 			getMessageList() {
-				request.post('/hs/getOneContent',{id: this.noticeInfo.id})
-				.then(res=>{
+				return request.post('/hs/getOneContent',{
+					id: this.noticeId,
+					userId: uni.getStorageSync("userInfo").user_id
+					}).then(res=>{
 					this.noMessage = res.data.message.length === 0 ? true : false;
+					this.noticeInfo = res.data.content;
 					this.messageList = res.data.message;
 					console.log("一条数据数据",res);
 				},err=>{
 					console.log("err",err);
-				})
+				});
 			},
 			/**
 			 * 新增留言（打开弹框）
@@ -198,6 +261,16 @@
 </script>
 
 <style scoped>
+	.blue{
+		border: 1rpx solid #1296DB!important;
+	}
+	.grey{
+		border: 1rpx solid #989898!important;
+	}
+	.title-content{
+		width: calc(100% - 200rpx);
+		text-align: center;
+	}
 	.padding-xl input{
 		background-color: #FFFFFF;
 		text-align: left;

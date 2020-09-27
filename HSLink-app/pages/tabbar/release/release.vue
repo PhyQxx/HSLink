@@ -52,7 +52,7 @@
 				},
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.noticeInfo = {
 					title: '',
 					label: '',

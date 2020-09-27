@@ -78,6 +78,11 @@
 						icon: "loading",
 						title: "保存成功"
 					});
+					setTimeout(() => {
+						uni.switchTab({
+						    url: '/pages/tabbar/my/my'
+						});
+					},1000);
 					updateUserInfo();
 					console.log("用户信息",this.userInfo);
 				}

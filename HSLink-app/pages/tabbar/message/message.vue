@@ -10,7 +10,7 @@
 						:data-target="'move-box-' + index"
 						@tap="goToMessage(item)">
 				<view class="header-photo">
-					{{item.userInfo.real_name.slice(0,1)}}
+					<avatar :userName="item.userInfo.real_name" size="50"></avatar>
 				</view>
 				<view class="content">
 					<view class="text-grey">{{item.userInfo.real_name}}</view>
@@ -32,7 +32,11 @@
 
 <script>
 	import request from '@/util/request.js';
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
+		components: {
+			avatar
+		},
 		data() {
 			return {
 				modalName: null,
@@ -141,15 +145,6 @@
 	}
 	.header-photo{
 		position: absolute;
-		left: 20rpx;
-		width: 100rpx;
-		height: 100rpx;
-		line-height: 100rpx;
-		text-align: center;
-		border-radius: 50%;
-		background-color: #1296DB;
-		color: #FFFFFF;
-		font-size: 40rpx;
-		font-weight: bold;
+		left: 0rpx;
 	}
 </style>

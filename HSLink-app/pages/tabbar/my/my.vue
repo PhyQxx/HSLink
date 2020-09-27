@@ -2,41 +2,30 @@
 	<view class="page">
 		<view class="top">
 			<view class="header-photo">
-				{{userInfo.real_name.slice(0,1)}}
+				<avatar :userName="userInfo.real_name" size="90"></avatar>
 			</view>
-			<view class="user-info">
-				<view class="info-left">
-					<view class="name">
-						姓名：{{userInfo.real_name}}
-					</view>
-					<view class="grade">
-						等级：<text class="l">天才</text><text class="r">{{Math.floor((userInfo.integral)/1000)+1}}</text>
-					</view>
-					<view class="score">
-						积分：{{userInfo.integral}}
-					</view>
-				</view>
-				<view class="info-right">
-					<view class="score" @tap="goPage('followList')">
-						关注：{{userOtherInfo.followNumber}}
-					</view>
-					<view class="score" @tap="goPage('fansList')">
-						粉丝：{{userOtherInfo.fansNumber}}
-					</view>
-				</view>
+			<view class="user-name">
+				{{userInfo.real_name}}
 			</view>
 		</view>
 		<view class="middle">
-			<view class="cu-item signature">
-				<view class="action">
-					<text class="text-black">个性签名：</text>
-				</view>
-			</view>
 			<view class="cu-item content">
 				<textarea v-model="userInfo.signature"
 							auto-height="true"
 							maxlength=2000
+							disabled="false"
 				></textarea>
+			</view>
+			<view class="other-info">
+				<view class="score" @tap="goPage('followList')">
+					关注：{{userOtherInfo.followNumber}}
+				</view>
+				<view class="score" @tap="goPage('fansList')">
+					粉丝：{{userOtherInfo.fansNumber}}
+				</view>
+				<view class="score">
+					积分：{{userInfo.integral}}
+				</view>
 			</view>
 		</view>
 		<view class="bottom">
@@ -44,7 +33,7 @@
 				<view class="cu-item" 
 						v-for="(item,index) in cuIconList" 
 						:key="index" 
-						v-if="index<gridCol*2"
+						v-if="item.admin === 0"
 						@tap="goToPage(item)">
 					<view :class="['cuIcon-' + item.cuIcon,'text-' + item.color]">
 					</view>
@@ -58,7 +47,11 @@
 <script>
 	import request from '@/util/request.js';
 	import { updateUserInfo } from "@/static/js/public.js";
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
+		components: {
+			avatar
+		},
 		data() {
 			return {
 				gridCol: 3,
@@ -68,33 +61,59 @@
 						cuIcon: 'favor',
 						color: 'orange',
 						name: '收藏',
+						admin: 0,
 						code: 'collection'
 					}, 
 					{
 						cuIcon: 'list',
 						color: 'yellow',
 						name: '我的文章',
+						admin: 0,
 						code: 'myArticle'
 					}, 
 					{
 						cuIcon: 'edit',
 						color: 'red',
 						name: '编辑信息',
+						admin: 0,
 						code: 'personInfo'
 					}, 
 					{
-						cuIcon: 'settings',
+						cuIcon: 'newshot',
 						color: 'olive',
+						name: '文章管理',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						code: 'articleManagement'
+					},
+					{
+						cuIcon: 'peoplelist',
+						color: 'cyan',
+						name: '人员管理',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						code: 'peopleManagement'
+					},
+					{
+						cuIcon: 'comment',
+						color: 'brown',
+						name: '帮助答复',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						code: 'helpAnswer'
+					},
+					{
+						cuIcon: 'settings',
+						color: 'purple',
 						name: '设置',
+						admin: 0,
 						code: 'settings'
 					}, 
 					{
 						cuIcon: 'questionfill',
-						color: 'mauve',
-						badge: 0,
+						color: 'pink',
 						name: '帮助',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 1 : 0,
 						code: 'help'
 					},
+					
 				],
 				userInfo: {},
 				userOtherInfo: {}
@@ -154,11 +173,14 @@
 			 */
 			goToPage(item) {
 				const FUNCTION_CODE = {
-					'collection': '',
-					'myArticle': '/pages/tabbar/my/my-article/my-article',
-					'personInfo': '/pages/tabbar/my/edit-info/edit-info',
-					'settings': '/pages/tabbar/my/settings/settings',
-					'help': '/pages/tabbar/my/help/help'
+					"collection": "/pages/tabbar/my/collection/collection",
+					"myArticle": "/pages/tabbar/my/my-article/my-article",
+					"personInfo": "/pages/tabbar/my/edit-info/edit-info",
+					"settings": "/pages/tabbar/my/settings/settings",
+					"help": "/pages/tabbar/my/help/help",
+					"articleManagement": "/pages/tabbar/my/article-management/article-management",
+					"peopleManagement": "/pages/tabbar/my/people-management/people-management",
+					"helpAnswer": "/pages/tabbar/my/help-answer/help-answer"
 				};
 				uni.navigateTo({
 					url: `${FUNCTION_CODE[item.code]}`
@@ -169,6 +191,10 @@
 </script>
 
 <style scoped>
+	.max{
+		width: 180rpx;
+		height: 180rpx;
+	}
 	.signature{
 		font-size: 30rpx;
 		font-weight: bold;
@@ -215,26 +241,28 @@
 		background-color: #ced8d8;
 	}
 	.header-photo{
-		font-size: 80rpx;
-		font-family: 'Courier New', Courier, monospace;
-		color: #1296DB;
-		border: 5rpx solid #1296DB;
-		border-radius: 50%;
-		width: 180rpx;
-		height: 180rpx;
-		text-align: center;
-		line-height: 180rpx;
-		margin: 20rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.other-info{
+		display: flex;
+		justify-content: space-between;
+		padding: 20rpx 40rpx;
+		color: #9a9a9a;
+		font-size: 30rpx;
 	}
 	.middle{
-		padding: 40rpx 20rpx;
-		border-top: 1rpx solid rgba(18,150,219,0.5);
-		border-bottom: 1rpx solid rgba(18,150,219,0.5);
+		padding: 40rpx 20rpx 0;
+	}
+	.user-name{
+		padding-top: 20rpx;
+		text-align: center;
 	}
 	.top{
 		display: flex;
-		justify-content: space-between;
-		padding-bottom: 40rpx;
+		flex-flow: column;
+		justify-content: center;
 	}
 	.page{
 		padding: 20rpx;
