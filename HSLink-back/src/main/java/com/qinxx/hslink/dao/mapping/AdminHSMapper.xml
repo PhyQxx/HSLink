@@ -69,4 +69,11 @@
             ORDER BY create_time desc
     </select>
 
+    <!--获取文我的页面未操作数字-->
+    <select id="getMyPageNumber" resultType="map" parameterType="map">
+        SELECT
+	        ( SELECT count( * ) FROM hs_notice WHERE STATUS = '1' AND is_pass = '0' AND type != "班级通知" ) articleManagementNumber,
+	        ( SELECT count( * ) FROM hs_help h WHERE answer_id IS NULL ) helpAnswerNumber
+    </select>
+
 </mapper>

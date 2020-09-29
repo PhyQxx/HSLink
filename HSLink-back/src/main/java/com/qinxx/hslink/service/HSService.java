@@ -258,4 +258,11 @@ public interface HSService {
      * @return
      */
     Map<String, Object> updateReadNumber(Map<String, Object> param);
+
+    /**
+     * 获取首页tabBar标记数字
+     * @param param
+     * @return
+     */
+    Map<String, Object> getTabBarNumber(Map<String, Object> param);
 }

@@ -126,4 +126,18 @@ public class AdminHSServiceImpl implements AdminHSService {
         result.put("success",true);
         return result;
     }
+
+    /**
+     * 获取文我的页面未操作数字
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getMyPageNumber(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = adminHSMapper.getMyPageNumber(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
 }

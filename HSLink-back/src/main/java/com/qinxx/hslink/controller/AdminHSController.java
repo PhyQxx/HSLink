@@ -107,4 +107,17 @@ public class AdminHSController {
         return result;
     }
 
+    /**
+     * 获取文我的页面未操作数字
+     * @param param
+     * @return
+     */
+    @PostMapping("/getMyPageNumber")
+    @ResponseBody
+    public Map<String, Object> getMyPageNumber(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = AdminhsService.getMyPageNumber(param);
+        return result;
+    }
+
 }

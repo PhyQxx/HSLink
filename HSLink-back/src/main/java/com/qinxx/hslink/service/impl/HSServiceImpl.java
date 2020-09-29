@@ -701,6 +701,21 @@ public class HSServiceImpl implements HSService {
     }
 
     /**
+     * 获取tabBar数字
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getTabBarNumber(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        res.put("unreadNumber",hsLinkMapper.getTabBarUnreadNumber(param));
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
      * 返回参数
      * @param flag
      * @param message

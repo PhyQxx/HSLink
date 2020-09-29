@@ -294,4 +294,11 @@ public interface HSLinkMapper {
      * @return
      */
     int updateReadNumber(Map<String, Object> param);
+
+    /**
+     * 获取tabBar数字(未读消息)
+     * @param param
+     * @return
+     */
+    int getTabBarUnreadNumber(Map<String, Object> param);
 }

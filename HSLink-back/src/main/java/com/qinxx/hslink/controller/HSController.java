@@ -444,13 +444,12 @@ public class HSController {
     }
 
     /**
-     * 测试接口
+     * 获取首页tabBar标记数字
      */
-    @PostMapping("/test")
+    @PostMapping("/getTabBarNumber")
     @ResponseBody
-    public Map<String, Object> test(String page, String limit){
-        Map<String, Object> result = new HashMap<>();
-
+    public Map<String, Object> getTabBarNumber(@RequestBody Map<String,Object> param){
+        Map<String,Object> result = hsService.getTabBarNumber(param);
         return result;
     }
 

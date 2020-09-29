@@ -52,4 +52,11 @@ public interface AdminHSMapper {
      * @return
      */
     int answerHelp(Map<String, Object> param);
+
+    /**
+     * 获取文我的页面未操作数字
+     * @param param
+     * @return
+     */
+    Map<String, Object> getMyPageNumber(Map<String, Object> param);
 }

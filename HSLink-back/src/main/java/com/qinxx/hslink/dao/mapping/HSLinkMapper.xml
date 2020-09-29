@@ -551,4 +551,10 @@
             release_time DESC
     </select>
 
+    <!--获取tabBar数字(未读消息)-->
+    <select id="getTabBarUnreadNumber" resultType="int" parameterType="map">
+        select count(*) unreadNumber from hs_private_letter
+        where receive_id = #{userId} and already_read = '0'
+    </select>
+
 </mapper>
