@@ -64,6 +64,7 @@ public class AdminHSServiceImpl implements AdminHSService {
         Map<String, Object> result = new HashMap<>();
         try {
             res = adminHSMapper.verifyArticle(param);
+            adminHSMapper.verifyArticleNotice(param);
         } catch (Exception e) {
             e.printStackTrace();
             res = 0;
@@ -136,6 +137,40 @@ public class AdminHSServiceImpl implements AdminHSService {
     public Map<String, Object> getMyPageNumber(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = adminHSMapper.getMyPageNumber(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 通过注册
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> passRegister(Map<String, Object> param) {
+        int res = 0;
+        Map<String, Object> result = new HashMap<>();
+        try {
+            res = adminHSMapper.passRegister(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 获取注册管理数据
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getRegisterManagementData(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> res = adminHSMapper.getRegisterManagementData(param);
         result.put("data",res);
         result.put("success",true);
         return result;

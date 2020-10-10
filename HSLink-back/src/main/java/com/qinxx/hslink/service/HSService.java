@@ -265,4 +265,18 @@ public interface HSService {
      * @return
      */
     Map<String, Object> getTabBarNumber(Map<String, Object> param);
+
+    /**
+     * 获取通知数据
+     * @param param
+     * @return
+     */
+    Map<String, Object> getNoticeData(Map<String, Object> param);
+
+    /**
+     * 设置通知为已读
+     * @param param
+     * @return
+     */
+    Map<String, Object> updateNoticeRead(Map<String, Object> param);
 }

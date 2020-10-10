@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qinxx.hslink.dao.AdminHSMapper">
 
+    <!--审核文章通知-->
+    <insert id="verifyArticleNotice" parameterType="map">
+        INSERT INTO hs_examine_notice ( id, author_id, article_id, result, create_time )
+        VALUES
+	    ( uuid(), (SELECT release_id FROM hs_notice WHERE id = #{articleId}), #{articleId}, #{operating}, now( ) )
+    </insert>
+
     <!--审核文章（通过/驳回）-->
     <update id="verifyArticle" parameterType="map">
         UPDATE hs_notice set is_pass = #{operating} where id = #{articleId}
@@ -20,6 +27,11 @@
         answer_time = now( )
         WHERE
             id = #{id}
+    </update>
+
+    <!--通过注册-->
+    <update id="passRegister" parameterType="map">
+        update hs_user set take_effect = #{takeEffect} where user_id = #{userId}
     </update>
 
     <!--获取待审核文章数据-->
@@ -51,10 +63,11 @@
             (SELECT count(*) from hs_follow f where f.user_id = u.user_id) followNumber,
             (SELECT count(*) from hs_follow f where f.follow_id = u.user_id) fansNumber
         FROM hs_user u where
+        u.user_type != "管理员"
         <if test="content != '' and content != null">
             and u.real_name like CONCAT('%',#{name},'%')
         </if>
-         u.user_type != "管理员" order by u.user_type
+        and u.take_effect = "1" order by u.frozen_state
     </select>
 
     <!--获取帮助答复列表-->
@@ -73,7 +86,13 @@
     <select id="getMyPageNumber" resultType="map" parameterType="map">
         SELECT
 	        ( SELECT count( * ) FROM hs_notice WHERE STATUS = '1' AND is_pass = '0' AND type != "班级通知" ) articleManagementNumber,
-	        ( SELECT count( * ) FROM hs_help h WHERE answer_id IS NULL ) helpAnswerNumber
+	        ( SELECT count( * ) FROM hs_help h WHERE answer_id IS NULL ) helpAnswerNumber,
+            (SELECT count(*) FROM hs_user u where u.take_effect = '0' ) registerManagementNumner
+    </select>
+
+    <!--获取注册管理数据-->
+    <select id="getRegisterManagementData" resultType="map" parameterType="map">
+        select * from hs_user where take_effect = '0'
     </select>
 
 </mapper>

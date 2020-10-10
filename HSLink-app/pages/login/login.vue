@@ -27,6 +27,14 @@
 				</view>
 			</view>
 			<button class="cu-btn login-btn" @tap="doLogin">登 录</button>
+			<view class="bottom">
+				<view class="forget" @tap="forgetPassword">
+					忘记密码
+				</view>
+				<view class="register" @tap="register">
+					用户注册
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -51,14 +59,37 @@
 			}
 		},
 		onLoad() {
-			this.role = uni.getStorageSync("userInfo").user_type;
-			this.username = uni.getStorageSync("userInfo").real_name;
-			this.password = uni.getStorageSync("userInfo").pass_word;
+			console.log(uni.getStorageSync("userInfo"))
+			if (uni.getStorageSync("userInfo").data !== null && uni.getStorageSync("userInfo") !== "") {
+				uni.switchTab({
+				    url: '/pages/tabbar/homepage/homepage'
+				});
+			}
+			this.role = uni.getStorageSync("loginInfo").user_type;
+			this.username = uni.getStorageSync("loginInfo").real_name;
+			this.password = uni.getStorageSync("loginInfo").pass_word;
 		},
 		onShow() {
 			this.getUserType();
 		},
 		methods: {
+			/**
+			 * 用户注册
+			 */
+			register() {
+				uni.navigateTo({
+					url: "/pages/login/register"
+				})
+			},
+			/**
+			 * 忘记密码
+			 */
+			forgetPassword() {
+				uni.showToast({
+					icon: "none",
+					title: "请联系管理员重置密码"
+				})
+			},
 			/**
 			 * 获取字典项数据（用户类型）
 			 */
@@ -116,8 +147,14 @@
 									icon: 'none',
 									title: '角色不匹配'
 								})
+							} else if (res.data.take_effect === '0') {
+								uni.showToast({
+									icon: 'none',
+									title: '该账号注册流程正在审核'
+								})
 							} else {
 								uni.setStorageSync("userInfo", res.data);
+								uni.setStorageSync("loginInfo", res.data);
 								uni.switchTab({
 								    url: '/pages/tabbar/homepage/homepage'
 								});
@@ -144,7 +181,13 @@
 
 
 
-<style lang="scss">
+<style lang="scss" scoped>
+	.bottom{
+		display: flex;
+		justify-content: space-between;
+		padding: 30rpx 0;
+		color: #968f99;
+	}
 	page {
 		background-color: #FFFFFF;
 
@@ -247,11 +290,10 @@
 		}
 
 		.login-btn {
-			margin-top: 70upx;
+			margin-top: 50upx;
 			height: 96upx;
 			width: 100%;
 			background: #797979;
-			border-radius: 47upx;
 			font-size: 34upx;
 			color: #ffffff;
 		}

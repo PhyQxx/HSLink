@@ -50,7 +50,7 @@
 				 	   "buttons": [ //原生标题栏按钮配置,
 				 		   {
 				 				"type":"none",
-				 				"text":"发表 ",
+				 				"text":"发表  ",
 				 				"fontSize":"16px",
 				 				"float":"right"
 				 		   }
@@ -74,7 +74,21 @@
 				"enablePullDownRefresh": true,
 				 "navigationBarTitleText": "我",//顶部名称
 				 "navigationBarBackgroundColor": "#333",//顶部背景色
-				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "navigationBarTextStyle": "white" ,//文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				    "bounce": "none", //关闭窗口回弹效果
+				    "titleNView": {
+				 	   "buttons": [ //原生标题栏按钮配置,
+				 		   {
+				 				"type":"none",
+				 				"text":"通知  ",
+				 				"fontSize":"16px",
+				 				"float":"right",
+								"redDot" : true  
+				 		   }
+				 		]
+				 	}
+				 }
 			 }
 		}
 	    ,{
@@ -99,7 +113,7 @@
 					   "buttons": [ //原生标题栏按钮配置,
 						   {
 								"type":"none",
-								"text":"删除 ",
+								"text":"删除  ",
 								"fontSize":"16px",
 								"float":"right"
 						   }
@@ -130,7 +144,7 @@
 					    "buttons": [ //原生标题栏按钮配置,
 						    {
 							   "type":"none",
-							   "text":"私信 ",
+							   "text":"私信  ",
 							   "float":"right",
 							   "fontSize":"16px"
 						    }
@@ -215,7 +229,7 @@
 				 	    "buttons": [ //原生标题栏按钮配置,
 				 		    {
 				 			   "type":"none",
-				 			   "text":"保存 ",
+				 			   "text":"保存  ",
 				 			   "float":"right",
 				 			   "fontSize":"16px"
 				 		    }
@@ -260,6 +274,33 @@
             "style": {
             	"enablePullDownRefresh": true,
             	 "navigationBarTitleText": "帮助答复",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/login/register",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "用户注册",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/register-management/register-management",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "注册管理",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/notice/notice",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "通知",//顶部名称
             	 "navigationBarBackgroundColor": "#333",//顶部背景色
             	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
              }

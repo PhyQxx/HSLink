@@ -167,6 +167,14 @@
        insert into hs_leave_message(id,notice_id,messager_id,content,create_time) VALUES (uuid(),#{noticeId},#{userId},#{content},now())
     </insert>
 
+    <!--新增留言通知-->
+    <insert id="addMessageNotice" parameterType="map">
+        INSERT INTO hs_leave_message_notice ( id, article_id, author_id, commenter_id, content, create_time )
+        VALUES(
+        uuid(),#{noticeId},(select release_id from hs_notice where id = #{noticeId}),#{userId},#{content},now())
+    </insert>
+
+
     <!--新增一篇文章-->
     <insert id="addArticle" parameterType="map">
         insert into hs_notice (id,label,title,content,release_id,release_time,type)
@@ -217,7 +225,8 @@
 
     <!--获取班级成员-->
     <select id="getStudents" parameterType="map" resultType="map">
-        select * from hs_user where class_name = (select class_name from hs_user where user_id = #{id})
+        select * from hs_user where class_name = (select class_name from hs_user where user_id = #{id} and
+        take_effect = "1")
     </select>
 
     <!--新增班级公告-->
@@ -357,6 +366,16 @@
     <!--浏览量+1-->
     <update id="updateReadNumber" parameterType="map">
         update hs_notice set read_number = #{number} where id = #{noticeId}
+    </update>
+
+    <!--设置留言通知为已读-->
+    <update id="updateMessageNoticeRead" parameterType="map">
+        update hs_leave_message_notice set is_read = '1' where id = #{id}
+    </update>
+
+    <!--设置审核通知为已读-->
+    <update id="updateVerifyNoticeRead" parameterType="map">
+        update hs_examine_notice set is_read = '1' where id = #{id}
     </update>
 
     <!--取消关注-->
@@ -504,6 +523,7 @@
             hs_user u
         WHERE
            u.user_id IN ( SELECT follow_id FROM hs_follow f WHERE f.user_id = #{userId} )
+        and u.take_effect = "1"
     </select>
 
     <!--获取粉丝列表-->
@@ -516,6 +536,7 @@
             hs_user u
         WHERE
            u.user_id IN ( SELECT user_id FROM hs_follow f WHERE f.follow_id = #{userId} )
+           and u.take_effect = "1"
     </select>
 
     <!--获取字典项数据-->
@@ -555,6 +576,32 @@
     <select id="getTabBarUnreadNumber" resultType="int" parameterType="map">
         select count(*) unreadNumber from hs_private_letter
         where receive_id = #{userId} and already_read = '0'
+    </select>
+
+    <!--获取留言通知-->
+    <select id="getMessageNotice" resultType="map" parameterType="map">
+        SELECT
+            *
+        FROM
+            hs_leave_message_notice mn
+            left join hs_user u on mn.commenter_id = u.user_id
+        WHERE
+            author_id = #{authorId}
+            AND is_delete = '0'
+            and is_read = '0'
+    </select>
+
+    <!--获取审核通知-->
+    <select id="getVerifyNotice" resultType="map" parameterType="map">
+        SELECT
+            *
+        FROM
+             hs_examine_notice e left join hs_notice n
+             on e.article_id = n.id
+        WHERE
+            author_id = #{authorId}
+            AND is_delete = '0'
+            and is_read = '0'
     </select>
 
 </mapper>

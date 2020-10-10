@@ -8,7 +8,7 @@
 				v-model="searchStr"
 		></m-search>
 		<view class="noData" v-if="noData === true">
-			<noData :custom="true"><view class="title" @tap="update()">暂无数据,点击重新加载</view></noData>
+			<noData :custom="true"><view class="title">暂无关注，打开他人主页可关注</view></noData>
 		</view>
 		<view class="list cu-card article dynamic" v-else-if="noData === false">
 			<view class="cu-item" style="padding:0" v-for="(item,index) in noticeListQuery" :key="index">

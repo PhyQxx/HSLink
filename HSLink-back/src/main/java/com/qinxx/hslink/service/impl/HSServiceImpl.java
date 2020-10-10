@@ -100,6 +100,7 @@ public class HSServiceImpl implements HSService {
         Map<String, Object> result = new HashMap<>();
         try {
             res = hsLinkMapper.addMessage(param);
+            hsLinkMapper.addMessageNotice(param);
         } catch (Exception e) {
             e.printStackTrace();
             res = 0;
@@ -710,6 +711,48 @@ public class HSServiceImpl implements HSService {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> res = new HashMap<>();
         res.put("unreadNumber",hsLinkMapper.getTabBarUnreadNumber(param));
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 获取通知数据
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getNoticeData(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
+        List<Map<String, Object>> res1 = hsLinkMapper.getMessageNotice(param);
+        List<Map<String, Object>> res2 = hsLinkMapper.getVerifyNotice(param);
+        res.put("messageNoticeList",res1);
+        res.put("verifyNoticeList",res2);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 设置通知为已读
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> updateNoticeRead(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        int res = 0;
+        try {
+            if ("0".equals(param.get("type"))) {
+                res = hsLinkMapper.updateMessageNoticeRead(param);
+            } else {
+                res = hsLinkMapper.updateVerifyNoticeRead(param);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
         result.put("data",res);
         result.put("success",true);
         return result;

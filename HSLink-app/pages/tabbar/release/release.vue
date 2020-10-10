@@ -1,5 +1,8 @@
 <template>
 	<view class="page">
+		<view class="clear" @tap="clear">
+			重置
+		</view>
 		<view class="cu-item height">
 			<view class="action">
 				<text class="text-black">文章名称：</text>
@@ -31,7 +34,7 @@
 			<textarea placeholder="请输入文章内容"
 						v-model="noticeInfo.content"
 						auto-height="true"
-						maxlength=2000
+						maxlength=8000
 			></textarea>
 		</view>
 	</view>
@@ -53,13 +56,14 @@
 			}
 		},
 		onShow() {
+			
+		},
+		mounted() {
 			this.noticeInfo = {
 					title: '',
 					label: '',
 					content: ''
 				}
-		},
-		mounted() {
 		},
 		onPullDownRefresh () {
 			uni.startPullDownRefresh();
@@ -68,6 +72,16 @@
 			this.preservation()
 		},
 		methods: {
+			/**
+			 * 清空
+			 */
+			clear() {
+				this.noticeInfo = {
+						title: '',
+						label: '',
+						content: ''
+					}
+			},
 			/**
 			 * 发表
 			 */
@@ -106,6 +120,11 @@
 </script>
 
 <style scoped>
+	.clear{
+		position: absolute;
+		right: 20px;
+		color: #999;
+	}
 	.page{
 		background-color: #FFFFFF;
 		border-radius: 10rpx;

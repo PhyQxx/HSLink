@@ -59,13 +59,17 @@
 			let timesRun = 0;
 			let interval = setInterval(() => {
 				this.getTwoLetterApp();
-			timesRun += 1;
-			if(timesRun === 5){
-			clearInterval(interval);
-			}
+				timesRun += 1;
+				if(timesRun === 5){
+				clearInterval(interval);
+				}
 			}, 2000);
 		},
 		onBackPress() {
+		},
+		onPullDownRefresh () {
+			this.getTwoLetterApp();
+			uni.startPullDownRefresh();
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
@@ -84,15 +88,10 @@
 			 * 调整弹框高度
 			 */
 			InputFocus(e) {
-				setTimeout(() => {
 				this.InputBottom = e.detail.height;
-				console.log(this.InputBottom)
-				},500)
 			},
 			InputBlur(e) {
-				setTimeout(() => {
-					this.InputBottom = 0
-				},500)
+				this.InputBottom = 0
 			},
 			/**
 			 * 跳转到其他人的主页

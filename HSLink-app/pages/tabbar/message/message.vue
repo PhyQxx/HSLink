@@ -1,6 +1,9 @@
 <template>
 	<view class="page">
-		<view class="cu-list menu-avatar">
+		<view class="noData" v-if="noData === true">
+			<noData :custom="true"><view class="title">暂无消息，打开他人主页可私信</view></noData>
+		</view>
+		<view class="cu-list menu-avatar" v-if="noData === false">
 			<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" 
 						v-for="(item,index) in message" 
 						:key="index"
@@ -20,7 +23,8 @@
 				</view>
 				<view class="action">
 					<view class="text-grey text-xs">{{item.letterList[item.letterList.length-1].letter_create_time}}</view>
-					<view class="cu-tag round bg-grey sm">{{item.unreadNumber}}</view>
+					<view class="cu-tag round bg-grey sm" v-if="item.unreadNumber === 0">{{item.unreadNumber}}</view>
+					<view class="cu-tag round bg-red sm" v-if="item.unreadNumber > 0">{{item.unreadNumber}}</view>
 				</view>
 				<view class="move">
 					<view class="bg-red" @tap="deleteMessage">删除</view>
@@ -33,24 +37,52 @@
 <script>
 	import request from '@/util/request.js';
 	import avatar from "@/pages/components/avatar/avatar.vue";
+	import noData from '@/components/noData/noData.vue';
 	export default {
 		components: {
-			avatar
+			avatar,
+			noData
 		},
 		data() {
 			return {
 				modalName: null,
 				message: [],
+				//无数据
+				noData: false,
 			}
 		},
 		onShow() {
 			this.getPersonalPrivateLetter();
+			this.getTabBarNumber();
 		},
 		onPullDownRefresh () {
 			this.getPersonalPrivateLetter();
+			this.getTabBarNumber();
 			uni.startPullDownRefresh();
 		},
 		methods: {
+			/**
+			 * 获取tabBar数字
+			 */
+			getTabBarNumber() {
+				request.post("/hs/getTabBarNumber",{
+					userId: uni.getStorageSync("userInfo").user_id
+				}).then(res => {
+					console.log("获取tabBar数字",res);
+					if (res.data.unreadNumber > 0) {
+						uni.setTabBarBadge({
+							index: 3,
+							text: res.data.unreadNumber.toString()
+						});
+					} else {
+						uni.removeTabBarBadge({
+							index: 3
+						})
+					}
+				},err => {
+					console.log("err",err)
+				})
+			},
 			/**
 			 * 跳转到消息页面
 			 * @param {Object} item
@@ -78,6 +110,7 @@
 					userId: uni.getStorageSync("userInfo").user_id,
 				}).then(res => {
 					this.message = res.data;
+					this.noData = res.data.length > 0 ? false : true;
 					this.message.forEach((item,index) => {
 						let unreadNumber = 0;
 						item.letterList.forEach(i => {
@@ -86,7 +119,6 @@
 							}
 						});
 						item.unreadNumber = unreadNumber;
-						
 					});
 					this.message.forEach((item,index) => {
 						if (item.userInfo.user_id === uni.getStorageSync("userInfo").user_id) {

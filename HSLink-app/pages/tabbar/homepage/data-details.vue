@@ -52,7 +52,7 @@
 			<view class="one-message" v-for="(item,index) in messageList" :key="index">
 				<view class="left">
 					<view class="header-photo">
-						{{item.real_name.slice(0,1)}}
+						<avatar :userName="item.real_name" size="50"></avatar>
 					</view>
 					<view class="message">
 						<view class="name">
@@ -68,7 +68,7 @@
 		<view class="cu-modal" :class="messageDialog ? 'show' : ''" :style="[{'margin-top': -InputBottom/2+'px'}]">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
-					<view class="title-content">留言</view>
+					<view class="title-content bg-white">留言</view>
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
@@ -95,8 +95,10 @@
 <script>
 	import request from '@/util/request.js';
 	import uniFav from '@/components/uni-fav/uni-fav.vue';
+	import avatar from "@/pages/components/avatar/avatar.vue";
 	export default {
 		components: {
+			avatar,
 			uniFav
 		},
 		data() {
@@ -318,15 +320,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-	.one-message .header-photo{
-		color: #1296DB;
-		border: 1rpx solid #1296DB;
-		border-radius: 50%;
-		width: 76rpx;
-		height: 76rpx;
-		text-align: center;
-		line-height: 76rpx;
 	}
 	.one-message{
 		display: flex;

@@ -52,7 +52,7 @@
 					content: "确认退出登录？",
 					success(res) {
 						if (res.confirm) {
-							uni.setStorageSync("userInfo",{});
+							uni.setStorageSync("userInfo","");
 							uni.showToast({
 								icon: 'loading',
 								title: `退出成功`

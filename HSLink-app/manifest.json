@@ -2,8 +2,8 @@
     "name" : "HSLink",
     "appid" : "__UNI__7C9492E",
     "description" : "",
-    "versionName" : "1.0.4",
-    "versionCode" : 104,
+    "versionName" : "1.0.7",
+    "versionCode" : 107,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,

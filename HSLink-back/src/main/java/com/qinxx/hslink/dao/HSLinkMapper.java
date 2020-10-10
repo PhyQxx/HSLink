@@ -55,6 +55,11 @@ public interface HSLinkMapper {
     int addMessage(Map<String,Object> param);
 
     /**
+     * 新增留言通知
+     */
+    int addMessageNotice(Map<String,Object> param);
+
+    /**
      * 新增一篇文章
      */
     int addArticle(Map<String,Object> param);
@@ -301,4 +306,32 @@ public interface HSLinkMapper {
      * @return
      */
     int getTabBarUnreadNumber(Map<String, Object> param);
+
+    /**
+     * 获取留言通知
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getMessageNotice(Map<String, Object> param);
+
+    /**
+     * 获取审核通知
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getVerifyNotice(Map<String, Object> param);
+
+    /**
+     * 设置留言通知为已读
+     * @param param
+     * @return
+     */
+    int updateMessageNoticeRead(Map<String, Object> param);
+
+    /**
+     * 设置留言通知为已读
+     * @param param
+     * @return
+     */
+    int updateVerifyNoticeRead(Map<String, Object> param);
 }

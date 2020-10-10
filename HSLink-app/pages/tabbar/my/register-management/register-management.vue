@@ -22,23 +22,14 @@
 							</text>
 						</view>
 						<view class="other-info">
-							<view class="other-info-left">
-								关注:{{item.followNumber}}
-							</view>
-							<view class="other-info-middle">
-								粉丝:{{item.fansNumber}}
-							</view>
 							<view class="other-info-right">
-								积分:{{item.integral}}
+								手机号：{{item.mobile}}
 							</view>
 						</view>
 					</view>
 				</view>
-				<view class="follow-flag ed" @tap.stop="peopleManagement(item, '1')" v-if="item.frozen_state === '0'">
-					冻结
-				</view>
-				<view class="follow-flag" @tap.stop="peopleManagement(item, '0')" v-if="item.frozen_state === '1'">
-					解冻
+				<view class="follow-flag ed" @tap.stop="passRegister(item)">
+					通过
 				</view>
 			</view>	
 		</view>
@@ -88,30 +79,25 @@
 		},
 		methods: {
 			/**
-			 * 冻结/解冻
+			 * 通过注册
 			 * @param {Object} item
-			 * @param {Object} operation 冻结/解冻
 			 */
-			peopleManagement(item, operating) {
-				const OPERATING = {
-					"0": "解冻",
-					"1": "冻结",
-				};
+			passRegister(item) {
 				let _this = this;
 				uni.showModal({
-					title: `${OPERATING[operating]}`,
-					content: `确认${OPERATING[operating]}?`,
+					title: `注册管理`,
+					content: `确认通过注册?`,
 					success(res) {
 						if (res.confirm) {
-							request.post('/admin/peopleManagement',{
+							request.post('/admin/passRegister',{
 								userId: item.user_id,
-								operating: operating
+								takeEffect: '1'
 							}).then(res=>{
-								console.log("人员操作结果",res);
+								console.log("通过注册",res);
 								if (res.data > 0) {
 									uni.showToast({
 										icon: "loading",
-										title: `${OPERATING[operating]}成功`
+										title: `通过注册成功`
 									});
 									setTimeout(() => {
 										_this.getFollowPeopleList();
@@ -139,13 +125,13 @@
 				})
 			},
 			/**
-			 * 获取人员管理列表
+			 * 获取注册管理列表
 			 */
 			getFollowPeopleList() {
-				request.post("/admin/getPersonnelManagement",{
+				request.post("/admin/getRegisterManagementData",{
 					userId: uni.getStorageSync("userInfo").user_id
 				}).then(res => {
-					console.log("人员管理列表",res);
+					console.log("注册管理列表",res);
 					uni.startPullDownRefresh();
 					this.followList = res.data;
 					this.noData = this.followList.length === 0 ? true : false;

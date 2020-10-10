@@ -131,7 +131,7 @@
 			 * 提交帮助
 			 */
 			answerHelp(item) {
-				if (this.answer === "") {
+				if (item.answer === "") {
 					uni.showToast({
 						icon: "none",
 						title: "请输入解决方案"

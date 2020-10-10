@@ -453,4 +453,28 @@ public class HSController {
         return result;
     }
 
+    /**
+     * 获取通知数据
+     * @param param
+     * @return
+     */
+    @PostMapping("/getNoticeData")
+    @ResponseBody
+    public Map<String, Object> getNoticeData(@RequestBody Map<String,Object> param){
+        Map<String,Object> result = hsService.getNoticeData(param);
+        return result;
+    }
+
+    /**
+     * 设置通知为已读
+     * @param param
+     * @return
+     */
+    @PostMapping("/updateNoticeRead")
+    @ResponseBody
+    public Map<String, Object> updateNoticeRead(@RequestBody Map<String,Object> param){
+        Map<String,Object> result = hsService.updateNoticeRead(param);
+        return result;
+    }
+
 }

@@ -10,6 +10,7 @@ let axios = require('axios')
 function toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
+
 // 参数过滤函数
 function filterNull (o) {
   for (let key in o) {

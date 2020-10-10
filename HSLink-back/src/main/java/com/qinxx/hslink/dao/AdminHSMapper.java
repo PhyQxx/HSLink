@@ -33,6 +33,13 @@ public interface AdminHSMapper {
     int verifyArticle(Map<String, Object> param);
 
     /**
+     * 审核文章通知
+     * @param param
+     * @return
+     */
+    int verifyArticleNotice(Map<String, Object> param);
+
+    /**
      * 人员管理（冻结/解冻）
      * @param param
      * @return
@@ -59,4 +66,18 @@ public interface AdminHSMapper {
      * @return
      */
     Map<String, Object> getMyPageNumber(Map<String, Object> param);
+
+    /**
+     * 通过注册
+     * @param param
+     * @return
+     */
+    int passRegister(Map<String, Object> param);
+
+    /**
+     * 获取注册管理数据
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getRegisterManagementData(Map<String, Object> param);
 }

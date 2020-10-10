@@ -36,6 +36,9 @@
 						v-if="item.admin === 0"
 						@tap="goToPage(item)">
 					<view :class="['cuIcon-' + item.cuIcon,'text-' + item.color]">
+						<view class="cu-tag badge" v-if="item.badge > 0">
+							<block v-if="item.badge > 0">{{item.badge>99?'99+':item.badge}}</block>
+						</view>
 					</view>
 					<text>{{item.name}}</text>
 				</view>
@@ -62,6 +65,7 @@
 						color: 'orange',
 						name: '收藏',
 						admin: 0,
+						badge: 0,
 						code: 'collection'
 					}, 
 					{
@@ -69,6 +73,7 @@
 						color: 'yellow',
 						name: '我的文章',
 						admin: 0,
+						badge: 0,
 						code: 'myArticle'
 					}, 
 					{
@@ -76,6 +81,7 @@
 						color: 'red',
 						name: '编辑信息',
 						admin: 0,
+						badge: 0,
 						code: 'personInfo'
 					}, 
 					{
@@ -83,6 +89,7 @@
 						color: 'olive',
 						name: '文章管理',
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						badge: 0,
 						code: 'articleManagement'
 					},
 					{
@@ -90,13 +97,23 @@
 						color: 'cyan',
 						name: '人员管理',
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						badge: 0,
 						code: 'peopleManagement'
+					},
+					{
+						cuIcon: 'friendadd',
+						color: 'green',
+						name: '注册管理',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						badge: 0,
+						code: 'registerManagement'
 					},
 					{
 						cuIcon: 'comment',
 						color: 'brown',
 						name: '帮助答复',
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						badge: 0,
 						code: 'helpAnswer'
 					},
 					{
@@ -104,6 +121,7 @@
 						color: 'purple',
 						name: '设置',
 						admin: 0,
+						badge: 0,
 						code: 'settings'
 					}, 
 					{
@@ -111,16 +129,30 @@
 						color: 'pink',
 						name: '帮助',
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 1 : 0,
+						badge: 0,
 						code: 'help'
 					},
 					
 				],
 				userInfo: {},
-				userOtherInfo: {}
+				userOtherInfo: {},
+				//通知数量
+				noticeNumber: 0
 			}
+		},
+		/**
+		 * 跳转通知页面
+		 * @param {Object} e
+		 */
+		onNavigationBarButtonTap(e) {
+			uni.navigateTo({
+				url: '/pages/tabbar/my/notice/notice'
+			})
 		},
 		onShow() {
 			this.getUserInfo();
+			this.getMyPageNumber();
+			this.getNoticeData();
 			this.userInfo = uni.getStorageSync("userInfo");
 			let timesRun = 0;
 			let interval = setInterval(() => {
@@ -132,13 +164,65 @@
 			}, 10000);
 		},
 		onLoad() {
+			
 		},
 		onPullDownRefresh () {
+			this.getMyPageNumber();
+			this.getNoticeData();
 			this.getUserInfo();
 		},
 		mounted() {
 		},
 		methods: {
+			/**
+			 * 获取通知
+			 */
+			getNoticeData() {
+				request.post('/hs/getNoticeData',{
+					authorId: uni.getStorageSync("userInfo").user_id
+				}).then(res => {
+					this.noticeNumber = res.data.messageNoticeList.length + res.data.verifyNoticeList.length;
+					if(this.noticeNumber == 0) {
+						//隐藏
+						// #ifdef APP-PLUS
+						const pages = getCurrentPages();
+						const page = pages[pages.length - 1];
+						const currentWebview = page.$getAppWebview();
+						currentWebview.hideTitleNViewButtonRedDot({
+							index:0
+						});
+						// #endif
+					}else{
+						//显示
+						// #ifdef APP-PLUS
+						const pages = getCurrentPages();
+						const page = pages[pages.length - 1];
+						const currentWebview = page.$getAppWebview();
+						currentWebview.showTitleNViewButtonRedDot({
+							index:0
+						});
+						// #endif
+					}
+					console.log("通知",res);
+				},err => {
+					console.log("err",err);
+				})
+			},
+			/**
+			 * 获取文章管理/帮助答复的未操作数字
+			 */
+			getMyPageNumber() {
+				let _this = this;
+				request.post("/admin/getMyPageNumber",{
+				}).then(res => {
+					console.log("获取文章管理/帮助答复的未操作数字",res);
+					_this.cuIconList[3].badge = res.data.articleManagementNumber;
+					_this.cuIconList[5].badge = res.data.registerManagementNumner;
+					_this.cuIconList[6].badge = res.data.helpAnswerNumber;
+				},err => {
+					console.log("err",err)
+				})
+			},
 			/**
 			 * 跳转页面
 			 * @param {Object} pageName 页面名称
@@ -180,7 +264,8 @@
 					"help": "/pages/tabbar/my/help/help",
 					"articleManagement": "/pages/tabbar/my/article-management/article-management",
 					"peopleManagement": "/pages/tabbar/my/people-management/people-management",
-					"helpAnswer": "/pages/tabbar/my/help-answer/help-answer"
+					"helpAnswer": "/pages/tabbar/my/help-answer/help-answer",
+					"registerManagement": "/pages/tabbar/my/register-management/register-management"
 				};
 				uni.navigateTo({
 					url: `${FUNCTION_CODE[item.code]}`

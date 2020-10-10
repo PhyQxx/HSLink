@@ -55,4 +55,18 @@ public interface AdminHSService {
      * @return
      */
     Map<String, Object> getMyPageNumber(Map<String, Object> param);
+
+    /**
+     * 通过注册
+     * @param param
+     * @return
+     */
+    Map<String, Object> passRegister(Map<String, Object> param);
+
+    /**
+     * 获取注册管理数据
+     * @param param
+     * @return
+     */
+    Map<String, Object> getRegisterManagementData(Map<String, Object> param);
 }

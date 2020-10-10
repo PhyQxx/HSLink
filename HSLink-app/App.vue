@@ -1,7 +1,15 @@
 <script>
+	import request from "@/util/request.js";
 export default {
+	data() {
+		return {
+			//未读消息数字
+			unreadNumber: ""
+		}
+	},
 	onLaunch: function() {
 		console.log('App Launch');
+		this.getTabBarNumber();
 		/**
 		 * 主页面tab标签红标显示
 		 */
@@ -20,6 +28,30 @@ export default {
 	},
 	onHide: function() {
 		console.log('App Hide');
+	},
+	methods: {
+		/**
+		 * 获取tabBar数字
+		 */
+		getTabBarNumber() {
+			request.post("/hs/getTabBarNumber",{
+				userId: uni.getStorageSync("userInfo").user_id
+			}).then(res => {
+				console.log("获取tabBar数字",res);
+				if (res.data.unreadNumber > 0) {
+					uni.setTabBarBadge({
+						index: 3,
+						text: res.data.unreadNumber.toString()
+					});
+				} else {
+						uni.removeTabBarBadge({
+							index: 3
+						})
+					}
+			},err => {
+				console.log("err",err)
+			})
+		}
 	}
 };
 </script>

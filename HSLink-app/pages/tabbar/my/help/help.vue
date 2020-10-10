@@ -116,6 +116,7 @@
 								icon: "loading",
 								title: "提交成功"
 							});
+							this.content = "";
 							this.getHistoryHelp();
 						}
 					},err => {
