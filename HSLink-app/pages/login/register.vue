@@ -29,7 +29,7 @@
 					姓名：
 				</view>
 				<view class="right">
-					<input type="text" v-model="username" placeholder="请输入姓名"/>
+					<input type="text" v-model="username" placeholder="请输入真实姓名"/>
 				</view>
 			</view>
 			<view class="password one">
