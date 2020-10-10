@@ -108,6 +108,32 @@ public class AdminHSController {
     }
 
     /**
+     * 获取注册管理数据
+     * @param param
+     * @return
+     */
+    @PostMapping("/getRegisterManagementData")
+    @ResponseBody
+    public Map<String, Object> getRegisterManagementData(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = AdminhsService.getRegisterManagementData(param);
+        return result;
+    }
+
+    /**
+     * 通过注册
+     * @param param
+     * @return
+     */
+    @PostMapping("/passRegister")
+    @ResponseBody
+    public Map<String, Object> passRegister(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = AdminhsService.passRegister(param);
+        return result;
+    }
+
+    /**
      * 获取文我的页面未操作数字
      * @param param
      * @return
