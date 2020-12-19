@@ -1,0 +1,157 @@
+@font-face {font-family: "iconfont";
+    src:
+        url('./static/iconfont.ttf') format('truetype')
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-search:before {
+  content: "\e614";
+}
+
+.icon-haoyou:before {
+  content: "\e62e";
+}
+
+.icon-play:before {
+  content: "\e630";
+}
+
+.icon-stop:before {
+  content: "\e635";
+}
+
+.icon-address:before {
+  content: "\e62c";
+}
+
+.icon-more:before {
+  content: "\e840";
+}
+
+.icon-addre:before {
+  content: "\e700";
+}
+
+.icon-right:before {
+  content: "\e61c";
+}
+
+.icon-message:before {
+  content: "\e671";
+}
+
+.icon-history:before {
+  content: "\e8bd";
+}
+
+.icon-left:before {
+  content: "\e602";
+}
+
+.icon-share:before {
+  content: "\e694";
+}
+
+.icon-yanzhengma:before {
+  content: "\e7a1";
+}
+
+.icon-zhiwei:before {
+  content: "\e63e";
+}
+
+.icon-shoucang2:before {
+  content: "\e605";
+}
+
+.icon-time:before {
+  content: "\e600";
+}
+
+.icon-fatie:before {
+  content: "\e629";
+}
+
+.icon-CombinedShape:before {
+  content: "\e638";
+}
+
+.icon-fenxiang:before {
+  content: "\e667";
+}
+
+.icon-E607:before {
+  content: "\e647";
+}
+
+.icon-guangchang:before {
+  content: "\e601";
+}
+
+.icon-vnums:before {
+  content: "\e615";
+}
+
+.icon-set:before {
+  content: "\eb40";
+}
+
+.icon-tongxunlu:before {
+  content: "\e604";
+}
+
+.icon-xuexijilu:before {
+  content: "\e6a3";
+}
+
+.icon-daoshi:before {
+  content: "\e6d7";
+}
+
+.icon-aixin:before {
+  content: "\e83f";
+}
+
+.icon-aixin1:before {
+  content: "\e85c";
+}
+
+.icon-collect:before {
+  content: "\e603";
+}
+
+.icon-xuanze:before {
+  content: "\e60b";
+}
+
+.icon-shoujihao:before {
+  content: "\e67d";
+}
+
+.icon-xuanze1:before {
+  content: "\e6cb";
+}
+
+.icon-shuaxin:before {
+  content: "\e87e";
+}
+
+.icon-shezhi:before {
+  content: "\e611";
+}
+
+.icon-down-copy:before {
+  content: "\e85d";
+}
+
+.icon-up-copy:before {
+  content: "\e85e";
+}
+

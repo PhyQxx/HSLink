@@ -118,7 +118,7 @@ export default {
 		 */
 		goToDetails(item) {
 			uni.navigateTo({
-				url: '/pages/tabbar/homepage/data-details?noticeId='+item.id
+				url: `/pages/tabbar/homepage/data-details?noticeId=${item.id}&isMessage=false`
 			})
 		},
 		/**

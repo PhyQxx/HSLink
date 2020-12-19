@@ -1,0 +1,10 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "文章内容",
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "uni-fav": "/components/uni-fav/uni-fav",
+    "avatar": "/pages/components/avatar/avatar"
+  }
+}

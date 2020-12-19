@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/tabbar/homepage/homepage",
+    "pages/tabbar/homepage/data-details",
+    "pages/tabbar/follow/follow",
+    "pages/tabbar/release/release",
+    "pages/tabbar/message/message",
+    "pages/tabbar/my/my",
+    "pages/tabbar/my/my-article/my-article",
+    "pages/notice-edit/notice-edit",
+    "pages/tabbar/message/chat-page",
+    "pages/person-info-page/person-info-page",
+    "pages/tabbar/follow/follow-list",
+    "pages/tabbar/follow/fans-list",
+    "pages/tabbar/my/settings/settings",
+    "pages/tabbar/my/settings/account-security/account-security",
+    "pages/tabbar/my/settings/agreement/agreement",
+    "pages/tabbar/my/settings/system-information/system-information",
+    "pages/tabbar/my/help/help",
+    "pages/tabbar/my/edit-info/edit-info",
+    "pages/components/avatar/avatar",
+    "pages/tabbar/my/collection/collection",
+    "pages/tabbar/my/article-management/article-management",
+    "pages/tabbar/my/people-management/people-management",
+    "pages/tabbar/my/help-answer/help-answer",
+    "pages/login/register",
+    "pages/tabbar/my/register-management/register-management",
+    "pages/tabbar/my/notice/notice"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#333",
+    "color": "#FFFFFF",
+    "selectedColor": "#f33e54",
+    "list": [
+      {
+        "pagePath": "pages/tabbar/homepage/homepage",
+        "iconPath": "static/img/tabbar/home.png",
+        "selectedIconPath": "static/img/tabbar/homeactive.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/tabbar/follow/follow",
+        "iconPath": "static/img/tabbar/guanzhu.png",
+        "selectedIconPath": "static/img/tabbar/guanzhuactive.png",
+        "text": "关注"
+      },
+      {
+        "pagePath": "pages/tabbar/release/release",
+        "iconPath": "static/img/tabbar/add.png",
+        "selectedIconPath": "static/img/tabbar/addactive.png",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/tabbar/message/message",
+        "iconPath": "static/img/tabbar/news.png",
+        "selectedIconPath": "static/img/tabbar/newsactive.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/tabbar/my/my",
+        "iconPath": "static/img/tabbar/me.png",
+        "selectedIconPath": "static/img/tabbar/meactive.png",
+        "text": "我"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

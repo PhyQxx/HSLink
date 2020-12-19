@@ -1,0 +1,10 @@
+
+.content.data-v-619c9c64{
+	padding: 20rpx!important;
+	background-color: #FFFFFF;
+	border-radius: 10rpx;
+}
+uni-textarea.data-v-619c9c64{
+	width: 100%!important;
+}
+

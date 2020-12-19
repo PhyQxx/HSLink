@@ -1,0 +1,13 @@
+
+.content.data-v-729e89f7 {
+	min-height: 85vh;
+	padding-bottom: 100rpx;
+}
+.text-gray.data-v-729e89f7{
+	display: inline-block;
+	width: 4rem;
+}
+.cu-card>.cu-item.data-v-729e89f7{
+	margin: 20rpx!important;
+}
+

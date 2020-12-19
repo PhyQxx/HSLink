@@ -99,27 +99,44 @@
 			 * 保存
 			 */
 			preservation() {
-				request.post('/hs/updateOneContent',{
-					id: this.noticeInfo.id,
-					label: this.noticeInfo.label,
-					title: this.noticeInfo.title,
-					content: this.noticeInfo.content,
-				}).then(res => {
-					console.log("保存文章",res);
-					if (res.data === 1) {
-						uni.showToast({
-							icon: 'loading',
-							title: '保存成功'
-						});
-						setTimeout(() => {
-							uni.navigateBack({
-								delta: 1
-							})
-						},1000)
-					}
-				},err=>{
-					console.log("err",err);
-				})
+				if (this.noticeInfo.title === '') {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入文章标题'
+					})
+				} else if (this.noticeInfo.label.length !== 4) {
+					uni.showToast({
+						icon: 'none',
+						title: '文章标签只能4个字符哦'
+					})
+				} else if (this.noticeInfo.content === '') {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入文章内容'
+					})
+				} else {
+					request.post('/hs/updateOneContent',{
+						id: this.noticeInfo.id,
+						label: this.noticeInfo.label,
+						title: this.noticeInfo.title,
+						content: this.noticeInfo.content,
+					}).then(res => {
+						console.log("保存文章",res);
+						if (res.data === 1) {
+							uni.showToast({
+								icon: 'loading',
+								title: '保存成功'
+							});
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							},1000)
+						}
+					},err=>{
+						console.log("err",err);
+					})
+				}
 			}
 		}
 	}

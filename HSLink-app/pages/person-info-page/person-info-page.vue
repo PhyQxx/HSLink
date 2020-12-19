@@ -39,7 +39,7 @@
 				<noData :custom="true"><view class="title" @tap="update()">暂无数据,点击重新加载</view></noData>
 			</view>
 			<view class="list cu-card article dynamic" v-else-if="noData === false">
-				<view class="cu-item" style="padding:0" v-for="(item,index) in noticeList" :key="index">
+				<view class="cu-item" style="padding:0" v-for="(item,index) in noticeList" :key="index" v-if="item.is_pass === '1'">
 					<view class="cu-list menu solid-bottom" @click="goToDetails(item)">
 						<view class="cu-item arrow" style="min-height: 90rpx;padding-top: 10rpx;">
 							<view class="action">

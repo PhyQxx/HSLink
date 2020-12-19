@@ -1,0 +1,30 @@
+
+.button.data-v-0fc8cfc6{
+	padding: 40rpx 100rpx;
+}
+.cu-item.data-v-0fc8cfc6{
+	padding: 20rpx;
+}
+.title.data-v-0fc8cfc6{
+	padding-top: 0;
+}
+.title.data-v-0fc8cfc6, .label.data-v-0fc8cfc6, .content.data-v-0fc8cfc6{
+	background-color: #F1F1F1;
+	border-radius: 10rpx;
+	padding: 20rpx;
+	margin: 20rpx;
+}
+.title textarea.data-v-0fc8cfc6, .label textarea.data-v-0fc8cfc6, .content textarea.data-v-0fc8cfc6{
+	width: 100%;
+}
+.title textarea.data-v-0fc8cfc6{
+	height: 128rpx;
+	font-weight: bold;
+}
+.label textarea.data-v-0fc8cfc6{
+	height: 80rpx;
+}
+.page.data-v-0fc8cfc6{
+	background-color: #FFFFFF;
+}
+

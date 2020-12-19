@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "系统信息",
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {}
+}

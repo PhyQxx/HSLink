@@ -1,0 +1,104 @@
+
+.no.data-v-0b4aa774 {
+	padding: 20rpx;
+}
+.first-number.data-v-0b4aa774{
+	position: absolute;
+	right: 96rpx;
+	margin-top: 28rpx;
+	border-radius: 50%;
+	background: red;
+	color: #FFFFFF;
+	padding: 6rpx;
+	font-size: 28rpx;
+	width: 44rpx;
+	text-align: center;
+}
+.second-number.data-v-0b4aa774{
+	position: relative;
+	left: 592rpx;
+	top: 26rpx;
+	height: 44rpx;
+	background: red;
+	border-radius: 50%;
+	width: 44rpx;
+	color: #FFFFFF;
+	font-size: 28rpx;
+	line-height: 44rpx;
+	text-align: center;
+}
+.a .right-top.data-v-0b4aa774{
+	width: 250px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.a .right-bottom.data-v-0b4aa774{
+	font-size: 30rpx;
+	color: #999999;
+	margin-top: 10rpx;
+}
+.pass.data-v-0b4aa774{
+	font-size: 30rpx;
+	color: #39B54A;
+	border: 1rpx solid #39B54A;
+	border-radius: 10rpx;
+	background-color: #FFFFFF;
+}
+.reject.data-v-0b4aa774{
+	font-size: 30rpx;
+	color: #f10000;
+	border: 1rpx solid #f10000;
+	border-radius: 10rpx;
+	background-color: #FFFFFF;
+}
+.a .left.data-v-0b4aa774{
+	padding: 20rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	margin-right: 20rpx;
+}
+.a.data-v-0b4aa774{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	padding-top: 20rpx;
+}
+.one.data-v-0b4aa774, .a.data-v-0b4aa774{
+	background-color: #e6e6e6;
+	margin: 20rpx;
+	border-radius: 10rpx;
+	padding-bottom: 20rpx;
+}
+.one .bottom.data-v-0b4aa774{
+	padding: 0 20rpx;
+	font-size: 30rpx;
+	color: #a3a3a3;
+}
+.top .top-right.data-v-0b4aa774{
+	color: #A5A5A5;
+}
+.one .top.data-v-0b4aa774{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	padding: 20rpx;
+}
+.uni-collapse.data-v-0b4aa774, .uni-collapse-cell--open.data-v-0b4aa774{
+	background-color: rgba(0,0,0,0);
+}
+.page.data-v-0b4aa774{
+	background-color: #FFFFFF;
+	padding-bottom: 0;
+}
+

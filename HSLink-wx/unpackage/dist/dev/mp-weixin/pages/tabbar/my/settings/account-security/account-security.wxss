@@ -1,0 +1,12 @@
+
+.padding-xl input.data-v-069b0de4{
+	background-color: #FFFFFF;
+	text-align: left;
+	margin: 20rpx 0;
+	border-radius: 10rpx;
+	font-size: 36rpx;
+}
+.cu-modal.data-v-069b0de4{
+	z-index: 998!important;
+}
+

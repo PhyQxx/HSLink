@@ -1,0 +1,21 @@
+
+.cancel.data-v-6ebcacd7{
+		float: right;
+		margin-right: 32rpx;
+		padding: 0 5rpx;
+		color: red;
+		border: 1rpx solid red;
+		border-radius: 10rpx;
+}
+.content.data-v-6ebcacd7 {
+	min-height: 85vh;
+	padding-bottom: 100rpx;
+}
+.text-gray.data-v-6ebcacd7{
+	display: inline-block;
+	width: 4rem;
+}
+.cu-card>.cu-item.data-v-6ebcacd7{
+	margin: 20rpx!important;
+}
+

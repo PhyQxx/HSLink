@@ -1,0 +1,10 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "关注",
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "no-data": "/components/noData/noData",
+    "m-search": "/components/mehaotian-search/mehaotian-search"
+  }
+}

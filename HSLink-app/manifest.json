@@ -1,9 +1,9 @@
 {
     "name" : "HSLink",
     "appid" : "__UNI__7C9492E",
-    "description" : "",
-    "versionName" : "1.0.7",
-    "versionCode" : 107,
+    "description" : "“家校通”是一种现代信息化管理系统，具有良好的可扩展性，能够适应幼儿园、小学、初中、高中，大学等不同类型的学校，同时，也能够适应不同结构的学校，为了家、校能够及时方便地传递信息",
+    "versionName" : "1.0.9",
+    "versionCode" : 109,
     "transformPx" : false,
     "app-plus" : {
         "usingComponents" : true,
@@ -86,8 +86,7 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wxe81cc6c613901bf9",
         "setting" : {
             "urlCheck" : true
         },

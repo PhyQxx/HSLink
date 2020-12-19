@@ -153,7 +153,7 @@ export default {
 		 */
 		goToDetails(item) {
 			uni.navigateTo({
-				url: '/pages/tabbar/homepage/data-details?noticeId='+item.articleId
+				url: `/pages/tabbar/homepage/data-details?noticeId=${item.articleId}&isMessage=false`
 			})
 		},
 		/**

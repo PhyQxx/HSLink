@@ -77,6 +77,14 @@
 						code: 'myArticle'
 					}, 
 					{
+						cuIcon: 'notice',
+						color: 'green',
+						name: '通知',
+						admin: 0,
+						badge: 0,
+						code: 'notice'
+					}, 
+					{
 						cuIcon: 'edit',
 						color: 'red',
 						name: '编辑信息',
@@ -102,7 +110,7 @@
 					},
 					{
 						cuIcon: 'friendadd',
-						color: 'green',
+						color: 'mauve',
 						name: '注册管理',
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
 						badge: 0,
@@ -115,6 +123,14 @@
 						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
 						badge: 0,
 						code: 'helpAnswer'
+					},
+					{
+						cuIcon: 'subscription',
+						color: 'black',
+						name: '群发消息',
+						admin: uni.getStorageSync("userInfo").user_type === "管理员" ? 0 : 1,
+						badge: 0,
+						code: 'massHair'
 					},
 					{
 						cuIcon: 'settings',
@@ -178,10 +194,12 @@
 			 * 获取通知
 			 */
 			getNoticeData() {
+				let _this = this;
 				request.post('/hs/getNoticeData',{
 					authorId: uni.getStorageSync("userInfo").user_id
 				}).then(res => {
 					this.noticeNumber = res.data.messageNoticeList.length + res.data.verifyNoticeList.length;
+					_this.cuIconList[2].badge = this.noticeNumber;
 					if(this.noticeNumber == 0) {
 						//隐藏
 						// #ifdef APP-PLUS
@@ -216,9 +234,9 @@
 				request.post("/admin/getMyPageNumber",{
 				}).then(res => {
 					console.log("获取文章管理/帮助答复的未操作数字",res);
-					_this.cuIconList[3].badge = res.data.articleManagementNumber;
-					_this.cuIconList[5].badge = res.data.registerManagementNumner;
-					_this.cuIconList[6].badge = res.data.helpAnswerNumber;
+					_this.cuIconList[4].badge = res.data.articleManagementNumber;
+					_this.cuIconList[6].badge = res.data.registerManagementNumner;
+					_this.cuIconList[7].badge = res.data.helpAnswerNumber;
 				},err => {
 					console.log("err",err)
 				})
@@ -265,7 +283,9 @@
 					"articleManagement": "/pages/tabbar/my/article-management/article-management",
 					"peopleManagement": "/pages/tabbar/my/people-management/people-management",
 					"helpAnswer": "/pages/tabbar/my/help-answer/help-answer",
-					"registerManagement": "/pages/tabbar/my/register-management/register-management"
+					"registerManagement": "/pages/tabbar/my/register-management/register-management",
+					"notice": "/pages/tabbar/my/notice/notice",
+					"massHair": "/pages/tabbar/my/mass-hair/mass-hair"
 				};
 				uni.navigateTo({
 					url: `${FUNCTION_CODE[item.code]}`

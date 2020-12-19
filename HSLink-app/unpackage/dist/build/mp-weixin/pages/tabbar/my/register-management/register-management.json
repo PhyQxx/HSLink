@@ -1,0 +1,11 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "注册管理",
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "no-data": "/components/noData/noData",
+    "m-search": "/components/mehaotian-search/mehaotian-search",
+    "avatar": "/pages/components/avatar/avatar"
+  }
+}

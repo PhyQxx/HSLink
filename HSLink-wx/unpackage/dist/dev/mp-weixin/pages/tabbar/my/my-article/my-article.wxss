@@ -1,0 +1,12 @@
+
+.content.data-v-491b86d4 {
+	min-height: 85vh;
+}
+.text-gray.data-v-491b86d4{
+	display: inline-block;
+	width: 4rem;
+}
+.cu-card>.cu-item.data-v-491b86d4{
+	margin: 20rpx!important;
+}
+

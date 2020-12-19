@@ -1,0 +1,10 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "消息",
+  "navigationBarBackgroundColor": "#333",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "no-data": "/components/noData/noData",
+    "avatar": "/pages/components/avatar/avatar"
+  }
+}

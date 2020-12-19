@@ -1,0 +1,36 @@
+
+.uni-input-input.data-v-e1e8db50, .uni-input-placeholder.data-v-e1e8db50{
+	text-align: right!important;
+}
+.content.data-v-e1e8db50 {
+	background-color: #F1F1F1;
+	width: 100%;
+	padding: 20rpx;
+	border-radius: 10rpx;
+}
+.cu-form-group uni-textarea.data-v-e1e8db50{
+	margin: 0!important;
+}
+textarea.data-v-e1e8db50{
+	width: 100%;
+	height: 100rpx;
+}
+.signature.data-v-e1e8db50{
+	-webkit-box-orient: vertical!important;
+	-webkit-box-direction: normal!important;
+	-webkit-flex-flow: column!important;
+	        flex-flow: column!important;
+	-webkit-box-align: start;
+	-webkit-align-items: flex-start;
+	        align-items: flex-start;
+	padding: 20rpx;
+	text-align: inherit!important;
+}
+.uni-input-form.data-v-e1e8db50, .uni-input-wrapper.data-v-e1e8db50{
+	text-align: right!important;
+}
+.cu-form-group.data-v-e1e8db50{
+	border-radius: 10rpx;
+	text-align: right;
+}
+

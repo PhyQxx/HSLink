@@ -1,0 +1,1 @@
+<view class="page data-v-faa3d246"><view class="content data-v-faa3d246"><textarea auto-height="true" disabled="true" data-event-opts="{{[['input',[['__set_model',['','content','$event',[]]]]]]}}" value="{{content}}" bindinput="__e" class="data-v-faa3d246"></textarea></view></view>

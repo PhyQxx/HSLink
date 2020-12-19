@@ -74,21 +74,7 @@
 				"enablePullDownRefresh": true,
 				 "navigationBarTitleText": "我",//顶部名称
 				 "navigationBarBackgroundColor": "#333",//顶部背景色
-				 "navigationBarTextStyle": "white" ,//文字颜色，目前只支持white和black这两种颜色（小程序）
-				 "app-plus": {
-				    "bounce": "none", //关闭窗口回弹效果
-				    "titleNView": {
-				 	   "buttons": [ //原生标题栏按钮配置,
-				 		   {
-				 				"type":"none",
-				 				"text":"通知  ",
-				 				"fontSize":"16px",
-				 				"float":"right",
-								"redDot" : true  
-				 		   }
-				 		]
-				 	}
-				 }
+				 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
 			 }
 		}
 	    ,{
@@ -304,6 +290,32 @@
             	 "navigationBarBackgroundColor": "#333",//顶部背景色
             	 "navigationBarTextStyle": "white" //文字颜色，目前只支持white和black这两种颜色（小程序）
              }
+        }
+        ,{
+            "path" : "pages/tabbar/my/mass-hair/select-people",
+            "style": {
+            	"enablePullDownRefresh": true,
+            	 "navigationBarTitleText": "群发消息",//顶部名称
+            	 "navigationBarBackgroundColor": "#333",//顶部背景色
+            	 "navigationBarTextStyle": "white" ,//文字颜色，目前只支持white和black这两种颜色（小程序）
+				 "app-plus": {
+				     "bounce": "none", //关闭窗口回弹效果
+				     "titleNView": {
+				 	    "buttons": [ //原生标题栏按钮配置,
+				 		    {
+				 			   "type":"none",
+				 			   "text":"下一步  ",
+				 			   "float":"right",
+				 			   "fontSize":"16px"
+				 		    }
+				 	    ]
+				     }
+				 }
+             }
+        }
+        ,{
+            "path" : "pages/tabbar/my/mass-hair/mass-hair",
+            "style" : {}
         }
     ],
 	"globalStyle": {

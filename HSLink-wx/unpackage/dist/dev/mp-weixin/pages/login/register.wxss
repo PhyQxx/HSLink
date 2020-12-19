@@ -1,0 +1,27 @@
+
+.button.data-v-24dc7ac2{
+	padding: 0 20rpx;
+}
+.login-btn.data-v-24dc7ac2 {
+	background: #797979;
+	color: #FFFFFF;
+}
+.one .left.data-v-24dc7ac2{
+	width: 200rpx;
+	color: #8f8f8f;
+}
+.one .right.data-v-24dc7ac2{
+	color: #a7a7a7;
+}
+.one.data-v-24dc7ac2{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	padding: 20rpx;
+	background-color: #FFFFFF;
+	margin: 20rpx;
+	border-radius: 10rpx;
+}
+.page.data-v-24dc7ac2{
+}
+

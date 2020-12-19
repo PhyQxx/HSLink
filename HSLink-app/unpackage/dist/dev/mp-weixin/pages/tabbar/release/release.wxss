@@ -1,0 +1,45 @@
+
+.clear.data-v-c14d31f2{
+	position: absolute;
+	right: 20px;
+	color: #999;
+}
+.page.data-v-c14d31f2{
+	background-color: #FFFFFF;
+	border-radius: 10rpx;
+	padding: 20rpx;
+}
+.button.data-v-c14d31f2{
+	padding: 40rpx 100rpx 80rpx;
+}
+.cu-item.data-v-c14d31f2{
+	padding: 20rpx 0;
+}
+.title.data-v-c14d31f2{
+	padding-top: 0;
+}
+.title.data-v-c14d31f2, .label.data-v-c14d31f2, .content.data-v-c14d31f2{
+	background-color: #F1F1F1;
+	width: 100%;
+	padding: 20rpx;
+	border-radius: 10rpx;
+}
+textarea.data-v-c14d31f2{
+	text-indent: 32rpx;
+	line-height: 1.5;
+	width: 100%;
+	height: 100%;
+}
+.title textarea.data-v-c14d31f2{
+	height: 128rpx;
+	font-weight: bold;
+}
+.label textarea.data-v-c14d31f2{
+	height: 80rpx;
+}
+.content textarea.data-v-c14d31f2{
+	min-height: 400rpx;
+	text-indent: 40rpx;
+}
+
+

@@ -1,0 +1,11 @@
+
+.button.data-v-35e9b394{
+	position: absolute;
+	width: 80%;
+	bottom: 80rpx;
+	left: 10%;
+}
+.cu-list.data-v-35e9b394{
+	border-radius: 10rpx;
+}
+

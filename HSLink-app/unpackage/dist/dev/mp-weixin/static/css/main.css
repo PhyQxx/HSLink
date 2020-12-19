@@ -1,0 +1,125 @@
+.login {
+	height: auto;
+	width: auto;
+	display: flex;
+	flex-direction: row;
+	justify-content:center;
+	/* margin-top: 128upx; */
+}
+.content {
+	height: auto;
+	width: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content:center;
+	/* margin-top: 128upx; */
+}
+
+/* 头部 logo */
+.header {
+/* 	width:400upx;
+	height:200upx; */
+/* 	box-shadow:0upx 0upx 60upx 0upx rgba(0,0,0,0.1); */
+	border-radius:50%;
+/* 	background-color: #000000;
+ */	margin-top: 30upx;
+	/* margin-bottom: 30upx; */
+	margin-left: auto;
+	margin-right: auto;
+	
+
+
+}
+.header image{
+	width:200upx;
+	height:200upx;
+	border-radius:50%;
+	text-align:center;
+	
+}
+.title{
+	text-align:center;
+	/* margin-bottom: 70upx; */
+	font-weight:900;
+	font-size: 18px;
+}
+
+/* 主体 */
+.main {
+	display: flex;
+	flex-direction: column;
+	padding-left: 90upx;
+	padding-right: 90upx;
+}
+.tips {
+	color: #999999;
+	font-size: 28upx;
+	margin-top: 64upx;
+	margin-left: 48upx;
+	/* margin-bottom:30px; */
+}
+
+/* 其他登录方式 */
+.other_login{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 256upx;
+	text-align: center;
+}
+.login_icon{
+	border: none;
+	font-size: 128upx;
+	margin: 0 64upx 0 64upx;
+	color: rgba(0,0,0,0.7)
+}
+.wechat_color{
+	color: #83DC42;
+}
+.weibo_color{
+	color: #F9221D;
+}
+.github_color{
+	color: #24292E;
+}
+
+/* 底部 */
+.footer{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	font-size: 28upx;
+	margin-top: 64upx;
+	color: rgba(0,0,0,0.7);
+	text-align: center;
+	height: 40upx;
+	line-height: 40upx;
+}
+.footer text{
+	font-size: 24upx;
+	margin-left: 15upx;
+	margin-right: 15upx;
+}
+/*
+ 2019-10-28 ljl 登录输入框样式
+*/
+.ljl_title{
+	background: #f3f3f3;
+	font-size:10px;
+	text-indent: 10px;
+	padding-top:5px;
+	color:#cccdd1;
+	height: 100upx;
+	border-radius: 30upx;
+	width: 90%;
+	margin: auto;
+}
+.main-list,.ljl_top{
+	margin-top: -24upx !important;
+}
+.ljl_tt{
+	margin-top: 25upx;
+	border-bottom: 1upx solid #cdcdcd;
+}
