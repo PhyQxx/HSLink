@@ -1,12 +1,10 @@
 <template>
-  <div class="page">
-    <h1>完善中···</h1>
-  </div>
+
 </template>
 
 <script>
     export default {
-        name: "HomepageManagement"
+        name: "RegistrationManagement"
     }
 </script>
 

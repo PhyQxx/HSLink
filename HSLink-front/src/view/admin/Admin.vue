@@ -26,10 +26,12 @@
         <el-menu
           default-active="1"
           class="el-menu-vertical-demo">
-          <el-menu-item index="1" @click="goToArticleReview">文章审核</el-menu-item>
-          <el-menu-item index="2" @click="goToPersonnelManagement">人员管理</el-menu-item>
-          <el-menu-item index="3" @click="goToHomepageManagement">首页管理</el-menu-item>
-          <el-menu-item index="4"disabled>更多···</el-menu-item>
+          <el-menu-item index="1" @click="goToHomepageManagement">首页管理</el-menu-item>
+          <el-menu-item index="2" @click="goToArticleReview">文章审核</el-menu-item>
+          <el-menu-item index="3" @click="goToPersonnelManagement">人员管理</el-menu-item>
+          <el-menu-item index="4" @click="goToHomepageManagement">注册管理</el-menu-item>
+          <el-menu-item index="5" @click="goToHomepageManagement">帮助答复</el-menu-item>
+          <el-menu-item index="6" disabled>更多···</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -157,9 +159,6 @@
     background: #FFFFFF;
     padding: 0.5rem 2rem;
     border-radius: 0.5rem;
-  }
-  .el-container{
-    /*height: 100%;*/
   }
   .el-menu{
     border-radius: 5px;

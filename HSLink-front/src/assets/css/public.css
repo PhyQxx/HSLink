@@ -8,6 +8,12 @@ html {
 body{
   height: 100%;
 }
+.page{
+  margin: 1rem;
+  border-radius: 5px;
+  padding: 1rem;
+  background-color: #ffffff;
+}
 #app{
   height: 100%;
 }

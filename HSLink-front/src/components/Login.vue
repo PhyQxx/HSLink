@@ -14,10 +14,7 @@
                      label-position="left">
               <el-form-item label="角色" prop="role">
                 <el-select v-model="form.role" placeholder="请选择">
-                  <el-option value="学生"></el-option>
-                  <el-option value="家长"></el-option>
-                  <el-option value="教师"></el-option>
-                  <el-option value="管理员"></el-option>
+                  <el-option :value="item.dd_detail" v-for="(item,index) in userTypeList" :key="index"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="账号" prop="username">
@@ -104,6 +101,8 @@
         type = "login"
       }
       return{
+        //用户类型字典项
+        userTypeList: [],
         isSelect: true,
         rememberList: JSON.parse(sessionStorage.getItem("rememberList")),
         rememberPassword: false,
@@ -162,6 +161,7 @@
       }
     },
     mounted() {
+      this.getUserType();
     },
     methods:{
       /*deleteUser(username,index) {
@@ -192,6 +192,15 @@
         this.isSelect = false
         this.isSelect = true
       },*/
+      /**
+       * 获取用户类型字典项
+       */
+      getUserType() {
+        this.$ajax.post('/hs/getDictionariesData',{code: 'userType'},res => {
+          console.log('用户类型字典项', res);
+          this.userTypeList = res;
+        })
+      },
       forget() {
         this.$message("请联系管理员重置密码")
       },
@@ -202,6 +211,15 @@
             this.$message.error('用户名和密码不匹配');
             this.loading = false;
           } else {
+            if (this.form.role === '管理员') {
+              this.$router.push({
+                name: "admin"
+            })
+            } else {
+              this.$router.push({
+                name: "homepage"
+            })
+            }
             this.$message({
               message: "登录成功",
               type: "success"
@@ -232,9 +250,6 @@
               }
             }*/
             this.loading = false;
-            this.$router.push({
-              name: "homepage"
-            })
             sessionStorage.setItem("userInfo",JSON.stringify(r));
             // location.reload();
           }
