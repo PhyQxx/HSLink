@@ -41,6 +41,12 @@ body{
 .theme-font-blue{
   color: #1B94D4;
 }
+.theme-font-green{
+  color: #06d400;
+}
+.theme-font-red{
+  color: #d7371c;
+}
 .body-background{
   background: #EEFCFE;
 }

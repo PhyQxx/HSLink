@@ -17,12 +17,12 @@
         <div class="one-data" v-for="(person, index) in personList" :key="index">
           <div class="index box">{{index+1}}</div>
           <div class="article-name box theme-font-blue special-text">{{person.real_name}}</div>
-          <div class="article-type box theme-font-blue special-text">{{person.user_type}}</div>
-          <div class="article-label box theme-font-blue special-text">{{person.create_time}}</div>
-          <div class="article-type box theme-font-blue special-text">{{person.frozen_state === '0' ? '未冻结' : '已冻结'}}</div>
+          <div class="article-type box">{{person.user_type}}</div>
+          <div class="time box theme-font-blue special-text">{{person.create_time}}</div>
+          <div class="article-type box" :class="person.frozen_state === '0' ? 'theme-font-green' : 'theme-font-red'">{{person.frozen_state === '0' ? '未冻结' : '已冻结'}}</div>
           <div class="function box">
-            <el-button type="success" size='mini' @click="" v-if="person.frozen_state === '0'">冻结</el-button>
-            <el-button type="danger" size='mini' @click="" v-if="person.frozen_state === '1'">解冻</el-button>
+            <el-button type="danger" size='mini' @click="" v-if="person.frozen_state === '0'">冻结</el-button>
+            <el-button type="success" size='mini' @click="" v-if="person.frozen_state === '1'">解冻</el-button>
           </div>
         </div>
         <div class="number">共{{personList.length}}条数据</div>
@@ -93,21 +93,19 @@
   }
   .index{
     width: 3rem;
+    text-align: center;
   }
   .article-name{
     width: 6rem;
+    text-align: center;
   }
   .article-type{
     width: 6rem;
-  }
-  .article-label{
-    width: 6rem;
-  }
-  .author{
-    width: 6rem;
+    color: #999999;
+    text-align: center;
   }
   .time{
-    width: 10rem;
+    width: 14rem;
     color: #999;
     text-decoration: none!important;
     cursor: default!important;
