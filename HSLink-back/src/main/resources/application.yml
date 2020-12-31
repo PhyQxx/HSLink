@@ -12,12 +12,13 @@ logging:
 ##数据源
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/hslink?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8
+#    url: jdbc:mysql://127.0.0.1:3306/hslink?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://106.53.113.158:3306/hslink?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: Beater123
     db-name: hslink
     filters: log4j,wall,mergeStat
     driverClassName: com.mysql.cj.jdbc.Driver
 
 ##文件保存路径
-filePath: D:\office\phy\HSLink\HSLink-front\src\assets\file
+filePath: ${user.dir}\src\main\static\files

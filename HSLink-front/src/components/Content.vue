@@ -39,7 +39,7 @@
       <div class="comment-area">
         <el-button class="message" type="primary" @click="messages">留言</el-button>
         <div class="comment-list">
-          <div class="comment-one" v-for="(item,index) in message">
+          <div class="comment-one" v-for="(item, index) in message" :key='index'>
             <div class="comment-header">
               <div class="header-photo">{{item.header_photo}}</div>
               <div class="name">{{item.real_name}}</div>
@@ -461,8 +461,10 @@
     padding: 0;
   }
   .el-aside{
-    /*margin-top: 1rem;*/
     width: 14rem!important;
+    position: fixed;
+    top: 15rem;
+    right: 10%;
   }
   .el-main{
     padding: 0;

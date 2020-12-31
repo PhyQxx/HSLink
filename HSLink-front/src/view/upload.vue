@@ -2,7 +2,7 @@
   <div id="upload">
     <el-upload
       class="upload-demo"
-      action="http://127.0.0.1:8048/hs/upload"
+      :action="url"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :file-list="fileList"
@@ -11,17 +11,23 @@
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
     </el-upload>
     <div class="img">
-      <img v-for="(item,index) in fileList" :src="item.path" height="100" width="100"/>
+      <img v-for="(item,index) in fileList" :src="item.path" height="100" width="100" :key='index'/>
     </div>
     <el-button @click="fileUpload">
       下载
     </el-button>
+    <img :src="imgUrl" alt="">
   </div>
 </template>
 <script>
   export default {
     data() {
       return {
+        //图片地址
+        imgUrl: `${sessionStorage.getItem('url')}/hs/showImg/3fdc4d49-8bd4-4dc7-a8c1-50d2fa8e89f5carousel4.jpg`,
+        //服务器地址
+        url: `${sessionStorage.getItem('url')}/hs/upload`,
+        //文件列表
         fileList: []
       };
     },
@@ -34,7 +40,7 @@
         this.$axios(
           {
             method: 'post',
-            url: 'http://127.0.0.1:8048/hs/fileDownload',
+            url: `${sessionStorage.getItem('url')}/hs/fileDownload`,
             params: {
               fileId: '111'
             },

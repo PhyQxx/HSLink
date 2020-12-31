@@ -177,6 +177,8 @@
     margin-top: 1rem;
     text-align: center;
     height: 21rem;
+    position: sticky;
+    top: 1rem;
   }
   .el-radio-group{
     margin-bottom: 0!important;

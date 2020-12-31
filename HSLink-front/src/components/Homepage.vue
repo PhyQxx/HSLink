@@ -12,21 +12,21 @@
           </div>
           <el-carousel indicator-position="outside">
             <el-carousel-item v-for="(item,index) in rotationPhotoList" :key="index">
-              <img :src="item.fileName" height="100%" width="100%"/>
+              <img class="rotation-photo" :src='imgPath(item)'/>
             </el-carousel-item>
           </el-carousel>
         </div>
       </div>
       <div id="bottom">
         <div class="left">
-          <el-tabs v-model="activeName" @tab-click=""  v-loading="tabLoading">
+          <el-tabs v-model="activeName" v-loading="tabLoading">
             <el-tab-pane label="校园通知" name="first">
               <div class="newest-notice module">
                 <div class="title">
                   <i class="el-icon-chat-dot-square"></i> 最 新 通 知
                 </div>
                 <div class="content">
-                  <div class="one theme-font-blue" v-for="item in newestNotice" :data-id="item.id" >
+                  <div class="one theme-font-blue" v-for="(item, index) in newestNotice" :data-id="item.id" :key='index'>
                     <div class="type" @click="searchLabel(item.label)">
                       [{{item.label}}]
                     </div>
@@ -43,7 +43,7 @@
                   <i class="el-icon-chat-line-square"></i> 优 秀 建 议
                 </div>
                 <div class="content">
-                  <div class="one theme-font-blue" v-for="item in goodAdvice" :data-id="item.id">
+                  <div class="one theme-font-blue" v-for="(item, index) in goodAdvice" :data-id="item.id" :key='index'>
                     <div class="type" @click="searchLabel(item.label)">[{{item.label}}]</div>
                     <div class="text" @click="getContent(item.id)">{{item.title}}</div>
                     <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
@@ -58,7 +58,7 @@
                   <i class="el-icon-chat-square"></i> 神 奇 想 法
                 </div>
                 <div class="content">
-                  <div class="one theme-font-blue" v-for="item in magicalThinking" :data-id="item.id">
+                  <div class="one theme-font-blue" v-for="(item, index) in magicalThinking" :data-id="item.id"  :key='index'>
                     <div class="type" @click="searchLabel(item.label)">[{{item.label}}]</div>
                     <div class="text" @click="getContent(item.id)">{{item.title}}</div>
                     <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
@@ -75,7 +75,7 @@
               <i class="el-icon-trophy"></i>
               优 秀 教 师
             </div>
-            <div class="one" v-for="item in prominentTeacher">
+            <div class="one" v-for="(item, index) in prominentTeacher"  :key='index'>
               <div class="name theme-font-blue">{{item.name}}老师</div>
               <!--          <div class="subject theme-font-blue">数学</div>-->
               <!--            <div class="grade theme-font-blue">2016届</div>-->
@@ -87,7 +87,7 @@
               <i class="el-icon-trophy-1"></i>
               三 好 学 生
             </div>
-            <div class="one" v-for="item in meritStudent">
+            <div class="one" v-for="(item, index) in meritStudent" :key='index'>
               <div class="name theme-font-blue">{{item.name}}同学</div>
               <!--            <div class="grade theme-font-blue">2016届</div>-->
               <div class="subject theme-font-blue">{{item.class}}</div>
@@ -173,6 +173,12 @@
           this.getNoticeList();
       },
       methods: {
+        /**
+         * 图片地址
+         */
+        imgPath(item) {
+          return `${sessionStorage.getItem('url')}/hs/showImg/${item.fileEncryption}`
+        },
           //获取通知列表
         getNoticeList() {
           this.tabLoading = true;
@@ -187,16 +193,7 @@
         getRotationPhotoList() {
           this.$ajax.post('/hs/getRotationPhotoList',{},res=>{
             console.log("轮播图列表",res);
-            this.rotationPhotoList = [];
-            for (let i = 0; i < res.rotationPhotoList.length; i++) {
-              this.rotationPhotoList.push(
-                {
-                  id: res.rotationPhotoList[i].id,
-                  fileId: res.rotationPhotoList[i].fileId,
-                  fileName: require('../assets/img/carousel/'+res.rotationPhotoList[i].fileName)},
-              );
-            }
-            console.log("rotationPhotoList",this.rotationPhotoList)
+            this.rotationPhotoList = res.rotationPhotoList;
           })
         },
         searchLabel(label) {
@@ -219,7 +216,12 @@
     }
 </script>
 
-<style scoped>
+<style scoped>  
+  .rotation-photo{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
   .el-main{
     padding: 0.5rem 1rem;
   }

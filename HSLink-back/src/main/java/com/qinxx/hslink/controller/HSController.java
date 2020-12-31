@@ -34,6 +34,9 @@ public class HSController {
 
     @Resource
     HSService hsService;
+    /**文件路径*/
+    @Value("${filePath}")
+    private String filesPath;
 
     /**登录验证*/
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
@@ -476,5 +479,42 @@ public class HSController {
         Map<String,Object> result = hsService.updateNoticeRead(param);
         return result;
     }
+
+    /**
+     * 以流的形式写照片
+     *
+     * @param response
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    @RequestMapping("/showImg/{fileName}")
+    private void responPhoto(HttpServletResponse response, @PathVariable(value = "fileName") String fileName) throws IOException {
+        String filePath = filesPath + "\\" + fileName;
+        File imageFile = new File(filePath);
+        if (imageFile.exists()) {
+            FileInputStream fis = null;
+            OutputStream os = null;
+            try {
+                fis = new FileInputStream(imageFile);
+                os = response.getOutputStream();
+                int count = 0;
+                byte[] buffer = new byte[1024 * 8];
+                while ((count = fis.read(buffer)) != -1) {
+                    os.write(buffer, 0, count);
+                    os.flush();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fis.close();
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 }

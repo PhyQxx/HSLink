@@ -20,7 +20,7 @@
       :visible.sync="dialogVisible"
       width="40%">
       <div class="list">
-        <div class="one" v-for="item in list" >
+        <div class="one" v-for="(item, index) in list" :key='index'>
           <div class="type">[{{item.label}}]</div>
           <div class="text" @click="getContent(item.id)">{{item.title}}</div>
           <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>

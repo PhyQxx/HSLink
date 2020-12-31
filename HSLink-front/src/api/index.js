@@ -1,9 +1,6 @@
 // 配置API接口地址
 import de from "element-ui/src/locale/lang/de";
 
-// let root = 'http://192.168.10.29:8048'
-let root = 'http://106.53.113.158:8048'
-// let root = 'http://127.0.0.1:8048'
 // 引用axios
 let axios = require('axios')
 // 自定义判断元素类型JS
@@ -46,7 +43,7 @@ function apiAxios (method, url, params, success, failure) {
     url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
-    baseURL: root,
+    baseURL: sessionStorage.getItem('url'),
     withCredentials: false
   })
     .then(function (res) {

@@ -12,12 +12,10 @@
 </template>
 
 <script>
-  import noDate from '@/components/components/NoData'
   import person from '@/view/admin/personnelManagement/personnelManagement/PersonnelManagement'
   import registration from '@/view/admin/personnelManagement/registrationManagement/RegistrationManagement'
     export default {
       components: {
-        noDate,
         person,
         registration
       },

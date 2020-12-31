@@ -34,6 +34,11 @@ export default new Router({
             path: '/homepagemanagement',
             name: 'homepagemanagement',
             component:() => import('@/view/admin/homepageManagement/HomepageManagement')
+          },
+          {
+            path: '/helpreply',
+            name: 'helpreply',
+            component:() => import('@/view/admin/helpReply/HelpReply')
           }
         ]
       },

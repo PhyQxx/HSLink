@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    const url = `http://192.168.10.207:8048`;
+    sessionStorage.setItem('url', url);
+  }
 }
 </script>
 

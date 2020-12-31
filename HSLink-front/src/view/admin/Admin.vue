@@ -29,8 +29,7 @@
           <el-menu-item index="1" @click="goToHomepageManagement">首页管理</el-menu-item>
           <el-menu-item index="2" @click="goToArticleReview">文章审核</el-menu-item>
           <el-menu-item index="3" @click="goToPersonnelManagement">人员管理</el-menu-item>
-          <el-menu-item index="4" @click="goToHomepageManagement">注册管理</el-menu-item>
-          <el-menu-item index="5" @click="goToHomepageManagement">帮助答复</el-menu-item>
+          <el-menu-item index="5" @click="goToHelpReply">帮助答复</el-menu-item>
           <el-menu-item index="6" disabled>更多···</el-menu-item>
         </el-menu>
       </el-aside>
@@ -82,6 +81,10 @@
       //跳转首页管理
       goToHomepageManagement() {
         this.$router.push({name: "homepagemanagement"})
+      },
+      //跳转帮助答复
+      goToHelpReply() {
+        this.$router.push({name: "helpreply"})
       },
       timingTask(userId) {
         this.$ajax.post("/hs/timingTask",{userId:userId},r=>{
