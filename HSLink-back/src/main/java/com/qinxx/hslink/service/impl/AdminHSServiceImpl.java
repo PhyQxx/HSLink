@@ -1,13 +1,14 @@
 package com.qinxx.hslink.service.impl;
 
 import com.qinxx.hslink.dao.AdminHSMapper;
-import com.qinxx.hslink.dao.HSLinkMapper;
 import com.qinxx.hslink.service.AdminHSService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class AdminHSServiceImpl implements AdminHSService {
     @Resource
     AdminHSMapper adminHSMapper;
 
+    /**文件路径*/
+    @Value("${filePath}")
+    private String filesPath;
     /**
      * 获取待审核文章数据
      * @param param
@@ -171,6 +175,46 @@ public class AdminHSServiceImpl implements AdminHSService {
     public Map<String, Object> getRegisterManagementData(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> res = adminHSMapper.getRegisterManagementData(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
+     * 上传轮播图
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> uploadRotationPhoto(Map<String, Object> param) {
+        int res = 0;
+        Map<String, Object> result = new HashMap<>();
+        try {
+            res = adminHSMapper.uploadRotationPhoto(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> deleteRotationPhoto(Map<String, Object> param) {
+        int res = 0;
+        File file = new File(filesPath + "\\" + param.get("fileEncryption"));
+        // 路径为文件且不为空则进行删除
+        if (file.isFile() && file.exists()) {
+            file.delete();
+        }
+        Map<String, Object> result = new HashMap<>();
+        try {
+            res = adminHSMapper.deleteRotationPhoto(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+            res = 0;
+        }
         result.put("data",res);
         result.put("success",true);
         return result;

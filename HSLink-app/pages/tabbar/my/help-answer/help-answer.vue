@@ -171,8 +171,8 @@
 							this.historyHelpList.push(item);
 						}
 					})
-					this.notHelpNoData = res.data.length === 0 ? true : false;
-					this.historyHelpNoData = res.data.length === 0 ? true : false;
+					this.notHelpNoData = this.notHelpList.length === 0 ? true : false;
+					this.historyHelpNoData = this.historyHelpList.length === 0 ? true : false;
 					console.log("历史帮助列表",res);
 				},err => {
 					console.log("err",err);

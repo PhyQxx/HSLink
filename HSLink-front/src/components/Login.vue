@@ -213,7 +213,7 @@
           } else {
             if (this.form.role === '管理员') {
               this.$router.push({
-                name: "admin"
+                name: "homepagemanagement"
             })
             } else {
               this.$router.push({

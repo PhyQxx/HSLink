@@ -173,6 +173,8 @@
     margin-top: 1rem;
     text-align: center;
     height: 21rem;
+    position: sticky;
+    top: 8.8rem;
   }
   .el-radio-group{
     margin-bottom: 0!important;
@@ -180,6 +182,7 @@
   .second{
     background: #EEFCFE;
     padding: 0 20%;
+    margin-top: 7.3rem;
   }
   .user-cancellation{
     float: right;
@@ -217,5 +220,11 @@
     background-size: 100%;
     background-position: 0 2rem;
     background-repeat: no-repeat;
+    position: fixed;
+    width: 100%;
+    background-color: #fff;
+    z-index: 2000;
+    top: 0;
+    padding-top: 0.2rem;
   }
 </style>

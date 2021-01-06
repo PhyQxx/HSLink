@@ -8,6 +8,8 @@
           <span class="pointer special-font-blue " v-if="isLogin" @click="goPersonalInfo(userInfo.user_id)">欢迎：{{userInfo.real_name}}（{{userInfo.user_type}}）</span>
           <span class="pointer special-font-blue " v-if="isLogin" @click="cancellation">注销</span>
           <el-divider direction="vertical"></el-divider>
+          <span class="pointer special-font-blue " v-if="userInfo.user_type === '管理员'" @click="admin">后台管理</span>
+          <el-divider direction="vertical"></el-divider>
           <span class="pointer special-font-blue" @click="service">客服中心</span>
           <el-divider direction="vertical"></el-divider>
           <span class="pointer special-font-blue" @click="opinion">用户意见</span>
@@ -74,6 +76,12 @@
             +day2.getMinutes():day2.getMinutes())+"分"+(day2.getSeconds()<10?"0"+day2.getSeconds():day2.getSeconds())+"秒";},1000)
     },
     methods:{
+      /**
+       * 跳转到后台管理模式
+       */
+      admin() {
+        this.$router.push({name: 'homepagemanagement'});
+      },
       timingTask(userId) {
         this.$ajax.post("/hs/timingTask",{userId:userId},r=>{
           console.log(r)

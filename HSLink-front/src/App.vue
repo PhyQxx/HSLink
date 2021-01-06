@@ -8,7 +8,8 @@
 export default {
   name: 'App',
   mounted() {
-    const url = `http://192.168.10.207:8048`;
+    // const url = `http://192.168.10.29:8048`;
+    const url = `http://127.0.0.1:8048`;
     sessionStorage.setItem('url', url);
   }
 }

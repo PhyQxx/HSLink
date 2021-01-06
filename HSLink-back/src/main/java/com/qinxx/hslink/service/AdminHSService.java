@@ -69,4 +69,18 @@ public interface AdminHSService {
      * @return
      */
     Map<String, Object> getRegisterManagementData(Map<String, Object> param);
+
+    /**
+     * 上传轮播图
+     * @param param
+     * @return
+     */
+    Map<String, Object> uploadRotationPhoto(Map<String, Object> param);
+
+    /**
+     * 删除轮播图
+     * @param param
+     * @return
+     */
+    Map<String, Object> deleteRotationPhoto(Map<String, Object> param);
 }

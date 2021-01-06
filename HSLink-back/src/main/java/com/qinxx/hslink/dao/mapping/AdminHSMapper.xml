@@ -9,6 +9,13 @@
 	    ( uuid(), (SELECT release_id FROM hs_notice WHERE id = #{articleId}), #{articleId}, #{operating}, now( ) )
     </insert>
 
+    <!--上传轮播图-->
+    <insert id="uploadRotationPhoto" parameterType="map">
+        INSERT INTO hs_file_type ( id, file_id, type_code, type_name, create_time )
+        VALUES
+            ( uuid( ), #{fileId}, 'rotationChart', '轮播图', now( ) )
+    </insert>
+
     <!--审核文章（通过/驳回）-->
     <update id="verifyArticle" parameterType="map">
         UPDATE hs_notice set is_pass = #{operating} where id = #{articleId}
@@ -33,6 +40,11 @@
     <update id="passRegister" parameterType="map">
         update hs_user set take_effect = #{takeEffect} where user_id = #{userId}
     </update>
+
+    <!--删除轮播图-->
+    <delete id="deleteRotationPhoto" parameterType="map">
+        DELETE from hs_file_type where id = #{id}
+    </delete>
 
     <!--获取待审核文章数据-->
     <select id="getVerifyList" parameterType="map" resultType="map">

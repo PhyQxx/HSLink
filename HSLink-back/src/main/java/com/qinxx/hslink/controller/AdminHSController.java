@@ -1,7 +1,6 @@
 package com.qinxx.hslink.controller;
 
 import com.qinxx.hslink.service.AdminHSService;
-import com.qinxx.hslink.service.HSService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -143,6 +142,32 @@ public class AdminHSController {
     public Map<String, Object> getMyPageNumber(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
         result = AdminhsService.getMyPageNumber(param);
+        return result;
+    }
+
+    /**
+     * 上传轮播图
+     * @param param
+     * @return
+     */
+    @PostMapping("/uploadRotationPhoto")
+    @ResponseBody
+    public Map<String, Object> uploadRotationPhoto(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = AdminhsService.uploadRotationPhoto(param);
+        return result;
+    }
+
+    /**
+     * 删除轮播图
+     * @param param
+     * @return
+     */
+    @PostMapping("/deleteRotationPhoto")
+    @ResponseBody
+    public Map<String, Object> deleteRotationPhoto(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = AdminhsService.deleteRotationPhoto(param);
         return result;
     }
 

@@ -5,7 +5,6 @@
         <rotation-photo-management></rotation-photo-management>
       </el-tab-pane>
       <el-tab-pane label="版块管理" name="2">
-        <registration></registration>
       </el-tab-pane>
     </el-tabs>
   </div>

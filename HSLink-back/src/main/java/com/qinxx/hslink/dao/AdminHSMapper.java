@@ -80,4 +80,18 @@ public interface AdminHSMapper {
      * @return
      */
     List<Map<String, Object>> getRegisterManagementData(Map<String, Object> param);
+
+    /**
+     * 上传轮播图
+     * @param param
+     * @return
+     */
+    int uploadRotationPhoto(Map<String, Object> param);
+
+    /**
+     * 删除轮播图
+     * @param param
+     * @return
+     */
+    int deleteRotationPhoto(Map<String, Object> param);
 }

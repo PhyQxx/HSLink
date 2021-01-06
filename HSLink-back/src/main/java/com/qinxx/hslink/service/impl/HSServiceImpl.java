@@ -359,7 +359,7 @@ public class HSServiceImpl implements HSService {
         if(httpServletRequest instanceof MultipartHttpServletRequest){
             multipartHttpServletRequest = (MultipartHttpServletRequest) httpServletRequest;
         }else{
-            return dealResultMap(false, "上传失败");
+            return dealResultMap(false, "上传失败", new HashMap<>());
         }
         //获取MultipartFile文件信息(注意参数为前端对应的参数名称)
         MultipartFile mf = multipartHttpServletRequest.getFile("file");
@@ -380,7 +380,7 @@ public class HSServiceImpl implements HSService {
             mf.transferTo(file);
         } catch (IOException e) {
             e.printStackTrace();
-            return dealResultMap(false, "上传失败");
+            return dealResultMap(false, "上传失败", new HashMap<>());
         }
         //保存文件路径
         Map<String,Object> param = new HashMap<>();
@@ -389,7 +389,7 @@ public class HSServiceImpl implements HSService {
         param.put("fileEncryption",id+fileName);
         param.put("filePath",String.valueOf(file));
         hsLinkMapper.insertFilePath(param);
-        return dealResultMap(true, "上传成功");
+        return dealResultMap(true, "上传成功", param);
     }
 
     @Override
@@ -764,10 +764,13 @@ public class HSServiceImpl implements HSService {
      * @param message
      * @return
      */
-    private Map<String, Object> dealResultMap(boolean flag, String message) {
+    private Map<String, Object> dealResultMap(boolean flag,
+                                              String message,
+                                              Map<String, Object> fileInfo) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("flag",flag);
         map.put("message",message);
+        map.put("fileInfo", fileInfo);
         return map;
     }
 }
