@@ -21,4 +21,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
 
 ##文件保存路径
-filePath: ${user.dir}\src\main\static\files
+# Linux环境下
+filePath: /usr/local/src/phy/file
+# Window环境下
+#filePath: ${user.dir}\src\main\static\files

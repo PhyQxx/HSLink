@@ -483,6 +483,9 @@ public class HSController {
      */
     @RequestMapping("/showImg/{fileName}")
     private void responPhoto(HttpServletResponse response, @PathVariable(value = "fileName") String fileName) throws IOException {
+        //Linux环境下的路径
+//        String filePath = filesPath + "/" + fileName;
+        //Window环境下的路径
         String filePath = filesPath + "\\" + fileName;
         File imageFile = new File(filePath);
         if (imageFile.exists()) {

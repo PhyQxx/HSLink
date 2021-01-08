@@ -203,6 +203,9 @@ public class AdminHSServiceImpl implements AdminHSService {
     @Override
     public Map<String, Object> deleteRotationPhoto(Map<String, Object> param) {
         int res = 0;
+        //Linux环境下的路径
+//        File file = new File(filesPath + "/" + param.get("fileEncryption"));
+        //Window环境下的路径
         File file = new File(filesPath + "\\" + param.get("fileEncryption"));
         // 路径为文件且不为空则进行删除
         if (file.isFile() && file.exists()) {
