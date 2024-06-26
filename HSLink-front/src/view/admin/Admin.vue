@@ -88,7 +88,6 @@
       },
       timingTask(userId) {
         this.$ajax.post("/hs/timingTask",{userId:userId},r=>{
-          console.log(r)
         })
       },
       goPersonalInfo(userId) {
@@ -97,9 +96,7 @@
         this.$refs.child.getUserInfo();
       },
       goMore() {
-        this.$message({
-          message:"期待更多内容",
-        })
+        this.$notify.info("期待更多内容")
 
       },
       help() {
@@ -108,7 +105,7 @@
         })
       },
       forget() {
-        this.$message("请联系管理员重置密码")
+        this.$notify.info("请联系管理员重置密码")
       },
       register() {
         this.$router.push({
@@ -119,10 +116,10 @@
         })
       },
       opinion() {
-        this.$message('用户意见请发邮箱至：617594538@qq.com')
+        this.$notify.info('用户意见请发邮箱至：617594538@qq.com')
       },
       service() {
-        this.$message('客服中心请拨打：15006732580')
+        this.$notify.info('客服中心请拨打：15006732580')
       },
       login() {
         this.$router.push({
@@ -141,7 +138,7 @@
           })
           // location.reload()
         }).catch(() => {
-          this.$message({
+          this.$notify({
             type: 'info',
             message: '已取消退出'
           });

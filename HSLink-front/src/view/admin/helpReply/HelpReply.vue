@@ -32,9 +32,8 @@
          * 切换tab
          */
         handleClick(tab, event) {
-          console.log(tab, event);
         },
-        
+
       }
     }
 </script>

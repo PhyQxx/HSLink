@@ -52,10 +52,10 @@
       mounted() {
           this.$ajax.post("/hs/getListByAttribute",{type:"校园通知",text:''},r=>{
             let list = [];
-            for (let i = 0; i < r.length; i++) {
+            for (let i = 0; i < r.data.length; i++) {
               let one = {};
-              one.date = r[i].release_time.substring(0,10);
-              one.content = r[i].label;
+              one.date = r.data[i].release_time.substring(0,10);
+              one.content = r.data[i].label;
               list.push(one)
             }
             this.resDate = list
@@ -76,11 +76,10 @@
         },
         getDay(date) {
           this.dialogVisible = true
-          console.log(date)
           this.$ajax.post("/hs/getListByAttribute",{release_time: date.day,text: '',type:"校园通知"},
             r=> {
-              this.list  = r;
-              this.length  = r.length;
+              this.list  = r.data;
+              this.length  = r.data.length;
               })
         },
         dealMyDate(v) {

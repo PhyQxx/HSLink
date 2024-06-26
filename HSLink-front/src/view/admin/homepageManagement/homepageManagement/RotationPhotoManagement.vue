@@ -1,13 +1,12 @@
 <template>
   <div>
-      <div class="title">轮播图管理</div>
-      <div class="img-list">
+      <div class="img-list" v-loading="loading">
         <div class="img" v-for="(img, index) in rotationPhotoList" :key='index'>
-          <el-image class="rotation-photo" 
-                    :src='imgPath(img)' 
+          <el-image class="rotation-photo"
+                    :src='imgPath(img)'
                     :preview-src-list="srcList"
-                    fit='scale-down'></el-image>
-          <i class="el-icon-circle-close delete-icon pointer" @click="deleteImg(img)"></i>
+                    fit='scale-down'/>
+          <i class="el-icon-circle-close delete-icon pointer" @click="deleteImg(img)"/>
         </div>
         <el-upload
           class="upload-demo"
@@ -17,10 +16,9 @@
           :on-success='success'
           :on-error='error'>
           <div class="add-img pointer">
-            <i class="el-icon-plus"></i>
+            <i class="el-icon-plus"/>
           </div>
         </el-upload>
-        
       </div>
   </div>
 </template>
@@ -29,6 +27,8 @@
     export default {
       data() {
           return{
+            //加载标志
+            loading: false,
             //轮播图图片
             rotationPhotoList: [],
             //轮播图片URL列表
@@ -45,31 +45,24 @@
          * 上传图片成功
          */
         success(response, file, fileList) {
-          console.log('上传图片', response);
           this.$ajax.post('/admin/uploadRotationPhoto', {fileId: response.fileInfo.id}, res => {
-            if (res === 1) {
-              this.$message({
+            if (res.data === 1) {
+              this.$notify({
                 type: 'success',
                 message: '上传成功'
               })
               this.getRotationPhotoList();
             } else {
-              this.$message({
-                type: 'error',
-                message: '网络异常，请稍后再试'
-              })
+              this.$notify.error('网络异常，请稍后再试')
             }
           })
-          
+
         },
         /**
          * 上传图片失败
          */
         error() {
-          this.$message({
-            type: 'error',
-            message: '网络异常，请稍后再试'
-          })
+          this.$notify.error('网络异常，请稍后再试')
         },
         /**
          * 删除图片
@@ -79,17 +72,14 @@
             id: img.id,
             fileEncryption: img.fileEncryption
           }, res => {
-            if (res === 1) {
-              this.$message({
+            if (res.data === 1) {
+              this.$notify({
                 type: 'success',
                 message: '删除成功'
               })
               this.getRotationPhotoList();
             } else {
-              this.$message({
-                type: 'error',
-                message: '网络异常，请稍后再试'
-              })
+              this.$notify.error('网络异常，请稍后再试')
             }
           })
         },
@@ -101,14 +91,15 @@
         },
         //获取轮播图片
         getRotationPhotoList() {
+          this.loading = true;
           this.$ajax.post('/hs/getRotationPhotoList',{},res=>{
-            console.log("轮播图列表",res);
-            if (res.rotationPhotoList.length > 0) {
-              this.rotationPhotoList = res.rotationPhotoList;
-              res.rotationPhotoList.forEach(img => {
+            if (res.data.rotationPhotoList.length > 0) {
+              this.rotationPhotoList = res.data.rotationPhotoList;
+              res.data.rotationPhotoList.forEach(img => {
                 this.srcList.push(`${sessionStorage.getItem('url')}/hs/showImg/${img.fileEncryption}`)
               });
             }
+            this.loading = false
           })
         },
       }

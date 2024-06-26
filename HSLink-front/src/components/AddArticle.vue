@@ -9,23 +9,18 @@
       </div>
 
       <div class="indexContainer">
-        <div class="maskContainer" v-if="dilogStatus">
-          <div class="contentContainer">
-            <div class="closeBtnContainer" @click="closeMaskFn"></div>
-            <textarea class="showAreaContainer" v-model="msgShow" readonly></textarea>
-          </div>
-        </div>
         <div class="editorContainer">
-          <markdown
-            :mdValuesP="msg.mdValue"
-            :fullPageStatusP="false"
-            :editStatusP="true"
-            :previewStatusP="true"
-            :navStatusP="true"
-            :icoStatusP="true"
-            @childevent="childEventHandler"
-            ref="markdown"
-          ></markdown>
+          <mavon-editor
+                  :placeholder="'开始创作···'"
+                  :toolbars="toolbars"
+                  :toolbarsBackground="'#f9f9f9'"
+                  @change="change"
+                  @imgAdd="imgAdd"
+                  @imgDel="imgDel"
+                  ref="md"
+                  style="height: 50vh"
+                  v-model="content"
+          />
         </div>
       </div>
       <el-button class="" type="primary" @click="publish">发 表</el-button>
@@ -47,14 +42,44 @@
     name: "Posting",
     data() {
       return {
+        //参数
+        toolbars: {
+          bold: true, // 粗体
+          italic: true, // 斜体
+          header: true, // 标题
+          underline: true, // 下划线
+          strikethrough: true, // 中划线
+          mark: true, // 标记
+          superscript: true, // 上角标
+          subscript: true, // 下角标
+          quote: true, // 引用
+          ol: true, // 有序列表
+          ul: true, // 无序列表
+          link: true, // 链接
+          imagelink: true, // 图片链接
+          code: true, // code
+          table: true, // 表格
+          fullscreen: false, // 全屏编辑
+          readmodel: false, // 沉浸式阅读
+          htmlcode: true, // 展示html源码
+          help: true, // 帮助
+          /* 1.3.5 */
+          undo: true, // 上一步
+          redo: true, // 下一步
+          trash: true, // 清空
+          save: false, // 保存（触发events中的save事件）
+          navigation: true, // 导航目录
+          alignleft: true, // 左对齐
+          aligncenter: true, // 居中
+          alignright: true, // 右对齐
+          subfield: true, // 单双栏模式
+          preview: false // 预览
+        },
         label: "",
         title:"",
         type:'',
-        msgShow:'我要显示的内容',
+        content:'',
         dilogStatus:false,
-        msg: {
-          mdValue:''
-        },
         flag:false,
       }
     },
@@ -73,33 +98,36 @@
       }
     },
     methods: {
+      imgAdd (pos, file) {
+        // 第一步.将图片上传到服务器.
+        const formData = new FormData();
+        formData.append('image', file);
+        this.$ajax.post('https://phy0412.top/prod-api/open/uploadImage', formData, res => {
+          this.$refs.md.$img2Url(pos, 'https://phy0412.top/prod-api' + res.imgUrl)
+        })
+      },
+      imgDel (pos) {
+        delete this.img_file[pos]
+      },
+      change (value, render) {
+        this.html = render
+      },
       goBack() {
         this.$router.back(-1)
       },
-      childEventHandler:function(res){
-        // res会传回一个data,包含属性mdValue和htmlValue，具体含义请自行翻译
-        this.msg=res;
-      },
-      closeMaskFn:function(){
-        this.msgShow='';
-        this.dilogStatus=false;
-      },
-      handleChange(value) {
-        console.log(value);
-      },
       publish() {
-        if (this.label.length != 4) {
-          this.$message({
+        if (this.label.length !== 4) {
+          this.$notify({
             message: "文章标签只能为4个汉字",
             type: "warning"
           })
-        } else if (this.title == '') {
-          this.$message({
+        } else if (this.title === '') {
+          this.$notify({
             message: "文章标题不能为空",
             type: "warning"
           })
-        } else if (this.msg.mdValue == '') {
-          this.$message({
+        } else if (this.content === '') {
+          this.$notify({
             message: "编辑内容不能为空",
             type: "warning"
           })
@@ -107,13 +135,12 @@
           if (sessionStorage.getItem("releaseType") === "classNotice") {
             let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
             this.$ajax.post("/hs/addClassNotice",{classId:userInfo.class_id,className:userInfo.class_name,
-              label:this.label,title:this.title,content:this.msg.mdValue,releaseId:userInfo.user_id,
+              label:this.label,title:this.title,content:this.html,content_md: this.content ,releaseId:userInfo.user_id,
               release_time:getDate(),type:this.type},r=> {
-              if (r === 1) {
+              if (r.data === 1) {
                 this.$ajax.post("/hs/timingTask",{userId:userInfo.user_id},r=>{
-                  console.log(r)
                 });
-                this.$message({
+                this.$notify({
                   message: "发布成功",
                   type: "success"
                 });
@@ -125,13 +152,12 @@
             sessionStorage.setItem("releaseType","")
           } else {
             let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-            this.$ajax.post("/hs/addArticle",{label:this.label,title:this.title,content:this.msg.mdValue,release_id:userInfo.user_id,
+            this.$ajax.post("/hs/addArticle",{label:this.label,title:this.title,content:this.html,content_md: this.content,release_id:userInfo.user_id,
               release_time:getDate(),type:this.type},r=>{
-              if (r === 1) {
+              if (r.data === 1) {
                 this.$ajax.post("/hs/timingTask",{userId:userInfo.user_id},r=>{
-                  console.log(r)
                 });
-                this.$message({
+                this.$notify({
                   message: "发表成功",
                   type: "success"
                 });
@@ -143,9 +169,6 @@
           }
         }
       }
-    },
-    components: {
-      markdown
     },
   }
 </script>
@@ -170,7 +193,7 @@
     padding-bottom: 1rem;
   }
   .editorContainer{
-    height: 500px;
+    height: fit-content;
   }
   .integral img{
     display: inline-block;

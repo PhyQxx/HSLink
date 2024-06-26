@@ -5,6 +5,7 @@
         <rotation-photo-management></rotation-photo-management>
       </el-tab-pane>
       <el-tab-pane label="版块管理" name="2">
+        <plate-management></plate-management>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -12,9 +13,11 @@
 
 <script>
   import rotationPhotoManagement from '@/view/admin/homepageManagement/homepageManagement/RotationPhotoManagement';
+  import plateManagement from '@/view/admin/homepageManagement/plateManagement/PlateManagement.vue';
     export default {
       components: {
-        rotationPhotoManagement
+        rotationPhotoManagement,
+        plateManagement
       },
       name: "HomepageManagement",
       data() {
@@ -29,9 +32,8 @@
          * 切换tab
          */
         handleClick(tab, event) {
-          console.log(tab, event);
         },
-        
+
       }
     }
 </script>

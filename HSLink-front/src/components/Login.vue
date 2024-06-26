@@ -13,7 +13,7 @@
                      close-on-click-modal=false
                      label-position="left">
               <el-form-item label="角色" prop="role">
-                <el-select v-model="form.role" placeholder="请选择">
+                <el-select v-model="form.role" placeholder="请选择角色">
                   <el-option :value="item.dd_detail" v-for="(item,index) in userTypeList" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -35,7 +35,7 @@
                     <span style="float: right; color: #8492a6; font-size: 13px" @click="deleteUser(item.username,index)"><i class="el-icon-circle-close"></i></span>
                   </el-option>
                 </el-select>-->
-                <el-input v-model="form.username" type="text" placeholder="请输入手机号或姓名"></el-input>
+                <el-input v-model="form.username" type="text" placeholder="请输入手机号"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password" type="password" placeholder="请输入密码" @keyup.enter.native="login"></el-input>
@@ -55,23 +55,22 @@
                      close-on-click-modal=false
                      label-position="left">
               <el-form-item label="角色" prop="role">
-                <el-select v-model="form1.role" placeholder="请选择">
-<!--                  <el-option value="学生"></el-option>-->
+                <el-select v-model="form1.role" placeholder="请选择角色">
                   <el-option value="家长"></el-option>
                   <el-option value="教师"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="姓名" prop="realName">
-                <el-input v-model="form1.realName" type="text"></el-input>
+                <el-input v-model="form1.realName" placeholder="请输入姓名" type="text"></el-input>
               </el-form-item>
               <el-form-item label="手机号" prop="mobile">
-                <el-input v-model="form1.mobile" type="text"></el-input>
+                <el-input v-model="form1.mobile" placeholder="请输入手机号" type="text"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input v-model="form1.password" type="password"></el-input>
+                <el-input v-model="form1.password" placeholder="请输入密码" type="password"></el-input>
               </el-form-item>
               <el-form-item label="确认密码" prop="againPassword" @keyup.enter.native="register">
-                <el-input v-model="form1.againPassword" type="password"></el-input>
+                <el-input v-model="form1.againPassword" placeholder="请确认密码" type="password"></el-input>
               </el-form-item>
               <el-button type="primary" @click="register">提 交</el-button>
             </el-form>
@@ -95,7 +94,7 @@
         }
       }
       let type;
-      if (this.$route.params.type == "login" || this.$route.params.type == "register") {
+      if (this.$route.params.type === "login" || this.$route.params.type === "register") {
         type = this.$route.params.type
       } else {
         type = "login"
@@ -197,19 +196,21 @@
        */
       getUserType() {
         this.$ajax.post('/hs/getDictionariesData',{code: 'userType'},res => {
-          console.log('用户类型字典项', res);
-          this.userTypeList = res;
+          this.userTypeList = res.data;
         })
       },
       forget() {
-        this.$message("请联系管理员重置密码")
+        this.$notify("请联系管理员重置密码")
       },
       login() {
         this.loading = true;
         this.$ajax.post("/hs/login",{role:this.form.role,username: this.form.username,password:this.form.password},r=>{
-          if (r == ''  || r == null) {
-            this.$message.error('用户名和密码不匹配');
-            this.loading = false;
+          if (r.data === ''  || r.data === null) {
+            this.$notify.error('用户名和密码不匹配');
+          } else if (r.data.take_effect === '0') {
+            this.$notify.error('该账户未通过审核');
+          } else if (r.data.frozen_state === '1') {
+            this.$notify.error('该账户已冻结');
           } else {
             if (this.form.role === '管理员') {
               this.$router.push({
@@ -220,7 +221,7 @@
                 name: "homepage"
             })
             }
-            this.$message({
+            this.$notify({
               message: "登录成功",
               type: "success"
             });
@@ -249,21 +250,20 @@
                 sessionStorage.setItem("rememberList",JSON.stringify(rememberList));
               }
             }*/
-            this.loading = false;
-            sessionStorage.setItem("userInfo",JSON.stringify(r));
+            sessionStorage.setItem("userInfo",JSON.stringify(r.data));
             // location.reload();
           }
+          this.loading = false;
         })
       },
       register() {
         this.$ajax.post("/hs/register",{type:this.form1.role,realname:this.form1.realName,mobile:this.form1.mobile,password:this.form1.password},r=>{
-          console.log(r)
-          if (r == '0') {
-            this.$message.error('该手机号已被注册');
+          if (r.data === 0) {
+            this.$notify.error('该手机号已被注册');
             this.form1.password = '';
             this.form1.againPassword = '';
           } else {
-            this.$message({
+            this.$notify({
               message: "注册成功",
               type: "success"
             });

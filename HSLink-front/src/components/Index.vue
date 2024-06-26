@@ -18,7 +18,7 @@
           <el-divider direction="vertical" v-if="!isLogin"></el-divider>
           <span class="pointer special-font-blue" v-if="isLogin" @click="forget">忘记密码</span>
           <el-divider direction="vertical" v-if="isLogin"></el-divider>
-          <span class="pointer special-font-blue" @click="help">帮助中心</span>
+          <span class="pointer special-font-blue" @click="goToPage('help')">帮助中心</span>
         </div>
       </div>
     </el-header>
@@ -27,12 +27,8 @@
       <el-menu
         default-active="1"
         class="el-menu-vertical-demo">
-        <el-menu-item index="1" @click="goHomepage">首页</el-menu-item>
-        <el-menu-item index="2" @click="goSchoolNotice">校园通知</el-menu-item>
-        <el-menu-item index="3" @click="goMyClass">我的班级</el-menu-item>
-        <el-menu-item index="4" @click="goParentsOpinion">家长意见</el-menu-item>
-        <el-menu-item index="5" @click="goStudentThought">学生想法</el-menu-item>
-        <el-menu-item index="6" @click="goMore" disabled>更多···</el-menu-item>
+        <el-menu-item :key="item.index" :index="item.path" @click="goToPage(item.path)" v-for="item in menuList">{{item.name}}</el-menu-item>
+        <el-menu-item index="100" @click="goMore" disabled>更多···</el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>
@@ -54,6 +50,14 @@
           real_name: '',
           user_type: '',
         },
+        //菜单目录
+        menuList: [
+          {name: '首页', path: 'homepage', index: '1'},
+          {name: '校园通知', path: 'schoolnotice', index: '2'},
+          {name: '我的班级', path: 'myclass', index: '3'},
+          {name: '家长意见', path: 'parentsproposal', index: '4'},
+          {name: '学生想法', path: 'studentthought', index: '5'},
+        ]
       }
     },
     mounted() {
@@ -61,7 +65,7 @@
       /*setInterval(()=>{
         this.timingTask(userInfo.user_id)
       },60000);*/
-      if (userInfo == '' || userInfo === null) {
+      if (userInfo === '' || userInfo === null) {
 
       } else {
         this.isLogin = true;
@@ -84,7 +88,6 @@
       },
       timingTask(userId) {
         this.$ajax.post("/hs/timingTask",{userId:userId},r=>{
-          console.log(r)
         })
       },
       goPersonalInfo(userId) {
@@ -93,42 +96,22 @@
         this.$refs.child.getUserInfo();
       },
       goMore() {
-        this.$message({
-          message:"期待更多内容",
-        })
+        this.$notify("期待更多内容",)
 
       },
-      goMyClass() {
-        if (JSON.parse(sessionStorage.getItem("userInfo")).class_name === undefined) {
-          this.$message.warning("您没有加入任何班级")
-        } else {
-          if (this.isLogin === true) {
-            this.$router.push({name: "myclass"})
+      goToPage(path) {
+        if (path === 'myclass') {
+          if (JSON.parse(sessionStorage.getItem("userInfo")).class_name === undefined) {
+            this.$message.warning("您没有加入任何班级")
           } else {
-            this.$message.warning("请先登录")
-            this.$router.push({name: "login"})
+            this.$router.push({name: path})
           }
+        } else {
+          this.$router.push({name: path})
         }
       },
-      goStudentThought() {
-        this.$router.push({name: "studentthought"})
-      },
-      goParentsOpinion() {
-        this.$router.push({name: "parentsproposal"})
-      },
-      goSchoolNotice() {
-        this.$router.push({name: "schoolnotice"})
-      },
-      goHomepage() {
-        this.$router.push({name: "homepage"})
-      },
-      help() {
-        this.$router.push({
-          name: "help",
-        })
-      },
       forget() {
-        this.$message("请联系管理员重置密码")
+        this.$notify("请联系管理员重置密码")
       },
       register() {
         this.$router.push({
@@ -139,10 +122,10 @@
         })
       },
       opinion() {
-        this.$message('用户意见请发邮箱至：617594538@qq.com')
+        this.$notify('用户意见请发邮箱至：617594538@qq.com')
       },
       service() {
-        this.$message('客服中心请拨打：15006732580')
+        this.$notify('客服中心请拨打：15006732580')
       },
       login() {
         this.$router.push({
@@ -161,10 +144,7 @@
           })
           // location.reload()
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          });
+          this.$notify.info('已取消退出');
         });
       }
     },

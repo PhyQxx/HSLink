@@ -49,14 +49,13 @@
                 answerId: userInfo.user_id,
                 answer: value,
                 id: help.id}, res => {
-                console.log('帮助解决', res);
-                if (res === 1) {
-                  this.$message({
+                if (res.data === 1) {
+                  this.$notify({
                     type: 'success',
                     message: '提交成功'
                   });
                 } else {
-                  this.$message.error("提交失败")
+                  this.$notify.error("提交失败")
                 }
               })
             })
@@ -73,13 +72,12 @@
              */
             getHelpAnswerList() {
               this.$ajax.post('/admin/getHelpAnswerList', {}, res => {
-                res.forEach(item => {
+                res.data.forEach(item => {
                   if (item.answer_id === undefined) {
                     this.notHelpList.push(item);
                   }
                   this.notHelpNoData = this.notHelpList.length === 0 ? true : false;
                 });
-                console.log('未帮助答复列表', this.notHelpList);
               })
             }
         }

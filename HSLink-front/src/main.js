@@ -6,15 +6,20 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import '@/assets/css/public.css'
-// 引用API文件
 import api from './api/index.js'
 import axios from 'axios'
-Vue.prototype.$axios = axios;
-// 将API方法绑定到全局
-import marked from 'marked'
+import Pagination from "@/components/components/Pagination";
 import scroll from 'vue-scroll'
+import  mavonEditor  from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import { getDict } from '@/api/system/dict'
+
+Vue.prototype.getDict = getDict;
+Vue.prototype.$axios = axios;
 Vue.prototype.$ajax = api;
+Vue.component('Pagination', Pagination);
 Vue.config.productionTip = false;
+Vue.use(mavonEditor);
 Vue.use(ElementUI);
 Vue.use(scroll);
 /* eslint-disable no-new */

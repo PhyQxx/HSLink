@@ -1,5 +1,6 @@
 package com.qinxx.hslink.service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,13 @@ public interface AdminHSService {
      * @return
      */
     Map<String, Object> getPersonnelManagement(Map<String, Object> param);
+
+    /**
+     * 获取人员详情
+     * @param param
+     * @return
+     */
+    Map<String, Object> getPersonInfo(Map<String, Object> param);
 
     /**
      * 审核文章（通过/驳回）
@@ -83,4 +91,26 @@ public interface AdminHSService {
      * @return
      */
     Map<String, Object> deleteRotationPhoto(Map<String, Object> param);
+
+
+    /**
+     * 删除人员
+     * @param ids
+     * @return
+     */
+    int deletePersonByIds(String[] ids);
+
+    /**
+     * 获取班级列表
+     * @param params
+     * @return
+     */
+    List<Map<String, Object>> selectClassList(Map<String, Object> params);
+
+    /**
+     * 获取职务列表
+     * @param params
+     * @return
+     */
+    List<Map<String, Object>> selectPostList(Map<String, Object> params);
 }

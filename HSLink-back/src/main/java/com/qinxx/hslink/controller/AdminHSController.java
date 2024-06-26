@@ -1,24 +1,25 @@
 package com.qinxx.hslink.controller;
 
+import com.qinxx.hslink.model.HsWinners;
+import com.qinxx.hslink.model.base.AjaxResult;
 import com.qinxx.hslink.service.AdminHSService;
+import com.qinxx.hslink.service.IHsWinnersService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author PHY
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
-public class AdminHSController {
+public class AdminHSController extends BaseController {
 
     /**
      * 日志
@@ -26,7 +27,10 @@ public class AdminHSController {
     private static Logger logger = LogManager.getLogger(HSController.class);
 
     @Resource
-    AdminHSService AdminhsService;
+    AdminHSService adminhsService;
+    @Resource
+    private IHsWinnersService hsWinnersService;
+
 
     /**
      * 获取待审核文章列表
@@ -34,10 +38,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/getVerifyList")
-    @ResponseBody
     public Map<String, Object> getVerifyList(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.getVerifyList(param);
+        result = adminhsService.getVerifyList(param);
         return result;
     }
 
@@ -47,10 +50,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/verifyArticle")
-    @ResponseBody
     public Map<String, Object> verifyArticle(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.verifyArticle(param);
+        result = adminhsService.verifyArticle(param);
         return result;
     }
 
@@ -60,10 +62,30 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/getPersonnelManagement")
-    @ResponseBody
     public Map<String, Object> getPersonnelManagement(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.getPersonnelManagement(param);
+        result = adminhsService.getPersonnelManagement(param);
+        return result;
+    }
+
+    /**
+     * 删除人员信息
+     */
+    @DeleteMapping("/person/{ids}")
+    public AjaxResult removePerson(@PathVariable String[] ids)
+    {
+        return toAjax(adminhsService.deletePersonByIds(ids));
+    }
+
+    /**
+     * 获取人员详情
+     * @param param
+     * @return
+     */
+    @PostMapping("/getPersonInfo")
+    public Map<String, Object> getPersonInfo(@RequestBody Map<String,Object> param){
+        Map<String, Object> result = new HashMap<>();
+        result = adminhsService.getPersonInfo(param);
         return result;
     }
 
@@ -73,10 +95,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/peopleManagement")
-    @ResponseBody
     public Map<String, Object> peopleManagement(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.peopleManagement(param);
+        result = adminhsService.peopleManagement(param);
         return result;
     }
 
@@ -86,10 +107,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/getHelpAnswerList")
-    @ResponseBody
     public Map<String, Object> getHelpAnswerList(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.getHelpAnswerList(param);
+        result = adminhsService.getHelpAnswerList(param);
         return result;
     }
 
@@ -99,10 +119,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/answerHelp")
-    @ResponseBody
     public Map<String, Object> answerHelp(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.answerHelp(param);
+        result = adminhsService.answerHelp(param);
         return result;
     }
 
@@ -112,10 +131,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/getRegisterManagementData")
-    @ResponseBody
     public Map<String, Object> getRegisterManagementData(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.getRegisterManagementData(param);
+        result = adminhsService.getRegisterManagementData(param);
         return result;
     }
 
@@ -125,10 +143,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/passRegister")
-    @ResponseBody
     public Map<String, Object> passRegister(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.passRegister(param);
+        result = adminhsService.passRegister(param);
         return result;
     }
 
@@ -138,10 +155,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/getMyPageNumber")
-    @ResponseBody
     public Map<String, Object> getMyPageNumber(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.getMyPageNumber(param);
+        result = adminhsService.getMyPageNumber(param);
         return result;
     }
 
@@ -151,10 +167,9 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/uploadRotationPhoto")
-    @ResponseBody
     public Map<String, Object> uploadRotationPhoto(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.uploadRotationPhoto(param);
+        result = adminhsService.uploadRotationPhoto(param);
         return result;
     }
 
@@ -164,11 +179,67 @@ public class AdminHSController {
      * @return
      */
     @PostMapping("/deleteRotationPhoto")
-    @ResponseBody
     public Map<String, Object> deleteRotationPhoto(@RequestBody Map<String,Object> param){
         Map<String, Object> result = new HashMap<>();
-        result = AdminhsService.deleteRotationPhoto(param);
+        result = adminhsService.deleteRotationPhoto(param);
         return result;
+    }
+
+    /**
+     * 查询获奖列表
+     */
+    @GetMapping("/winners/list")
+    public AjaxResult listWinners(HsWinners hsWinners)
+    {
+        List<HsWinners> list = hsWinnersService.selectHsWinnersList(hsWinners);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 新增获奖
+     */
+    @PostMapping("/winners")
+    public AjaxResult addWinners(@RequestBody HsWinners hsWinners)
+    {
+        return toAjax(hsWinnersService.insertHsWinners(hsWinners));
+    }
+
+    /**
+     * 修改获奖
+     */
+    @PutMapping("/winners")
+    public AjaxResult editWinners(@RequestBody HsWinners hsWinners)
+    {
+        return toAjax(hsWinnersService.updateHsWinners(hsWinners));
+    }
+
+    /**
+     * 删除获奖
+     */
+    @DeleteMapping("/winners/{ids}")
+    public AjaxResult removeWinners(@PathVariable Long[] ids)
+    {
+        return toAjax(hsWinnersService.deleteHsWinnersByIds(ids));
+    }
+
+    /**
+     * 查询班级列表
+     */
+    @PostMapping("/class/list")
+    public AjaxResult listClass(@RequestBody Map<String, Object> params)
+    {
+        List<Map<String, Object>> list = adminhsService.selectClassList(params);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 查询职务列表
+     */
+    @PostMapping("/post/list")
+    public AjaxResult listPost(@RequestBody Map<String, Object> params)
+    {
+        List<Map<String, Object>> list = adminhsService.selectPostList(params);
+        return AjaxResult.success(list);
     }
 
 }

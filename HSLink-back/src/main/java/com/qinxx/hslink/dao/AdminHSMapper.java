@@ -94,4 +94,32 @@ public interface AdminHSMapper {
      * @return
      */
     int deleteRotationPhoto(Map<String, Object> param);
+
+    /**
+     * 获取人员详情
+     * @param param
+     * @return
+     */
+    Map<String, Object> getPersonInfo(Map<String, Object> param);
+
+    /***
+     * 删除人员
+     * @param ids
+     * @return
+     */
+    int deletePersonByIds(String[] ids);
+
+    /**
+     * 获取班级列表
+     * @param params
+     * @return
+     */
+    List<Map<String, Object>> selectClassList(Map<String, Object> params);
+
+    /**
+     * 获取职务列表
+     * @param params
+     * @return
+     */
+    List<Map<String, Object>> selectPostList(Map<String, Object> params);
 }

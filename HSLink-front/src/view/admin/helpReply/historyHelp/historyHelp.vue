@@ -53,13 +53,12 @@
              */
             getHelpAnswerList() {
               this.$ajax.post('/admin/getHelpAnswerList', {}, res => {
-                res.forEach(item => {
+                res.data.forEach(item => {
                   if (item.answer_id !== undefined) {
                     this.historyHelpList.push(item);
                   }
                   this.historyHelpNoData = this.historyHelpList.length === 0 ? true : false;
                 });
-                console.log('历史帮助答复列表', this.historyHelpList);
               })
             }
         }

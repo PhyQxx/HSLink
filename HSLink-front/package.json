@@ -1,7 +1,7 @@
 {
   "name": "hslink",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "家校通",
   "author": "peihaoyu <617594538@qq.com>",
   "private": true,
   "scripts": {
@@ -14,6 +14,7 @@
     "element-ui": "^2.13.0",
     "jquery": "^3.4.1",
     "marked": "^0.8.2",
+    "mavon-editor": "^2.9.1",
     "react": "^16.13.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

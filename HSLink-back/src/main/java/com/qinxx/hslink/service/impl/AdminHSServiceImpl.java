@@ -58,6 +58,20 @@ public class AdminHSServiceImpl implements AdminHSService {
     }
 
     /**
+     * 获取人员详情
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getPersonInfo(Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = adminHSMapper.getPersonInfo(param);
+        result.put("data",res);
+        result.put("success",true);
+        return result;
+    }
+
+    /**
      * 审核文章（通过/驳回）
      * @param param
      * @return
@@ -203,10 +217,7 @@ public class AdminHSServiceImpl implements AdminHSService {
     @Override
     public Map<String, Object> deleteRotationPhoto(Map<String, Object> param) {
         int res = 0;
-        //Linux环境下的路径
-//        File file = new File(filesPath + "/" + param.get("fileEncryption"));
-        //Window环境下的路径
-        File file = new File(filesPath + "\\" + param.get("fileEncryption"));
+        File file = new File(filesPath + param.get("fileEncryption"));
         // 路径为文件且不为空则进行删除
         if (file.isFile() && file.exists()) {
             file.delete();
@@ -221,5 +232,37 @@ public class AdminHSServiceImpl implements AdminHSService {
         result.put("data",res);
         result.put("success",true);
         return result;
+    }
+
+    /**
+     * 删除人员信息
+     *
+     * @param ids ID
+     * @return 结果
+     */
+    @Override
+    public int deletePersonByIds(String[] ids)
+    {
+        return adminHSMapper.deletePersonByIds(ids);
+    }
+
+    /**
+     * 获取班级列表
+     * @param params
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectClassList(Map<String, Object> params) {
+        return adminHSMapper.selectClassList(params);
+    }
+
+    /**
+     * 获取职务列表
+     * @param params
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> selectPostList(Map<String, Object> params) {
+        return adminHSMapper.selectPostList(params);
     }
 }

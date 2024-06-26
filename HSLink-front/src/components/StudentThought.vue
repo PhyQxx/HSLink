@@ -7,14 +7,16 @@
       </div>
       <div class="list">
         <div class="title">学生想法</div>
-        <nodate v-if="noDate"></nodate>
-        <div class="one" v-for="item in thinkingList" v-if="!noDate">
-          <div class="type">[{{item.label}}]</div>
-          <div class="text" @click="getContent(item.id)">{{item.title}}</div>
-          <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
-          <div class="release-time">{{item.release_time}}</div>
+        <div class="list-box" v-loading="loading">
+          <nodate v-if="noDate"/>
+          <div class="one" v-for="item in thinkingList" v-if="!noDate">
+            <div class="type">[{{item.label}}]</div>
+            <div class="text" @click="getContent(item.id)">{{item.title}}</div>
+            <div class="release" @click="goPersonalInfo(item.user_id)">{{item.real_name}}</div>
+            <div class="release-time">{{item.release_time}}</div>
+          </div>
+          <p class="sum" v-if="!noDate">共{{length}}条数据</p>
         </div>
-        <p class="sum" v-if="!noDate">共{{length}}条数据</p>
       </div>
     </el-main>
     <el-aside>
@@ -31,7 +33,8 @@
     name: "StudentThought",
     data() {
       return{
-        noDate: '',
+        //加載标志
+        loading: false,
         condition: '',
         thinkingList: '',
         length: '',
@@ -39,17 +42,19 @@
       }
     },
     mounted() {
+      this.loading = true;
       this.$ajax.post("/hs/getListByAttribute",{text:"",type:"学生想法"},r=>{
-        this.thinkingList = r
-        this.length = r.length
+        this.thinkingList = r.data;
+        this.length = r.data.length;
+        this.loading = false
       })
     },
     methods: {
       search() {
         this.$ajax.post("/hs/getListByAttribute",{text:this.condition,type:"学生想法"},r=>{
-          this.thinkingList = r
-          this.length = r.length
-          if (r.length === 0) {
+          this.thinkingList = r.data
+          this.length = r.data.length
+          if (r.data.length === 0) {
             this.noDate = true
           }
         })

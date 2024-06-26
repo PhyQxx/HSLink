@@ -16,23 +16,17 @@
           </div>
         </div>
         <div class="middle">
-          <div class="editorContainer">
-            <markdown
-              :mdValuesP="msg.mdValue"
-              :fullPageStatusP="false"
-              :editStatusP="true"
-              :previewStatusP="true"
-              :navStatusP="true"
-              :icoStatusP="true"
-              @childevent="childEventHandler"
-              ref="markdown"
-            ></markdown>
-          </div>
+          <div class="editorContainer article-content" v-html="all.content"></div>
         </div>
         <div class="footer">
-          <el-row>
-            <el-button type="primary" icon="el-icon-thumb" size="mini" plain @click="follow">点 赞</el-button>
-            <el-button type="primary" icon="el-icon-share" size="mini" plain @click="follow">分 享</el-button>
+          <el-row class="article-read">
+            <div class="reading-volume">
+              阅读 {{all.read_number}}
+            </div>
+            <div class="collection" :class="all.isCollection === 0 ? '' : 'collection-active'" @click="collection(all.isCollection)">
+              <i class="el-icon-star-on"/>
+              {{all.isCollection === 0 ? '收藏' : '已收藏'}}
+            </div>
           </el-row>
         </div>
       </div>
@@ -52,7 +46,7 @@
         </div>
       </div>
     </el-main>
-    <el-aside>
+    <div class="index-right">
       <div class="person-info">
         <div class="info">
           <div class="name">
@@ -76,19 +70,18 @@
         </div>
         <hr>
         <div class="operation">
-          <el-button type="primary" plain size="mini" @click="follow">关 注</el-button>
+          <el-button type="primary" plain size="mini" @click="follow(all.isFollow)">{{all.isFollow === 0 ? '关 注' : '取消关注'}}</el-button>
           <el-button type="primary" plain size="mini" @click="sendLetter(all.author_id,all.author_name)">私 信</el-button>
         </div>
       </div>
-      <footers></footers>
-    </el-aside>
+      <footers/>
+    </div>
   </el-container>
 </template>
 
 <script>
   import  { getDate } from  '../assets/js/public.js'
   import footers from './components/Footer'
-  import markdown from "./components/Mdeditor";
     export default {
       name: "Content",
       data() {
@@ -96,11 +89,6 @@
           all: "",
           message: '',
           id:'',
-          msgShow:'我要显示的内容',
-          dilogStatus:false,
-          msg: {
-            mdValue:''
-          },
           flag:false,
           userId: JSON.parse(sessionStorage.getItem("userInfo")).user_id
         }
@@ -108,20 +96,48 @@
       created() {
       },
       mounted() {
-        this.$ajax.post("/hs/getOneContent", {
-          id: sessionStorage.getItem("noticeId")
-        }, r => {
-          this.all = r.content;
-          this.message = r.message;
-          this.msg.mdValue = r.content.content;
-          this.all.header_photo = this.all.author_name.substring(0, 1);
-          for (let i = 0; i < this.message.length; i++) {
-            this.message[i].header_photo = this.message[i].real_name.substring(0, 1);
-          }
-          setTimeout(()=>{this.$refs.markdown.addLine()},1)
-        })
+        this.getNotice()
       },
       methods: {
+        /**
+         * 获取通知
+         */
+        getNotice() {
+          this.$ajax.post("/hs/getOneContent", {
+            id: sessionStorage.getItem("noticeId"),
+            userId: this.userId
+          }, r => {
+            this.all = r.data.content;
+            this.message = r.data.message;
+            this.all.header_photo = this.all.author_name.substring(0, 1);
+            for (let i = 0; i < this.message.length; i++) {
+              this.message[i].header_photo = this.message[i].real_name.substring(0, 1);
+            }
+            this.$ajax.post("/hs/updateReadNumber",{
+              noticeId: sessionStorage.getItem("noticeId"),
+              number: Number(this.all.read_number)+1
+            }, res => {
+              this.all.read_number = Number(this.all.read_number)+1
+            })
+          })
+        },
+        /**
+         * 收藏
+         */
+        collection(option) {
+          const URL = {
+            "0": "/hs/addCollection",
+            "1": "/hs/cancelCollection",
+          };
+          this.$ajax.post(URL[option],{
+            noticeId: sessionStorage.getItem("noticeId"),
+            userId: this.userId,
+          }, res=>{
+            if (res.data > 0) {
+              this.getNotice()
+            }
+          })
+        },
         deleteMy(id) {
           this.$confirm('确定删除该条留言, 是否继续?', '删除', {
             confirmButtonText: '确定',
@@ -129,15 +145,15 @@
             type: 'warning'
           }).then(() => {
             this.$ajax.post("/hs/deleteOneMessage",{id:id},r=>{
-              if (r === 1) {
-                this.$message({
+              if (r.data === 1) {
+                this.$notify({
                   type: 'success',
                   message: '删除成功!'
                 });
                 this.$ajax.post("/hs/getOneContent", {
                   id: sessionStorage.getItem("noticeId")
                 }, r => {
-                  this.message = r.message;
+                  this.message = r.data.message;
                   for (let i = 0; i < this.message.length; i++) {
                     this.message[i].header_photo = this.message[i].real_name.substring(0, 1)
                   }
@@ -145,10 +161,7 @@
               }
             })
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });
+            this.$notify.info('已取消删除');
           });
         },
         sendLetter(id,name) {
@@ -160,26 +173,31 @@
             inputErrorMessage: '内容不能为空'
           }).then(({ value }) => {
             this.$ajax.post("/hs/sendLetter",{sendId:userInfo.user_id,receiveId:id,content:value,time:getDate()},r=>{
-              if (r === 1) {
-                this.$message({
+              if (r.data === 1) {
+                this.$notify({
                   type: 'success',
                   message: '发送成功'
                 });
               } else {
-                this.$message.error("发送失败")
+                this.$notify.error("发送失败")
               }
             })
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '取消输入'
-            });
+            this.$notify.info('取消输入');
           });
         },
-        follow() {
-          this.$message({
-            type:"success",
-            message: "喜欢就好"
+        follow(option) {
+          const URL = {
+            0: '/hs/addFollow',
+            1: '/hs/cancelFollow'
+          };
+          this.$ajax.post(URL[option],{
+            userId: this.userId,
+            followId: this.all.author_id
+          }, res => {
+            if (res.data > 0) {
+              this.getNotice();
+            }
           })
         },
         searchLabel(label) {
@@ -206,15 +224,15 @@
           }).then(({ value }) => {
             this.$ajax.post("/hs/addMessage",{noticeId:sessionStorage.getItem("noticeId"),content:value,
               createTime:getDate(),userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
-              if (r === 1) {
-                this.$message({
+              if (r.data === 1) {
+                this.$notify({
                   type: 'success',
                   message: '留言成功'
                 });
                 this.$ajax.post("/hs/getOneContent", {
                   id: sessionStorage.getItem("noticeId")
                 }, r => {
-                  this.message = r.message;
+                  this.message = r.data.message;
                   for (let i = 0; i < this.message.length; i++) {
                     this.message[i].header_photo = this.message[i].real_name.substring(0, 1)
                   }
@@ -222,14 +240,8 @@
               }
             });
             this.$ajax.post("/hs/timingTask",{userId:JSON.parse(sessionStorage.getItem("userInfo")).user_id},r=>{
-              console.log(r)
             });
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '取消输入'
-            });
-          });
+          })
         },
         childEventHandler:function(res){
           // res会传回一个data,包含属性mdValue和htmlValue，具体含义请自行翻译
@@ -240,16 +252,39 @@
           this.dilogStatus=false;
         },
         handleChange(val) {
-          console.log(val);
         },
       },
       components: {
         footers,
-        markdown
       },
     }
 </script>
 <style lang="scss" scoped>
+  .article-read {
+    display: flex;
+    align-items: center;
+    .reading-volume {
+      font-size: 0.9rem;
+      color: #999999;
+    }
+    .collection {
+      margin-left: 1rem;
+      padding: 0.2rem;
+      color: #999999;
+      cursor: pointer;
+    }
+    .collection-active {
+      color: #00afff!important;
+    }
+    .collection:hover {
+      color: #00afff;
+    }
+  }
+  .index-right {
+    width: 16%;
+    position: fixed;
+    right: 5%;
+  }
   .comment-one:hover .delete-my{
     display: inline-block;
   }

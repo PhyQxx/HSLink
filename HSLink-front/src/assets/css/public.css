@@ -53,3 +53,44 @@ body{
 body{
   padding-right:0 !important
 }
+.article-content img {
+  max-width: 100%;
+}
+.class-table-box {
+  width: 50%!important;
+  overflow: auto;
+}
+
+
+/*滚动条样式*/
+::-webkit-scrollbar
+
+{
+
+  width: 5px;
+
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+
+::-webkit-scrollbar-track {
+
+  border-radius: 0.5rem;
+
+  background-color: rgba(0,0,0,0);
+
+}
+
+/*定义滑块 内阴影+圆角*/
+
+::-webkit-scrollbar-thumb
+
+{
+
+  border-radius: 0.5rem;
+
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+
+  background-color: rgba(0,0,0,0.4);
+
+}

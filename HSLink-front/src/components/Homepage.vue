@@ -76,10 +76,12 @@
               优 秀 教 师
             </div>
             <div class="one" v-for="(item, index) in prominentTeacher"  :key='index'>
-              <div class="name theme-font-blue">{{item.name}}老师</div>
-              <!--          <div class="subject theme-font-blue">数学</div>-->
-              <!--            <div class="grade theme-font-blue">2016届</div>-->
-              <div class="class theme-font-blue">{{item.class}}</div>
+              <el-tooltip class="item" effect="light" :content="item.userName" placement="top">
+                <div class="name theme-font-blue">{{item.userName}}老师</div>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" :content="item.post" placement="top">
+                <div class="class theme-font-blue">{{item.post}}</div>
+              </el-tooltip>
             </div>
           </div>
           <div class="merit-student">
@@ -88,9 +90,12 @@
               三 好 学 生
             </div>
             <div class="one" v-for="(item, index) in meritStudent" :key='index'>
-              <div class="name theme-font-blue">{{item.name}}同学</div>
-              <!--            <div class="grade theme-font-blue">2016届</div>-->
-              <div class="subject theme-font-blue">{{item.class}}</div>
+              <el-tooltip class="item" effect="light" :content="item.userName" placement="top">
+                <div class="name theme-font-blue">{{item.userName}}同学</div>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" :content="item.post" placement="top">
+                <div class="class theme-font-blue">{{item.post}}</div>
+              </el-tooltip>
             </div>
           </div>
         </div>
@@ -100,7 +105,9 @@
 </template>
 
 <script>
-    export default {
+  import { listWinners } from "@/api/admin/winners";
+
+  export default {
         name: "Hompage",
       data() {
         return{
@@ -112,67 +119,32 @@
           goodAdvice: '',
           magicalThinking: '',
           activeName: 'first',
-          prominentTeacher: [
-            {
-              id: '',
-              name: '张伟',
-              class: '2016届物联网一班',
-            },
-            {
-              id: '',
-              name: '吕小布',
-              class: '2016届物联网二班',
-            },
-            {
-              id: '',
-              name: '李星',
-              class: '大数据一班',
-            },
-            {
-              id: '',
-              name: '吴达',
-              class: '软件外包一班',
-            },
-            {
-              id: '',
-              name: '田七',
-              class: '机算计科学与技术一班',
-            },
-          ],
-          meritStudent: [
-            {
-              id: '',
-              name: '王阔',
-              class: '2016届物联网一班',
-            },
-            {
-              id: '',
-              name: '于洋',
-              class: '2016届生物医学1班',
-            },
-            {
-              id: '',
-              name: '冯宇',
-              class: '2016届大数据一班',
-            },
-            {
-              id: '',
-              name: '刘强',
-              class: '2016届软件外包一班',
-            },
-            {
-              id: '',
-              name: '张智超',
-              class: '2016届护理一班',
-            },
-          ],
+          prominentTeacher: [],
+          meritStudent: [],
         }
       },
       mounted() {
           this.getRotationPhotoList();
           this.getNoticeList();
+          this.getWinnerList()
       },
       methods: {
+          /**
+           * 获取获奖人员
+           */
+          getWinnerList() {
+            listWinners().then(res => {
+              if (res.data.data.length > 0) {
+                res.data.data.forEach(item => {
+                  if (item.type === '优秀教师') {
+                    this.prominentTeacher.push(item)
+                  } else if (item.type === '三好学生') {
+                    this.meritStudent.push(item)
+                  }
+                })
+              }
+            })
+          },
         /**
          * 图片地址
          */
@@ -184,16 +156,15 @@
           this.tabLoading = true;
           this.$ajax.post("/hs/getAllContent",{},r=>{
             this.tabLoading = false;
-            this.newestNotice = r.schoolNoticeList.slice(0,12);
-            this.goodAdvice = r.parentAdvice.slice(0,12);
-            this.magicalThinking = r.studentThinking.slice(0,12);
+            this.newestNotice = r.data.schoolNoticeList.slice(0,12);
+            this.goodAdvice = r.data.parentAdvice.slice(0,12);
+            this.magicalThinking = r.data.studentThinking.slice(0,12);
           })
         },
           //获取轮播图片
         getRotationPhotoList() {
           this.$ajax.post('/hs/getRotationPhotoList',{},res=>{
-            console.log("轮播图列表",res);
-            this.rotationPhotoList = res.rotationPhotoList;
+            this.rotationPhotoList = res.data.rotationPhotoList;
           })
         },
         searchLabel(label) {
@@ -216,7 +187,7 @@
     }
 </script>
 
-<style scoped>  
+<style scoped>
   .rotation-photo{
     object-fit: contain;
     width: 100%;

@@ -67,16 +67,14 @@
       getPhoto() {
         this.$ajax.post('/hs/getFileList',{},r=>{
           this.fileList = [];
-          for (let i = 0; i < r.fileList.length; i++) {
-            this.fileList.push({path: require('../assets/file/'+r.fileList[i].fileEncryption)})
+          for (let i = 0; i < r.data.fileList.length; i++) {
+            this.fileList.push({path: require('../assets/file/'+r.data.fileList[i].fileEncryption)})
           }
         })
       },
       handleRemove(file, fileList) {
-        console.log(file, fileList);
       },
       handlePreview(file) {
-        console.log(file);
       }
     }
   }

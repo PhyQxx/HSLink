@@ -64,8 +64,10 @@
             <if test="content != '' and content != null">
                 and title like CONCAT('%',#{content},'%')
             </if>
+            <if test="author != '' and author != null">
+                and u.real_name like CONCAT('%',#{author},'%')
+            </if>
             AND is_pass = '0'
-            and type != "班级通知"
             ORDER BY release_time desc
     </select>
 
@@ -76,10 +78,25 @@
             (SELECT count(*) from hs_follow f where f.follow_id = u.user_id) fansNumber
         FROM hs_user u where
         u.user_type != "管理员"
-        <if test="content != '' and content != null">
+        <if test="name != '' and name != null">
             and u.real_name like CONCAT('%',#{name},'%')
         </if>
-        and u.take_effect = "1" order by u.frozen_state
+        <if test="userType != '' and userType != null">
+            and u.user_type = #{userType}
+        </if>
+        <if test="className != '' and className != null">
+            and u.class_name = #{className}
+        </if>
+        <if test="className == ''">
+            and (u.class_name = '' or u.class_name is null)
+        </if>
+        <if test="takeEffect != '' and takeEffect != null">
+            and u.take_effect = #{takeEffect}
+        </if>
+        <if test="takeEffect == '' or takeEffect == null">
+            and u.take_effect = '1'
+        </if>
+         order by u.frozen_state
     </select>
 
     <!--获取帮助答复列表-->
@@ -106,5 +123,28 @@
     <select id="getRegisterManagementData" resultType="map" parameterType="map">
         select * from hs_user where take_effect = '0'
     </select>
+
+    <!--获取人员详情-->
+    <select id="getPersonInfo" resultType="map" parameterType="map">
+        select * from hs_user where user_id = #{userId}
+    </select>
+
+    <!--获取班级列表-->
+    <select id="selectClassList" resultType="map" parameterType="map">
+        select DISTINCT class_name from hs_user
+    </select>
+
+    <!--获取职务列表-->
+    <select id="selectPostList" resultType="map" parameterType="map">
+        select DISTINCT post from hs_user where class_name = #{className}
+    </select>
+
+    <!--删除人员信息-->
+    <delete id="deletePersonByIds" parameterType="String">
+        delete from hs_user where user_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>
